@@ -1,6 +1,6 @@
-import Banner from "../components/Banner";
-import Header from "../components/Header";
-import Servicos from "../components/Servicos";
+import Banner from "../components/site/Banner";
+import Header from "../components/site/Header";
+import Servicos from "../components/site/Servicos";
 
 function Site (){
     return (
