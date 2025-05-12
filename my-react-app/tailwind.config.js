@@ -20,6 +20,7 @@ export default {
         'secondary-light': '#232220',
         'text-light': '#a3a3a3',
         'secondary-gray': '#BDBDBD',
+        'background-gray': '#ECECEC',
         white: '#ffffff',
         black: '#000000',
       },
