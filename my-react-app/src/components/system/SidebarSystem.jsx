@@ -31,13 +31,12 @@ function SidebarSystem({
     const ButtonPets = pets ? ButtonRed : ButtonWhite;
 
     return (
-        <div className="fixed w-96 h-full top-0 left-0 bg-slate-200 flex items-center pl-24 pb-24 mt-[85px]">
+        <div className="h-[100%] bg-slate-200 flex items-center p-12">
             <div className="h-full flex flex-col justify-center gap-10 text-[18px] text-white">
                 <div className="flex flex-row items-center gap-6 pb-12">
                     <img src={userImage} alt="Logo Pet Columbia" width={50} />
                     <span className="font-figtree font-bold text-navy-blue text-[20px]">{username}</span>
                 </div>
-
                 <ButtonProfile text="Perfil" logo={<IoPerson />} click={goToProfile} />
                 <ButtonServices text="Serviços" logo={<MdMiscellaneousServices />} click={goToServices} />
                 <ButtonAppointments text="Agendamentos" logo={<BsCalendar2WeekFill />} click={goToAppoints} />

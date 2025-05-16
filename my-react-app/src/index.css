@@ -4,3 +4,14 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+:root {
+    --placeholder-color: #d3d9e0;
+}
+
+@layer base {
+  input::placeholder,
+  textarea::placeholder {
+    color: var(--placeholder-color);
+  }
+}
