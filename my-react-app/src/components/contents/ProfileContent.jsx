@@ -50,7 +50,7 @@ function ProfileContent() {
 
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
-            <div className="flex justify-end w-4/5 gap-6">
+            <div className="flex justify-center w-4/5 gap-6 pb-10">
                 {editable && (
                     <ButtonWhite
                         text="Salvar Dados"
@@ -65,7 +65,7 @@ function ProfileContent() {
                 />
             </div>
 
-            <div className="flex flex-row gap-20">
+            <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBox
                     id="nome"
                     title="Nome"
@@ -82,7 +82,7 @@ function ProfileContent() {
                     value={userData.cpf}
                     disabled={!editable} />
             </div>
-            <div className="flex flex-row gap-20">
+            <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBox
                     id="email"
                     title="Email"
@@ -99,7 +99,7 @@ function ProfileContent() {
                     value={userData.telefone}
                     disabled={!editable} />
             </div>
-            <div className="flex flex-row gap-20">
+            <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <div className="flex flex-row gap-10">
                     <TextBox
                         id="cep"
@@ -127,7 +127,7 @@ function ProfileContent() {
                     value={userData.complemento}
                     disabled={!editable} />
             </div>
-            <div className="flex flex-row gap-20">
+            <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBox
                     id="logradouro"
                     title="Logradouro"
