@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import TextBox from "../system/TextBox"
-import ButtonWhite from "../system/ButtonWhite";
-import ButtonBlue from "../system/ButtonBlue";
+import ButtonSystem from "../system/ButtonSystem";
 import { MdModeEdit } from "react-icons/md";
 import { MdCancel } from "react-icons/md";
 import { IoIosSave } from "react-icons/io";
@@ -10,10 +9,10 @@ function ProfileContent() {
 
     const initialData = {
         nome: 'Matheus',
-        cpf: '440.824.488-02',
+        cpf: '44082448802',
         email: 'matheus@gmail.com',
-        telefone: '(11) 94023-4507',
-        cep: '01504-000',
+        telefone: '11940234507',
+        cep: '01504000',
         numero: '266',
         complemento: 'Ap. 51',
         logradouro: 'Rua Vergueiro',
@@ -52,13 +51,16 @@ function ProfileContent() {
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
             <div className="flex justify-center w-4/5 gap-6 pb-10">
                 {editable && (
-                    <ButtonWhite
+                    <ButtonSystem
+                        variant="blue"
                         text="Salvar Dados"
                         logo={<IoIosSave />}
                         click={saveData}
+                        
                     />
                 )}
-                <ButtonBlue
+                <ButtonSystem
+                    variant={editable ? "orange" : "blue"}
                     text={editable ? "Cancelar" : "Editar Dados"}
                     logo={editable ? <MdCancel /> : <MdModeEdit />}
                     click={toggleEdit}
@@ -69,7 +71,7 @@ function ProfileContent() {
                 <TextBox
                     id="nome"
                     title="Nome"
-                    hint="Matheus"
+                    hint="Daniel"
                     onChange={handleChange}
                     value={userData.nome}
                     disabled={!editable} />
@@ -77,16 +79,17 @@ function ProfileContent() {
                 <TextBox
                     id="cpf"
                     title="CPF"
-                    hint="44082448802"
+                    hint="000.000.000-00"
                     onChange={handleChange}
                     value={userData.cpf}
+                    mask="000.000.000-00"
                     disabled={!editable} />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBox
                     id="email"
                     title="Email"
-                    hint="matheus@gmail.com"
+                    hint="daniel@email.com"
                     onChange={handleChange}
                     value={userData.email}
                     disabled={!editable} />
@@ -94,9 +97,10 @@ function ProfileContent() {
                 <TextBox
                     id="telefone"
                     title="Telefone"
-                    hint="11940234507"
+                    hint="(00) 00000-0000"
                     onChange={handleChange}
                     value={userData.telefone}
+                    mask="(00) 00000-0000"
                     disabled={!editable} />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
@@ -104,10 +108,11 @@ function ProfileContent() {
                     <TextBox
                         id="cep"
                         title="CEP"
-                        hint="01504000"
+                        hint="00000-000"
                         width="w-50"
                         onChange={handleChange}
                         value={userData.cep}
+                        mask="00000-000"
                         disabled={!editable} />
 
                     <TextBox
