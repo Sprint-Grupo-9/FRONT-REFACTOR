@@ -1,8 +1,10 @@
 
 function Banner (){
     return(
-        <div className="w-full h-[725px] bg-banner-pattern bg-[center_14%]">
-            <div className="p-36  w-full h-full flex justify-start">
+
+        
+        <div className="w-full h-[600px] bg-banner-pattern bg-[center_14%]">
+            <div className="p-24  w-full h-full flex justify-start">
                 <div className=" p-10 w-[400px] h-full">
                 <span className="flex flex-col" >  
                 <h3 className="font-figtree text-navy-blue text-[65px] font-normal ">Tudo para</h3>
