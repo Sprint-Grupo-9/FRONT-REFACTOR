@@ -9,10 +9,10 @@ function ProfileContent() {
 
     const initialData = {
         nome: 'Matheus',
-        cpf: '440.824.488-02',
+        cpf: '44082448802',
         email: 'matheus@gmail.com',
-        telefone: '(11) 94023-4507',
-        cep: '01504-000',
+        telefone: '11940234507',
+        cep: '01504000',
         numero: '266',
         complemento: 'Ap. 51',
         logradouro: 'Rua Vergueiro',
@@ -108,7 +108,7 @@ function ProfileContent() {
                     <TextBox
                         id="cep"
                         title="CEP"
-                        hint="01504000"
+                        hint="00000-000"
                         width="w-50"
                         onChange={handleChange}
                         value={userData.cep}
