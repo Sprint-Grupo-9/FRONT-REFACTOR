@@ -71,7 +71,7 @@ function ProfileContent() {
                 <TextBox
                     id="nome"
                     title="Nome"
-                    hint="Matheus"
+                    hint="Daniel"
                     onChange={handleChange}
                     value={userData.nome}
                     disabled={!editable} />
@@ -79,16 +79,17 @@ function ProfileContent() {
                 <TextBox
                     id="cpf"
                     title="CPF"
-                    hint="44082448802"
+                    hint="000.000.000-00"
                     onChange={handleChange}
                     value={userData.cpf}
+                    mask="000.000.000-00"
                     disabled={!editable} />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBox
                     id="email"
                     title="Email"
-                    hint="matheus@gmail.com"
+                    hint="daniel@email.com"
                     onChange={handleChange}
                     value={userData.email}
                     disabled={!editable} />
@@ -96,9 +97,10 @@ function ProfileContent() {
                 <TextBox
                     id="telefone"
                     title="Telefone"
-                    hint="11940234507"
+                    hint="(00) 00000-0000"
                     onChange={handleChange}
                     value={userData.telefone}
+                    mask="(00) 00000-0000"
                     disabled={!editable} />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
@@ -110,6 +112,7 @@ function ProfileContent() {
                         width="w-50"
                         onChange={handleChange}
                         value={userData.cep}
+                        mask="00000-000"
                         disabled={!editable} />
 
                     <TextBox

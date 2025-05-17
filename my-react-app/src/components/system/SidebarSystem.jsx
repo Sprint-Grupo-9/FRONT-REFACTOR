@@ -34,7 +34,7 @@ function SidebarSystem({
             <div className="h-full flex flex-col justify-center gap-10 text-[18px] text-white">
                 <div className="flex flex-row items-center gap-6 pb-12">
                     <img src={userImage} alt="Logo Pet Columbia" width={50} />
-                    <span className="font-figtree font-bold text-navy-blue text-[20px]">{username}</span>
+                    <span className="font-bold text-navy-blue text-[20px]">{username}</span>
                 </div>
                 <ButtonSystem variant={colorProfile} text="Perfil" logo={<IoPerson />} click={goToProfile} />
                 <ButtonSystem variant={colorServices} text="Serviços" logo={<MdMiscellaneousServices />} click={goToServices} />
