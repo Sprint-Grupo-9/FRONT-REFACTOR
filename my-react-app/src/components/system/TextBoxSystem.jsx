@@ -1,13 +1,13 @@
 import { IMaskInput } from 'react-imask';
 
-function TextBox(props) {
-    const widthClass = props.width || "w-80"
+function TextBoxSystem(props) {
+    const widthClass = props.width || "w-96"
     const { mask, ...rest } = props;
 
     return (
         <>
             <div className="flex flex-col">
-                <span className="text-navy-blue pb-2 pl-2 text-[14px]">{props.title}</span>
+                <span className="text-slate-500 pb-2 pl-2 text-[14px]">{props.title}</span>
 
                 {mask ? (
                     <IMaskInput
@@ -29,7 +29,7 @@ function TextBox(props) {
     )
 }
 
-export default TextBox
+export default TextBoxSystem
 
 
 
