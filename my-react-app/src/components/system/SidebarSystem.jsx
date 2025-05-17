@@ -3,8 +3,7 @@ import { BsCalendar2WeekFill } from "react-icons/bs";
 import { MdMiscellaneousServices } from "react-icons/md";
 import { MdOutlinePets } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
-import ButtonWhite from "./ButtonWhite";
-import ButtonRed from "./ButtonRed";
+import ButtonSystem from "./ButtonSystem";
 import userImage from "../../assets/user-image.svg"
 
 function SidebarSystem({
@@ -25,10 +24,10 @@ function SidebarSystem({
 
     const goToPets = () => navigate("/system-pets");
 
-    const ButtonProfile = profile ? ButtonRed : ButtonWhite;
-    const ButtonServices = services ? ButtonRed : ButtonWhite;
-    const ButtonAppointments = appointments ? ButtonRed : ButtonWhite;
-    const ButtonPets = pets ? ButtonRed : ButtonWhite;
+    const colorProfile = profile ? "red" : "white";
+    const colorServices = services ? "red" : "white";
+    const colorAppoints = appointments ? "red" : "white";
+    const colorPets = pets ? "red" : "white";
 
     return (
         <div className="h-[100%] bg-slate-200 flex items-center p-12">
@@ -37,10 +36,10 @@ function SidebarSystem({
                     <img src={userImage} alt="Logo Pet Columbia" width={50} />
                     <span className="font-figtree font-bold text-navy-blue text-[20px]">{username}</span>
                 </div>
-                <ButtonProfile text="Perfil" logo={<IoPerson />} click={goToProfile} />
-                <ButtonServices text="Serviços" logo={<MdMiscellaneousServices />} click={goToServices} />
-                <ButtonAppointments text="Agendamentos" logo={<BsCalendar2WeekFill />} click={goToAppoints} />
-                <ButtonPets text="Pets" logo={<MdOutlinePets />} click={goToPets} />
+                <ButtonSystem variant={colorProfile} text="Perfil" logo={<IoPerson />} click={goToProfile} />
+                <ButtonSystem variant={colorServices} text="Serviços" logo={<MdMiscellaneousServices />} click={goToServices} />
+                <ButtonSystem variant={colorAppoints} text="Agendamentos" logo={<BsCalendar2WeekFill />} click={goToAppoints} />
+                <ButtonSystem variant={colorPets} text="Pets" logo={<MdOutlinePets />} click={goToPets} />
             </div>
         </div>
     )

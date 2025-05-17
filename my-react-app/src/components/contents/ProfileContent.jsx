@@ -1,7 +1,6 @@
 import { useRef, useState } from "react";
 import TextBox from "../system/TextBox"
-import ButtonWhite from "../system/ButtonWhite";
-import ButtonBlue from "../system/ButtonBlue";
+import ButtonSystem from "../system/ButtonSystem";
 import { MdModeEdit } from "react-icons/md";
 import { MdCancel } from "react-icons/md";
 import { IoIosSave } from "react-icons/io";
@@ -52,13 +51,16 @@ function ProfileContent() {
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
             <div className="flex justify-center w-4/5 gap-6 pb-10">
                 {editable && (
-                    <ButtonWhite
+                    <ButtonSystem
+                        variant="blue"
                         text="Salvar Dados"
                         logo={<IoIosSave />}
                         click={saveData}
+                        
                     />
                 )}
-                <ButtonBlue
+                <ButtonSystem
+                    variant={editable ? "orange" : "blue"}
                     text={editable ? "Cancelar" : "Editar Dados"}
                     logo={editable ? <MdCancel /> : <MdModeEdit />}
                     click={toggleEdit}
