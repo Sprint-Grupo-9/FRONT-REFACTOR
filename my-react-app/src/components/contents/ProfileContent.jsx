@@ -1,8 +1,8 @@
 import { useRef, useState } from "react";
-import TextBox from "../system/TextBox"
+import TextBoxSystem from "../system/TextBoxSystem"
 import ButtonSystem from "../system/ButtonSystem";
 import { MdModeEdit } from "react-icons/md";
-import { MdCancel } from "react-icons/md";
+import { CgClose } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
 
 function ProfileContent() {
@@ -49,7 +49,7 @@ function ProfileContent() {
 
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
-            <div className="flex justify-center w-4/5 gap-6 pb-10">
+            <div className="flex justify-center w-4/5 gap-6 pb-5">
                 {editable && (
                     <ButtonSystem
                         variant="blue"
@@ -62,13 +62,13 @@ function ProfileContent() {
                 <ButtonSystem
                     variant={editable ? "orange" : "blue"}
                     text={editable ? "Cancelar" : "Editar Dados"}
-                    logo={editable ? <MdCancel /> : <MdModeEdit />}
+                    logo={editable ? <CgClose /> : <MdModeEdit />}
                     click={toggleEdit}
                 />
             </div>
 
             <div className="flex flex-row gap-20 w-4/5 justify-center">
-                <TextBox
+                <TextBoxSystem
                     id="nome"
                     title="Nome"
                     hint="Daniel"
@@ -76,7 +76,7 @@ function ProfileContent() {
                     value={userData.nome}
                     disabled={!editable} />
 
-                <TextBox
+                <TextBoxSystem
                     id="cpf"
                     title="CPF"
                     hint="000.000.000-00"
@@ -86,7 +86,7 @@ function ProfileContent() {
                     disabled={!editable} />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
-                <TextBox
+                <TextBoxSystem
                     id="email"
                     title="Email"
                     hint="daniel@email.com"
@@ -94,7 +94,7 @@ function ProfileContent() {
                     value={userData.email}
                     disabled={!editable} />
 
-                <TextBox
+                <TextBoxSystem
                     id="telefone"
                     title="Telefone"
                     hint="(00) 00000-0000"
@@ -104,27 +104,27 @@ function ProfileContent() {
                     disabled={!editable} />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
-                <div className="flex flex-row gap-10">
-                    <TextBox
+                <div className="flex flex-row gap-8">
+                    <TextBoxSystem
                         id="cep"
                         title="CEP"
                         hint="00000-000"
-                        width="w-50"
+                        width="w-60"
                         onChange={handleChange}
                         value={userData.cep}
                         mask="00000-000"
                         disabled={!editable} />
 
-                    <TextBox
+                    <TextBoxSystem
                         id="numero"
                         title="Número"
                         hint="266"
-                        width="w-20"
+                        width="w-28"
                         onChange={handleChange}
                         value={userData.numero}
                         disabled={!editable} />
                 </div>
-                <TextBox
+                <TextBoxSystem
                     id="complemento"
                     title="Complemento"
                     hint="Ap. 51"
@@ -133,7 +133,7 @@ function ProfileContent() {
                     disabled={!editable} />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
-                <TextBox
+                <TextBoxSystem
                     id="logradouro"
                     title="Logradouro"
                     hint="Rua Vergueiro"
@@ -141,7 +141,7 @@ function ProfileContent() {
                     value={userData.logradouro}
                     disabled={!editable} />
 
-                <TextBox
+                <TextBoxSystem
                     id="bairro"
                     title="Bairro"
                     hint="Liberdade"
