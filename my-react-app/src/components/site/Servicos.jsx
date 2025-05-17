@@ -5,7 +5,8 @@ import Cardsite from './Cardssite.jsx';
 import Cardsite2 from './Cardssite2.jsx';
 function Servicos() {
   return (
-    <div className="z-50 w-full h-[500px] bg-white p-14">
+    <div className='w-full h-[600px] bg-banner-pattern bg-[center_80%] rounded-bl-[150px]'>
+    <div className="w-full h-[600px] rounded-bl-[150px] rounded-tl-[150px] bg-white p-24">
 
       <div className=" flex flex-col w-12/12 h-[400px]">
       <span className="w-full  flex flex-col justify-center items-center">
@@ -23,7 +24,7 @@ function Servicos() {
 
       </div>
       
-   
+   </div>
   );
 }
 
