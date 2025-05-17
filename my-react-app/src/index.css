@@ -7,7 +7,17 @@
 @tailwind components;
 @tailwind utilities;
 
+:root {
+    --placeholder-color: #d3d9e0;
+}
+
 @layer base {
+  input::placeholder,
+  
+  textarea::placeholder {
+    color: var(--placeholder-color);
+  }
+
   body {
     @apply m-0 p-0 box-border min-h-screen text-black bg-[#BB1055];
   }

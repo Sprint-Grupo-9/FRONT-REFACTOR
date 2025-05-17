@@ -8,9 +8,10 @@ import SystemServices from './pages/SystemServices';
 
 
 function App() {
-
+  
   return (
     <BrowserRouter>
+    <div className='font-figtree'>
       <Routes>
         <Route path="/" element={<Site />} />
         <Route path="/system-profile" element={<SystemProfile />} />
@@ -18,6 +19,7 @@ function App() {
         <Route path="/system-appointments" element={<SystemAppointments />} />
         <Route path="/system-pets" element={<SystemPets />} />
       </Routes>
+    </div>
     </BrowserRouter>
   )
 }
