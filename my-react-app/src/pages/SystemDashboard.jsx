@@ -4,12 +4,14 @@ import SidebarSystem from "../components/system/SidebarSystem";
 
 function SystemDashboard() {
 
-return (
-    <div className="min-h-screen bg-slate-100">
+  return (
+    <>
       <HeaderSystem text="Agendamentos" />
-      <SidebarSystem appointments />
-      <KpiSection />
-    </div>
+      <div className="w-full h-screen flex flex-start">
+        <SidebarSystem appointments />
+        <KpiSection />
+      </div>
+    </>
   )
 }
 

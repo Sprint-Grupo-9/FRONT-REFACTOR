@@ -45,12 +45,12 @@ export default function KpiSection() {
     const [detalhes, setDetalhes] = useState(null);
 
     return (
-        <div className="pl-[384px] pt-[85px] min-h-screen bg-secondary-gray">
+        <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8 pt-32">
             {/* KPIs */}
-            <div className="w-full h-[150px] flex flex-row gap-[30px] justify-center mt-[15px]">
+            <div className="w-full h-10 flex flex-row gap-[30px] justify-center mt-[15px]">
                 <CardKpi title="Procedimento Mais Realizado" description="Banho - 1" />
                 <CardKpi title="Procedimento com Menor Demanda " description="Tosa - 1" />
-                <CardKpi title="Horário de Maior Movimento" description="10 ás 12 - 1" />
+                <CardKpi title="Horário de Maior Movimento" description="10:00 12 - 1" />
                 <CardKpi title="Horário de Menor Movimento" description="10 ás 12 - 1" />
             </div>
 
@@ -72,7 +72,7 @@ export default function KpiSection() {
 
                     {/* Lista de Agendamentos */}
                     <div className="w-[50%] h-full overflow-x-auto p-4 bg-white rounded-xl border border-primary">
-                        <h4 className="text-lg font-semibold text-center mb-4 text-gray-700">Agendamentos do Dia</h4>
+                        <h4 className="text-lg font-semibold text-center mb-4 text-gray-700">Agendamentos do Dia (20/20/2020)</h4>
                         <div className="flex gap-4 overflow-x-auto pb-4 w-full">
                             {Array.from({ length: Math.ceil(agendamentosDoDia.length / 2) }, (_, colIndex) => (
                                 <div key={colIndex} className="flex flex-col gap-4 min-w-[260px] flex-shrink-0">
