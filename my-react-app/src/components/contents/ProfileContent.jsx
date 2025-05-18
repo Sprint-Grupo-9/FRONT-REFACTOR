@@ -49,7 +49,7 @@ function ProfileContent() {
 
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
-            <div className="flex justify-center w-4/5 gap-6 pb-5">
+            <div className="flex justify-center w-4/5 gap-6 pb-10">
                 {editable && (
                     <ButtonSystem
                         variant="blue"
@@ -60,7 +60,7 @@ function ProfileContent() {
                     />
                 )}
                 <ButtonSystem
-                    variant={editable ? "orange" : "blue"}
+                    variant={editable ? "redTransp" : "blue"}
                     text={editable ? "Cancelar" : "Editar Dados"}
                     logo={editable ? <CgClose /> : <MdModeEdit />}
                     click={toggleEdit}

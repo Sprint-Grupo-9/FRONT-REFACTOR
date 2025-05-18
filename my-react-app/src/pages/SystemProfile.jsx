@@ -6,7 +6,7 @@ function SystemProfile() {
     return (
         <>
         <HeaderSystem text="Perfil" />
-        <div className="w-full h-screen flex flex-row">
+        <div className="w-full h-screen  flex flex-row">
             <SidebarSystem profile />
             <ProfileContent />
         </div>

@@ -1,33 +1,82 @@
-import { FiChevronDown } from "react-icons/fi";
-import ButtonSystem from "./ButtonSystem";
-import { FaPlus } from "react-icons/fa6";
-import Logo from '../../assets/pet-logo.svg'
-import SwitchButtonSystem from "./SwitchButtonSystem";
-import SubServiceSystem from "./SubServiceSystem";
-import PrimaryServiceSystem from "./PrimaryServiceSystem";
+    import SubServiceSystem from "./SubServiceSystem";
+    import PrimaryServiceSystem from "./PrimaryServiceSystem";
+    import { useState } from "react";
+    import { FaPlus } from "react-icons/fa6";
+    import { CgClose } from "react-icons/cg";
 
-function ServiceBoxSystem(props) {
+    function ServiceBoxSystem({ services, setServices }) {
 
-    return (
-        <div className="w-full h-full flex flex-col gap-6">
-            <PrimaryServiceSystem/>
+        const [serviceOpen, setServiceOpen] = useState(true)
+        const [rotate, setRotate] = useState(false)
+        
+        const toggleOpenServices = () => {
+            setServiceOpen(prev => !prev)
+            setRotate(prev => !prev)
+        }
 
-            <div className="flex flex-row gap-6 w-full">
-                <SubServiceSystem title="Hidradatação" active={false}/>
-                <SubServiceSystem title="Desembolo" active={true}/>
-                <SubServiceSystem title="Tosa Higiênica" active={false}/>
-                <SubServiceSystem title="Tosa na Máquina" active={true}/>
+        const toggleServiceActive = (serviceId) => {
+            setServices(prev =>
+                prev.map(service =>
+                    service.id === serviceId ? {
+                        ...service, 
+                        active: !service.active, 
+                        hasChevron: service.subServices.length > 0 ? !service.hasChevron : false
+                    } : service
+                )
+            )
+        }
+
+
+        const toggleSubServiceActive = (serviceId, subServiceId) => {
+            setServices(prev =>
+                prev.map(service =>
+                    service.id === serviceId ? {
+                        ...service,
+                        subServices: service.subServices.map(sub =>
+                            sub.id === subServiceId ? {
+                                ...sub, active: !sub.active
+                            } : sub
+                        )
+                    } : service
+                )
+            )    
+        }
+
+        return (
+            <div className="w-full h-full flex flex-col gap-6">
+
+                {services.map(service => (
+                    <div key={service.id}>
+                        <PrimaryServiceSystem
+                            hasChevron={service.hasChevron}
+                            clickChevron={service.hasChevron ? toggleOpenServices : undefined}
+                            rotate={rotate}
+                            title={service.title}
+                            active={service.active}
+                            clickButton={() => toggleServiceActive(service.id)}
+                            label={service.active ? "Remover Serviço" : "Adicionar Serviço"}
+                            logo={service.active ? <CgClose/> : <FaPlus/>}
+                            variant={service.active ? "redTransp" : "blue"}
+                        />
+
+                        {service.hasChevron && serviceOpen && (
+                            <div className="flex flex-wrap gap-6 w-full mt-6">
+                                {service.subServices.map(sub => (
+                                    <SubServiceSystem
+                                        key={sub.id}
+                                        title={sub.title}
+                                        active={sub.active}
+                                        click={() => toggleSubServiceActive(service.id, sub.id)}
+                                    />
+                                ))}
+                            </div>
+                        )}
+                    </div>
+                ))}
+
             </div>
-            <div className="flex flex-row gap-6 w-full">
-                <SubServiceSystem title="Botinha" active={false}/>
-                <SubServiceSystem title="Tosa Bebê na Máquina" active={true}/>
-                <SubServiceSystem title="Escovação" active={false}/>
-            </div>
+        )
 
-            <PrimaryServiceSystem/>
-        </div>
-    )
+    }
 
-}
-
-export default ServiceBoxSystem;
+    export default ServiceBoxSystem;
