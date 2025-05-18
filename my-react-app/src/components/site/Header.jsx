@@ -2,15 +2,15 @@ import Logo from "../shared/Logo";
 
 function Header(){
     return (
-      <div className="fixed w-full h-[85px] top-0 left-0 bg-primary flex justify-center">
+      <div className="fixed w-full h-[85px]  bg-primary flex justify-center">
         
-        <div className=" w-10/12 h-full flex gap-60">
+        <div className=" w-10/12 h-full flex place-content-between items-center">
          
-         <div className="flex items-center h-full">
+         <div className="flex items-center w-[135px] h-full">
           <Logo/>
          </div>
 
-         <div className="list-none h-full flex items-center gap-20 text-[18px] text-white  font-figtree">
+         <div className="list-none h-full flex items-center text-[18px] text-white  font-figtree">
           <ul className="list-none h-full flex items-center gap-20 text-white font-light  font-figtree">
           <li className="cursor-pointer hover:translate-y-[-2px] transition-all duration-900">Serviços</li>
           <li className="cursor-pointer hover:translate-y-[-2px] transition-all duration-900">Sobre Nós</li>
