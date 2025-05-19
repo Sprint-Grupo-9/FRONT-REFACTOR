@@ -4,21 +4,22 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { CardKpi } from './CardKpi';
 import { CardAppointment } from './CardAppointment';
 
+
 const weeklyData = [
-    { day: 'Seg', clientes: 20 },
-    { day: 'Ter', clientes: 35 },
-    { day: 'Qua', clientes: 30 },
-    { day: 'Qui', clientes: 45 },
-    { day: 'Sex', clientes: 50 },
-    { day: 'Sáb', clientes: 60 },
-    { day: 'Dom', clientes: 15 },
+    { day: 'Seg', clientes: 10 },
+    { day: 'Ter', clientes: 6 },
+    { day: 'Qua', clientes: 7 },
+    { day: 'Qui', clientes: 8 },
+    { day: 'Sex', clientes: 2 },
+    { day: 'Sáb', clientes: 3 },
+    { day: 'Dom', clientes: 5 },
 ];
 
 const agendamentosDoDia = [
     {
         cliente: 'Nicollas',
         pet: 'Valesca - Pug',
-        procedimento: 'Banho',
+        procedimento: 'Banho/tosa/desembolo',
         valor: '10R$',
         horarioInicio: '09:00',
         horarioFim: '10:00',
@@ -45,20 +46,23 @@ export default function KpiSection() {
     const [detalhes, setDetalhes] = useState(null);
 
     return (
-        <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8 pt-32">
+    <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]">
+       
             {/* KPIs */}
-            <div className="w-full h-10 flex flex-row gap-[30px] justify-center mt-[15px]">
-                <CardKpi title="Procedimento Mais Realizado" description="Banho - 1" />
-                <CardKpi title="Procedimento com Menor Demanda " description="Tosa - 1" />
-                <CardKpi title="Horário de Maior Movimento" description="10:00 12 - 1" />
-                <CardKpi title="Horário de Menor Movimento" description="10 ás 12 - 1" />
+            <div className="w-full h-[25%]  flex flex-row gap-[2%] justify-center pt-[2%]">
+                <CardKpi title="Procedimento Mais Realizado" description="Banho / 1" />
+                <CardKpi title="Procedimento com Menor Demanda " description="Tosa / 1" />
+                <CardKpi title="Horário de Maior Movimento" description="10:00 - 12:00 / 1" />
+                <CardKpi title="Horário de Menor Movimento" description="10:00 - 12:00 / 1" />
             </div>
 
             {/* Gráfico + Lista */}
-            <div className="w-full mt-8 p-4 rounded-2xl h-full">
-                <div className="max-w-[1124px] mx-auto h-[90%] flex gap-6">
+            <div className="w-full p-4 rounded-2xl h-[75%]">
+                
+                <div className="w-[80%] mx-auto h-[98%] flex gap-[2%]">
+                    
                     {/* Gráfico */}
-                    <div className="w-[50%] h-[450px] flex justify-center items-center flex-col border border-primary bg-white rounded-xl gap-8">
+                    <div className="w-[50%] h-[100%] flex justify-center items-center flex-col border border-primary bg-white rounded-xl gap-8">
                         <h3 className="text-lg font-semibold mb-4 text-gray-700">Fluxo de Atendimentos – Últimos 7 Dias</h3>
                         <ResponsiveContainer width="90%" height="80%">
                             <BarChart data={weeklyData}>
@@ -92,6 +96,7 @@ export default function KpiSection() {
                                                     pet={item.pet}
                                                     procedimento={item.procedimento}
                                                     valor={item.valor}
+                                                    
                                                 />
                                             </div>
                                         );
