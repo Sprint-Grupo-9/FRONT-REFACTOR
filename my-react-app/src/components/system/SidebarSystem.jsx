@@ -36,10 +36,10 @@ function SidebarSystem({
                     <img src={userImage} alt="Logo Pet Columbia" width={50} />
                     <span className="font-bold text-navy-blue text-[20px]">{username}</span>
                 </div>
-                <ButtonSystem variant={colorProfile} text="Perfil" logo={<IoPerson />} click={goToProfile} />
-                <ButtonSystem variant={colorServices} text="Serviços" logo={<MdMiscellaneousServices />} click={goToServices} />
-                <ButtonSystem variant={colorAppoints} text="Agendamentos" logo={<BsCalendar2WeekFill />} click={goToAppoints} />
-                <ButtonSystem variant={colorPets} text="Pets" logo={<MdOutlinePets />} click={goToPets} />
+                <ButtonSystem variant={colorProfile} text="Perfil" logo={<IoPerson />} click={goToProfile} align={true}/>
+                <ButtonSystem variant={colorServices} text="Serviços" logo={<MdMiscellaneousServices />} click={goToServices} align={true}/>
+                <ButtonSystem variant={colorAppoints} text="Agendamentos" logo={<BsCalendar2WeekFill />} click={goToAppoints} align={true}/>
+                <ButtonSystem variant={colorPets} text="Pets" logo={<MdOutlinePets />} click={goToPets} align={true}/>
             </div>
         </div>
     )

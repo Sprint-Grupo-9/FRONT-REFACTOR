@@ -4,17 +4,19 @@ import ServiceIndividualTabSystem from "./ServiceIndividualTabSystem";
 
 function ServiceTabSystem({ services, setServices }) {
 
-    const toggleService = (serviceId) => {
+    const toggleServiceActive = (serviceId) => {
         setServices(prev =>
             prev.map(service =>
                 service.id === serviceId ? {
-                    ...service, active: !service.active
+                    ...service, 
+                    active: !service.active,
+                    hasChevron: service.subServices.length > 0 ? !service.hasChevron : false
                 } : service
             )
         )
     }
 
-    const toggleSubService = (serviceId, subServiceId) => {
+    const toggleSubServiceActive = (serviceId, subServiceId) => {
         setServices(prev =>
             prev.map(service =>
                 service.id === serviceId ? {
@@ -48,35 +50,37 @@ function ServiceTabSystem({ services, setServices }) {
         )
     }
 
-    const toggleServiceWithSub = (serviceId) => {
+    const toggleServiceActiveWithSub = (serviceId) => {
         toggleAll(serviceId);
-        toggleService(serviceId);
+        toggleServiceActive(serviceId);
     };
 
     return (
         <>
-            <div className="w-full h-2 text-[12px] text-slate-500">
+            <div className="w-auto h-auto text-[12px] text-slate-400">
                 Serviços selecionados:
             </div>
-            <div className="flex flex-row gap-2">
+            <div className="flex flex-row gap-1 bg-slate-200 p-1 border-2 rounded-lg">
                 {services
                     .filter(service => service.active || service.subServices?.some(sub => sub.active))
                     .map(service => (
                         <div key={service.id}>
                             <ServiceIndividualTabSystem
-                                click={() => toggleServiceWithSub(service.id)}
+                                click={() => toggleServiceActiveWithSub(service.id)}
                                 title={service.title}
+                                sizeText={"1rem"}
                             />
 
                             {service.subServices?.some(sub => sub.active) && (
-                                <div className="flex flex-row flex-wrap gap-2 pt-2 pl-4">
+                                <div className="flex flex-row flex-wrap gap-1 pt-2 pl-4">
                                     {service.subServices
                                         .filter(sub => sub.active)
                                         .map(sub => (
                                             <div key={sub.id}>
                                                 <ServiceIndividualTabSystem
-                                                    click={() => toggleSubService(service.id, sub.id)}
+                                                    click={() => toggleSubServiceActive(service.id, sub.id)}
                                                     title={sub.title}
+                                                    sizeText={"0.8rem"}
                                                 />
                                             </div>
                                         ))}

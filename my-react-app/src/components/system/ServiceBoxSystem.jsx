@@ -43,7 +43,7 @@
         }
 
         return (
-            <div className="w-full h-full flex flex-col gap-6">
+            <div className="w-full h-full flex flex-col gap-4">
 
                 {services.map(service => (
                     <div key={service.id}>
@@ -60,7 +60,7 @@
                         />
 
                         {service.hasChevron && serviceOpen && (
-                            <div className="flex flex-wrap gap-6 w-full mt-6">
+                            <div className="flex flex-wrap gap-2 w-full mt-2">
                                 {service.subServices.map(sub => (
                                     <SubServiceSystem
                                         key={sub.id}
