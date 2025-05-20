@@ -49,7 +49,7 @@ export default function KpiSection() {
     <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]">
        
             {/* KPIs */}
-            <div className="w-full h-[25%]  flex flex-row gap-[2%] justify-center pt-[2%]">
+            <div className="w-[95%] h-[25%]  flex flex-row gap-[2%] justify-center pt-[2%]">
                 <CardKpi title="Procedimento Mais Realizado" description="Banho / 1" />
                 <CardKpi title="Procedimento com Menor Demanda " description="Tosa / 1" />
                 <CardKpi title="Horário de Maior Movimento" description="10:00 - 12:00 / 1" />
@@ -62,7 +62,7 @@ export default function KpiSection() {
                 <div className="w-[80%] mx-auto h-[98%] flex gap-[2%]">
                     
                     {/* Gráfico */}
-                    <div className="w-[50%] h-[100%] flex justify-center items-center flex-col border border-primary bg-white rounded-xl gap-8">
+                    <div className="w-[50%] h-[100%] flex justify-center items-center flex-col bg-white rounded-xl gap-8 shadow">
                         <h3 className="text-lg font-semibold mb-4 text-gray-700">Fluxo de Atendimentos – Últimos 7 Dias</h3>
                         <ResponsiveContainer width="90%" height="80%">
                             <BarChart data={weeklyData}>
@@ -75,7 +75,7 @@ export default function KpiSection() {
                     </div>
 
                     {/* Lista de Agendamentos */}
-                    <div className="w-[50%] h-full overflow-x-auto p-4 bg-white rounded-xl border border-primary">
+                    <div className="w-[50%] h-full overflow-x-auto p-4 bg-white rounded-xl shadow">
                         <h4 className="text-lg font-semibold text-center mb-4 text-gray-700">Agendamentos do Dia (20/20/2020)</h4>
                         <div className="flex gap-4 overflow-x-auto pb-4 w-full">
                             {Array.from({ length: Math.ceil(agendamentosDoDia.length / 2) }, (_, colIndex) => (
