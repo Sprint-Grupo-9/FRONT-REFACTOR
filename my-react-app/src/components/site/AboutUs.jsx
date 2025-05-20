@@ -23,7 +23,7 @@ export function AboutUs() {
       <div className="w-2/4 h-full flex flex-col justify-center items-center">
       <MapsReact/>
       <span className="text-end pt-8 pl-56">
-      <p className="text-white font-figtree font-extralight"><b>Endereço:</b><br></br> Rua Columbia 123, Vila Boa São Paulo, SP</p>
+      <p className="text-white font-figtree font-extralight pr-28"><b>Endereço:</b><br></br> Rua Columbia 123, Vila Boa São Paulo, SP</p>
         </span>
       </div>
     </div>

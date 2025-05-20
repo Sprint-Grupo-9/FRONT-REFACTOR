@@ -11,7 +11,7 @@ function Cardsite(){
         </div>
       </div>
         <div className='w-2/3 h-full flex flex-col justify-center items-start pl-4'>
-            <h1 className='text-navy-blue font-poppins text-[24px] font-bold'>Banho e Tosa</h1> 
+            <h1 className='text-navy-blue font-poppins text-[24px] mb-4 font-bold'>Banho e Tosa</h1> 
             <button className='bg-secondary text-white font-bold font-figtree py-2 px-6 rounded-lg transition-all duration-900 hover:bg-white hover:text-primary'>Agendar</button>
        </div>
       </div>
