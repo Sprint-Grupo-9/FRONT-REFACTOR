@@ -2,7 +2,7 @@ import Logo from "../shared/Logo";
 
 function Header(){
     return (
-      <div className="fixed w-full h-[85px]  bg-primary flex justify-center">
+      <div className="fixed w-full h-[85px]  bg-primary flex justify-center z-50">
         
         <div className=" w-10/12 h-full flex place-content-between items-center">
          
