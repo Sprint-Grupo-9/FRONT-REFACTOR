@@ -1,29 +1,52 @@
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import TextBoxSystem from "../system/TextBoxSystem"
 import ButtonSystem from "../system/ButtonSystem";
 import { MdModeEdit } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
 import { saveUserProfile, loadUserProfile, clearUserProfile  } from "../../utils/mockStorage";
+import { getOwnerInformation } from "../../services/api";
+
 
 function ProfileContent() {
 
     const initialData = {
-        nome: 'Matheus',
-        cpf: '44082448802',
-        email: 'matheus@gmail.com',
-        telefone: '11940234507',
-        cep: '01504000',
-        numero: '266',
-        complemento: 'Ap. 51',
-        logradouro: 'Rua Vergueiro',
-        bairro: 'Liberdade'
+        nome: '',
+        cpf: '',
+        email: '',
+        telefone: '',
+        cep: '',
+        numero: '',
+        complemento: '',
+        logradouro: '',
+        bairro: ''
     };
     const [editable, setEditable] = useState(false)
+    const [userData, setUserData] = useState(initialData)
+    const originalData = useRef(initialData)
 
-    const savedData = loadUserProfile();
-    const [userData, setUserData] = useState(savedData || initialData)
-    const originalData = useRef(savedData || initialData)
+    useEffect(() => {
+        const id = localStorage.getItem("id");
+        if (id) {
+            getOwnerInformation(id)
+                .then(res => {
+                    setUserData({
+                        nome: res.data.name || '',
+                        cpf: res.data.cpf || '',
+                        email: res.data.email || '',
+                        telefone: res.data.phoneNumber || '',
+                        cep: res.data.cep || '',
+                        numero: res.data.number || '',
+                        complemento: res.data.complement || '',
+                        logradouro: res.data.street || '',
+                        bairro: res.data.neighborhood || ''
+                    });
+                })
+                 .catch(err => {
+                    console.error('Erro ao buscar dados do usuário:', err);
+                });
+        }
+    })
 
     const saveData = () => {
         saveUserProfile(userData);
@@ -75,7 +98,6 @@ function ProfileContent() {
                 <TextBoxSystem
                     id="nome"
                     title="Nome"
-                    hint="Daniel"
                     onChange={handleChange}
                     value={userData.nome}
                     disabled={true}
@@ -86,7 +108,6 @@ function ProfileContent() {
                 <TextBoxSystem
                     id="cpf"
                     title="CPF"
-                    hint="000.000.000-00"
                     onChange={handleChange}
                     value={userData.cpf}
                     mask="000.000.000-00"
@@ -99,7 +120,6 @@ function ProfileContent() {
                 <TextBoxSystem
                     id="email"
                     title="Email"
-                    hint="daniel@email.com"
                     onChange={handleChange}
                     value={userData.email}
                     disabled={!editable}
@@ -108,7 +128,6 @@ function ProfileContent() {
                 <TextBoxSystem
                     id="telefone"
                     title="Telefone"
-                    hint="(00) 00000-0000"
                     onChange={handleChange}
                     value={userData.telefone}
                     mask="(00) 00000-0000"
@@ -119,7 +138,6 @@ function ProfileContent() {
                     <TextBoxSystem
                         id="cep"
                         title="CEP"
-                        hint="00000-000"
                         width="w-60"
                         onChange={handleChange}
                         value={userData.cep}
@@ -129,7 +147,6 @@ function ProfileContent() {
                     <TextBoxSystem
                         id="numero"
                         title="Número"
-                        hint="266"
                         width="w-28"
                         onChange={handleChange}
                         value={userData.numero}
@@ -138,7 +155,6 @@ function ProfileContent() {
                 <TextBoxSystem
                     id="complemento"
                     title="Complemento"
-                    hint="Ap. 51"
                     onChange={handleChange}
                     value={userData.complemento}
                     disabled={!editable} />
@@ -147,7 +163,6 @@ function ProfileContent() {
                 <TextBoxSystem
                     id="logradouro"
                     title="Logradouro"
-                    hint="Rua Vergueiro"
                     onChange={handleChange}
                     value={userData.logradouro}
                     disabled={!editable} />
@@ -155,7 +170,6 @@ function ProfileContent() {
                 <TextBoxSystem
                     id="bairro"
                     title="Bairro"
-                    hint="Liberdade"
                     onChange={handleChange}
                     value={userData.bairro}
                     disabled={!editable} />

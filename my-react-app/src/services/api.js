@@ -33,4 +33,9 @@ export const loginOwner = async (loginData) => {
     return response.data;
 };
 
+export const getOwnerInformation = (id) => {
+    return api.get(`/owners/${id}`);
+}
+
+
 export default api;

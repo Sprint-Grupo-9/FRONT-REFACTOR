@@ -11,7 +11,7 @@ function SidebarSystem({
     services = false,
     appointments = false,
     pets = false,
-    username = "Matheus"
+    username = (localStorage.getItem("name")?.match(/^[^\s]+/)?.[0]) || "Usuário"
 }) {
 
     const navigate = useNavigate();
