@@ -16,8 +16,8 @@ const position = [-23.6341714, -46.520872]; // Rua Colúmbia, 971
 
 export default function MapsReact() {
   return (
-    <div className="p-4 bg-white rounded-xl shadow-lg w-8/12  h-4/5 mx-auto">
-      <MapContainer center={position} zoom={16} scrollWheelZoom={false} className="w-full h-full rounded-lg">
+    <div className="p-4 bg-white rounded-xl shadow-lg w-8/12  h-4/5">
+      <MapContainer center={position} zoom={16} scrollWheelZoom={false} className="w-full h-full rounded-lg" style={{zIndex: 0, position: 'relative'}}>
         <TileLayer
           attribution='&copy; <a href="https://osm.org/copyright">OpenStreetMap</a>'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
