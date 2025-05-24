@@ -3,34 +3,12 @@ import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recha
 import { motion, AnimatePresence } from 'framer-motion';
 import { CardKpi } from './CardKpi';
 import { CardAppointment } from './CardAppointment';
+import Calendar from 'react-calendar';
+import './CalendarDash.css'
+import TextBoxSystem from "../system/TextBoxSystem";
 import axios from 'axios';
 
-// const agendamentosDoDia = [
-//     {
-//         cliente: 'Carlos Souza',
-//         pet: 'Max - Golden Retriever',
-//         procedimento: 'Desembolo',
-//         valor: '60R$',
-//         horarioInicio: '09:00',
-//         horarioFim: '10:00',
-//     },
-//     {
-//         cliente: 'Maria Oliveira',
-//         pet: 'Luna - Persa',
-//         procedimento: 'Banho',
-//         valor: '55R$',
-//         horarioInicio: '10:00',
-//         horarioFim: '10:30',
-//     },
-//     {
-//         cliente: 'Matheus',
-//         pet: 'Thor - Pastor Alemão',
-//         procedimento: 'Banho',
-//         valor: '30R$',
-//         horarioInicio: '11:00',
-//         horarioFim: '12:00',
-//     },
-// ];
+
 
 
 export default function KpiSection() {
@@ -94,20 +72,34 @@ export default function KpiSection() {
     }, []);
 
     const [agendamentosDoDia, setAgendamentosDoDia] = useState([]);
-    const dataSelecionada = '2025-05-22'; // pode vir de um state depois
+    const [dataSelecionada, setdataSelecionada] = useState(new Date());// pode vir de um state depois
+
+
+    const handleDateChange = (date) => {
+        setdataSelecionada(date);
+        console.log("Data selecionada:", date);
+    };
+
+    const formattedDate = dataSelecionada.toLocaleDateString('pt-BR');
+
+
     useEffect(() => {
+        const dataFormatada = dataSelecionada.toISOString().split('T')[0]; // YYYY-MM-DD
 
         axios
-            .get(`http://localhost:8080/dashboards/appointments/date`, {
-                params: { date: dataSelecionada },
+            .get("http://localhost:8080/dashboards/appointments/date", {
+                params: { date: dataFormatada },
                 headers: {
                     Authorization: `Bearer ${token}`,
                 },
             })
             .then((res) => {
-                if (res.status === 204) return;
+                if (res.status === 204) {
+                    setAgendamentosDoDia([]); // limpa os dados anteriores
+                    return;
+                }
 
-                const { cardResponses, infoResponses } = res.data;
+                const { infoResponses } = res.data;
 
                 const agendamentos = infoResponses.map((info) => {
                     return {
@@ -137,10 +129,14 @@ export default function KpiSection() {
             })
             .catch((err) => {
                 console.error('Erro ao buscar agendamentos:', err);
+                setAgendamentosDoDia([]); // trata erro limpando também
             });
-    }, []);
+    }, [dataSelecionada]);
 
-    
+    console.log(dataSelecionada)
+
+    const [calendarOpen, setCalendarOpen] = useState(false);
+
 
     return (
         <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]">
@@ -198,52 +194,70 @@ export default function KpiSection() {
 
                     {/* Lista de Agendamentos */}
                     <div className="w-[50%] h-full overflow-x-auto p-4 bg-white rounded-xl shadow">
-                        <h4 className="text-lg font-semibold text-center mb-4 text-gray-700">
-                            Agendamentos do Dia ({dataSelecionada})
-                        </h4>
-                        <div className="flex gap-4 overflow-x-auto pb-4 w-full">
-                            {Array.from({ length: Math.ceil(agendamentosDoDia.length / 2) }, (_, colIndex) => (
-                                <div key={colIndex} className="flex flex-col gap-4 min-w-[260px] flex-shrink-0">
-                                    {[0, 1].map((offset) => {
-                                        const item = agendamentosDoDia[colIndex * 2 + offset];
-                                        if (!item) return null;
-                                        return (
-                                            <div
-                                                key={offset}
-                                                className="bg-white rounded-xl shadow-md border border-gray-200 cursor-pointer hover:shadow-lg transition"
-                                                onClick={() => setDetalhes(item)}
-                                            >
-                                                <CardAppointment
-                                                    key={item.id}
-                                                    cliente={item.cliente}
-                                                    pet={item.pet}
-                                                    procedimento={item.procedimento}
-                                                    valor={item.valor}
-                                                    horarioInicio={item.horarioInicio}
-                                                    horarioFim={item.horarioFim}
-                                                    detalhesExtras={{
-                                                        cpf: item.cpf,
-                                                        email: item.email,
-                                                        telefone: item.telefone,
-                                                        endereco: item.endereco,
-                                                        funcionario: item.funcionario,
-                                                        idade: item.petIdade,
-                                                        especie: item.petEspecie,
-                                                        pelagem: item.petPelagem,
-                                                        porte: item.petPorte,
-                                                    }}
-                                                />
-                                            </div>
-                                        );
-                                    })}
+                        <div className="relative flex justify-center mb-4">
+                            <div className="w-64 border rounded px-2 py-1  text-center">
+                                <div className="text-xs">Agendamento do Dia</div>
+                                <div
+                                    className="text-sm text-black cursor-pointer"
+                                    onClick={() => setCalendarOpen(!calendarOpen)}
+                                >
+                                    {formattedDate}
                                 </div>
-                            ))}
+                            </div>
+
+                            {calendarOpen && (
+                                <div className="absolute top-full mt-2 z-50">
+                                    <Calendar
+                                        className="rounded-lg shadow-lg p-1 bg-white text-black"
+                                        value={dataSelecionada}
+                                        minDate={new Date(new Date().setFullYear(new Date().getFullYear() - 1))}
+                                        onChange={(date) => {
+                                            handleDateChange(date);
+                                            setCalendarOpen(false);
+                                        }}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                        <div className="flex gap-4 overflow-x-auto pb-4 w-full">
+                            {agendamentosDoDia.length === 0 ? (
+                                <div className="w-full text-center text-red-600 font-semibold mt-4">
+                                    Nenhum agendamento encontrado para esta data.
+                                </div>
+                            ) : (
+                                agendamentosDoDia.map((item, index) => (
+                                    <div
+                                        key={item.id ?? index}
+                                        className="bg-white rounded-xl shadow-md border border-gray-200 cursor-pointer hover:shadow-lg transition"
+                                        onClick={() => setDetalhes(item)}
+                                    >
+                                        <CardAppointment
+                                            cliente={item.cliente}
+                                            pet={item.pet}
+                                            procedimento={item.procedimento}
+                                            valor={item.valor}
+                                            horarioInicio={item.horarioInicio}
+                                            horarioFim={item.horarioFim}
+                                            detalhesExtras={{
+                                                cpf: item.cpf,
+                                                email: item.email,
+                                                telefone: item.telefone,
+                                                endereco: item.endereco,
+                                                funcionario: item.funcionario,
+                                                idade: item.petIdade,
+                                                especie: item.petEspecie,
+                                                pelagem: item.petPelagem,
+                                                porte: item.petPorte,
+                                            }}
+                                        />
+                                    </div>
+                                ))
+                            )}
                         </div>
                     </div>
                 </div>
             </div>
 
-            {/* Modal de Ficha */}
             {/** Modal de Ficha */}
             <AnimatePresence>
                 {detalhes && (
@@ -323,6 +337,6 @@ export default function KpiSection() {
                     </motion.div>
                 )}
             </AnimatePresence>
-        </div>
+        </div >
     );
 }
