@@ -1,19 +1,9 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CardKpi } from './CardKpi';
 import { CardAppointment } from './CardAppointment';
-
-
-const weeklyData = [
-    { day: 'Seg', clientes: 10 },
-    { day: 'Ter', clientes: 6 },
-    { day: 'Qua', clientes: 7 },
-    { day: 'Qui', clientes: 8 },
-    { day: 'Sex', clientes: 2 },
-    { day: 'Sáb', clientes: 3 },
-    { day: 'Dom', clientes: 5 },
-];
+import axios from 'axios';
 
 const agendamentosDoDia = [
     {
@@ -43,24 +33,108 @@ const agendamentosDoDia = [
 ];
 
 export default function KpiSection() {
+    // Estado para armazenar os detalhes do agendamento
     const [detalhes, setDetalhes] = useState(null);
 
+    const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xhcml1bS50ZXN0ZUBlbWFpbC5jb20iLCJpYXQiOjE3NDgwNTUxNzEsImV4cCI6MTgzNDQ1NTE3MX0.lG9GhIkZJ_Wj4qXS2pt8BUwOrS25c2QFByCk5Q8a-pBr_LYTsaUk8Ru9fuU3xywKb3zS8KoINHBhaDzDMDM7BQ';  // Aqui você pode colocar o token fixo ou pegar do localStorage
+
+    const [weeklyData, setWeeklyData] = useState([]);
+
+    useEffect(() => {
+
+        axios.get('http://localhost:8080/dashboards/procedures/amount-last-seven-days', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                const data = response.data;
+
+                const formattedData = Object.entries(data).map(([date, count]) => {
+                    const [year, month, day] = date.split('-');
+                    return { day: `${day}/${month}`, clientes: count };
+                });
+                setWeeklyData(formattedData);
+            })
+            .catch(error => {
+                console.error('Erro ao buscar dados:', error);
+            });
+    }, []);
+
+// KPI para o procedimento mais realizado
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/dashboards/procedures/most-performed-month", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+            .then((res) => res.json())
+            .then((json) => setData(json))
+            .catch((err) => console.error("Erro ao buscar dados:", err));
+    }, []);
+
+
+    // KPI para o procedimento menos realizado
+    const [dataKPI2, setDataKPI2] = useState(null);
+
+    useEffect(() => {
+        fetch(" http://localhost:8080/dashboards/procedures/least-performed-month", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+            .then((res) => res.json())
+            .then((json) => setDataKPI2(json))
+            .catch((err) => console.error("Erro ao buscar dados:", err));
+    }, []);
+
+   
+
     return (
-    <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]">
-       
+        <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]">
+
             {/* KPIs */}
             <div className="w-[95%] h-[25%]  flex flex-row gap-[2%] justify-center pt-[2%]">
-                <CardKpi title="Procedimento Mais Realizado" description="Banho / 1" />
-                <CardKpi title="Procedimento com Menor Demanda " description="Tosa / 1" />
+                <>
+                    {data && (
+                        <CardKpi
+                            title={
+                                <>
+                                    Procedimento mais Realizado -<br />
+                                    ({data.start}) - ({data.end})
+                                </>
+                            }
+                            description={`${data.serviceName} / ${data.count}`}
+                        />
+                    )}
+                </>
+                  <>
+                    {dataKPI2 && (
+                        <CardKpi
+                            title={
+                                <>
+                                   Procedimento menos Realizado -<br />
+                                    ({dataKPI2.start}) - ({dataKPI2.end})
+                                </>
+                            }
+                            description={`${dataKPI2.serviceName} / ${dataKPI2.count}`}
+                        />
+                    )}
+                </>
+                {/* <CardKpi title="Procedimento com Menor Demanda " description="Tosa / 1" /> */}
                 <CardKpi title="Horário de Maior Movimento" description="10:00 - 12:00 / 1" />
                 <CardKpi title="Horário de Menor Movimento" description="10:00 - 12:00 / 1" />
             </div>
 
             {/* Gráfico + Lista */}
             <div className="w-full p-4 rounded-2xl h-[75%]">
-                
+
                 <div className="w-[80%] mx-auto h-[98%] flex gap-[2%]">
-                    
+
                     {/* Gráfico */}
                     <div className="w-[50%] h-[100%] flex justify-center items-center flex-col bg-white rounded-xl gap-8 shadow">
                         <h3 className="text-lg font-semibold mb-4 text-gray-700">Fluxo de Atendimentos – Últimos 7 Dias</h3>
@@ -96,7 +170,7 @@ export default function KpiSection() {
                                                     pet={item.pet}
                                                     procedimento={item.procedimento}
                                                     valor={item.valor}
-                                                    
+
                                                 />
                                             </div>
                                         );
@@ -134,8 +208,8 @@ export default function KpiSection() {
                             </button>
                             <h2 className="text-xl font-bold text-primary text-center mb-4">Ficha de Atendimento</h2>
                             <div className="text-left text-gray-800 space-y-4">
-                                 {/* DONO */}
-                                 <div>
+                                {/* DONO */}
+                                <div>
                                     <h3 className="font-semibold text-lg text-primary mb-1">Dono</h3>
                                     <p><strong>Nome:</strong> {detalhes.cliente}</p>
                                     <p><strong>CPF:</strong> 123.456.789-00</p>
