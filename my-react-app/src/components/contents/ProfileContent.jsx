@@ -4,6 +4,7 @@ import ButtonSystem from "../system/ButtonSystem";
 import { MdModeEdit } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
+import { saveUserProfile, loadUserProfile, clearUserProfile  } from "../../utils/mockStorage";
 
 function ProfileContent() {
 
@@ -19,8 +20,16 @@ function ProfileContent() {
         bairro: 'Liberdade'
     };
     const [editable, setEditable] = useState(false)
-    const [userData, setUserData] = useState(initialData)
-    const originalData = useRef(initialData)
+
+    const savedData = loadUserProfile();
+    const [userData, setUserData] = useState(savedData || initialData)
+    const originalData = useRef(savedData || initialData)
+
+    const saveData = () => {
+        saveUserProfile(userData);
+        console.log("Dados salvos:", userData);
+        setEditable(false);
+    };
 
 
     const toggleEdit = () => {
@@ -33,11 +42,6 @@ function ProfileContent() {
         }
     };
 
-    const saveData = () => {
-        console.log("Dados salvos:", userData)
-        setEditable(false)
-    };
-
     const handleChange = (e) => {
         const { id, value } = e.target
         setUserData(prev => ({
@@ -45,6 +49,7 @@ function ProfileContent() {
             [id]: value
         }));
     };
+
 
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
@@ -55,7 +60,7 @@ function ProfileContent() {
                         text="Salvar Dados"
                         logo={<IoIosSave />}
                         click={saveData}
-                        
+
                     />
                 )}
                 <ButtonSystem
@@ -76,7 +81,7 @@ function ProfileContent() {
                     disabled={true}
                     logo={true}
                     block={true}
-                    />
+                />
 
                 <TextBoxSystem
                     id="cpf"
@@ -88,7 +93,7 @@ function ProfileContent() {
                     disabled={true}
                     logo={true}
                     block={true}
-                    />
+                />
             </div>
             <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBoxSystem
@@ -97,8 +102,8 @@ function ProfileContent() {
                     hint="daniel@email.com"
                     onChange={handleChange}
                     value={userData.email}
-                    disabled={!editable} 
-                    />
+                    disabled={!editable}
+                />
 
                 <TextBoxSystem
                     id="telefone"
