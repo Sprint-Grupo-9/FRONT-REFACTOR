@@ -1,64 +1,190 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { BarChart, Bar, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import { motion, AnimatePresence } from 'framer-motion';
 import { CardKpi } from './CardKpi';
 import { CardAppointment } from './CardAppointment';
+import axios from 'axios';
 
-const weeklyData = [
-    { day: 'Seg', clientes: 20 },
-    { day: 'Ter', clientes: 35 },
-    { day: 'Qua', clientes: 30 },
-    { day: 'Qui', clientes: 45 },
-    { day: 'Sex', clientes: 50 },
-    { day: 'Sáb', clientes: 60 },
-    { day: 'Dom', clientes: 15 },
-];
+// const agendamentosDoDia = [
+//     {
+//         cliente: 'Carlos Souza',
+//         pet: 'Max - Golden Retriever',
+//         procedimento: 'Desembolo',
+//         valor: '60R$',
+//         horarioInicio: '09:00',
+//         horarioFim: '10:00',
+//     },
+//     {
+//         cliente: 'Maria Oliveira',
+//         pet: 'Luna - Persa',
+//         procedimento: 'Banho',
+//         valor: '55R$',
+//         horarioInicio: '10:00',
+//         horarioFim: '10:30',
+//     },
+//     {
+//         cliente: 'Matheus',
+//         pet: 'Thor - Pastor Alemão',
+//         procedimento: 'Banho',
+//         valor: '30R$',
+//         horarioInicio: '11:00',
+//         horarioFim: '12:00',
+//     },
+// ];
 
-const agendamentosDoDia = [
-    {
-        cliente: 'Nicollas',
-        pet: 'Valesca - Pug',
-        procedimento: 'Banho',
-        valor: '10R$',
-        horarioInicio: '09:00',
-        horarioFim: '10:00',
-    },
-    {
-        cliente: 'Andressa',
-        pet: 'Peppa - Shitzu',
-        procedimento: 'Tosa',
-        valor: '30R$',
-        horarioInicio: '10:00',
-        horarioFim: '10:30',
-    },
-    {
-        cliente: 'Matheus',
-        pet: 'Thor - Pastor Alemão',
-        procedimento: 'Banho',
-        valor: '30R$',
-        horarioInicio: '11:00',
-        horarioFim: '12:00',
-    },
-];
 
 export default function KpiSection() {
+    // Estado para armazenar os detalhes do agendamento
     const [detalhes, setDetalhes] = useState(null);
 
+    const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xhcml1bS50ZXN0ZUBlbWFpbC5jb20iLCJpYXQiOjE3NDgwNTUxNzEsImV4cCI6MTgzNDQ1NTE3MX0.lG9GhIkZJ_Wj4qXS2pt8BUwOrS25c2QFByCk5Q8a-pBr_LYTsaUk8Ru9fuU3xywKb3zS8KoINHBhaDzDMDM7BQ';  // Aqui você pode colocar o token fixo ou pegar do localStorage
+
+    const [weeklyData, setWeeklyData] = useState([]);
+
+    useEffect(() => {
+
+        axios.get('http://localhost:8080/dashboards/procedures/amount-last-seven-days', {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+            .then(response => {
+                const data = response.data;
+
+                const formattedData = Object.entries(data).map(([date, count]) => {
+                    const [year, month, day] = date.split('-');
+                    return { day: `${day}/${month}`, clientes: count };
+                });
+                setWeeklyData(formattedData);
+            })
+            .catch(error => {
+                console.error('Erro ao buscar dados:', error);
+            });
+    }, []);
+
+    // KPI para o procedimento mais realizado
+    const [data, setData] = useState(null);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/dashboards/procedures/most-performed-month", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+            .then((res) => res.json())
+            .then((json) => setData(json))
+            .catch((err) => console.error("Erro ao buscar dados:", err));
+    }, []);
+
+
+    // KPI para o procedimento menos realizado
+    const [dataKPI2, setDataKPI2] = useState(null);
+
+    useEffect(() => {
+        fetch(" http://localhost:8080/dashboards/procedures/least-performed-month", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+            .then((res) => res.json())
+            .then((json) => setDataKPI2(json))
+            .catch((err) => console.error("Erro ao buscar dados:", err));
+    }, []);
+
+    const [agendamentosDoDia, setAgendamentosDoDia] = useState([]);
+    const dataSelecionada = '2025-05-22'; // pode vir de um state depois
+    useEffect(() => {
+
+        axios
+            .get(`http://localhost:8080/dashboards/appointments/date`, {
+                params: { date: dataSelecionada },
+                headers: {
+                    Authorization: `Bearer ${token}`,
+                },
+            })
+            .then((res) => {
+                if (res.status === 204) return;
+
+                const { cardResponses, infoResponses } = res.data;
+
+                const agendamentos = infoResponses.map((info) => {
+                    return {
+                        id: info.id,
+                        cliente: info.pet.owner.name,
+                        cpf: info.pet.owner.cpf,
+                        email: info.pet.owner.email,
+                        telefone: info.pet.owner.phoneNumber,
+                        endereco: `${info.pet.owner.street}, ${info.pet.owner.number} - ${info.pet.owner.neighborhood}`,
+                        pet: `${info.pet.name} - ${info.pet.breed}`,
+                        petNome: info.pet.name,
+                        petRaca: info.pet.breed,
+                        petIdade: info.pet.age,
+                        petSexo: info.pet.sex,
+                        petEspecie: info.pet.species,
+                        petPorte: info.pet.size,
+                        petPelagem: info.pet.coat,
+                        funcionario: info.employee.name,
+                        procedimento: info.services,
+                        valor: `${info.totalPrice}R$`,
+                        horarioInicio: info.startDateTime.split('T')[1].slice(0, 5),
+                        horarioFim: info.endDateTime.split('T')[1].slice(0, 5),
+                    };
+                });
+
+                setAgendamentosDoDia(agendamentos);
+            })
+            .catch((err) => {
+                console.error('Erro ao buscar agendamentos:', err);
+            });
+    }, []);
+
+    
+
     return (
-        <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8 pt-32">
+        <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]">
+
             {/* KPIs */}
-            <div className="w-full h-10 flex flex-row gap-[30px] justify-center mt-[15px]">
-                <CardKpi title="Procedimento Mais Realizado" description="Banho - 1" />
-                <CardKpi title="Procedimento com Menor Demanda " description="Tosa - 1" />
-                <CardKpi title="Horário de Maior Movimento" description="10:00 12 - 1" />
-                <CardKpi title="Horário de Menor Movimento" description="10 ás 12 - 1" />
+            <div className="w-[95%] h-[25%]  flex flex-row gap-[2%] justify-center pt-[2%]">
+                <>
+                    {data && (
+                        <CardKpi
+                            title={
+                                <>
+                                    Procedimento mais Realizado -<br />
+                                    ({data.start}) - ({data.end})
+                                </>
+                            }
+                            description={`${data.serviceName} / ${data.count}`}
+                        />
+                    )}
+                </>
+                <>
+                    {dataKPI2 && (
+                        <CardKpi
+                            title={
+                                <>
+                                    Procedimento menos Realizado -<br />
+                                    ({dataKPI2.start}) - ({dataKPI2.end})
+                                </>
+                            }
+                            description={`${dataKPI2.serviceName} / ${dataKPI2.count}`}
+                        />
+                    )}
+                </>
+                {/* <CardKpi title="Procedimento com Menor Demanda " description="Tosa / 1" /> */}
+                <CardKpi title="Horário de Maior Movimento" description="10:00 - 12:00 / 1" />
+                <CardKpi title="Horário de Menor Movimento" description="10:00 - 12:00 / 1" />
             </div>
 
             {/* Gráfico + Lista */}
-            <div className="w-full mt-8 p-4 rounded-2xl h-full">
-                <div className="max-w-[1124px] mx-auto h-[90%] flex gap-6">
+            <div className="w-full p-4 rounded-2xl h-[75%]">
+
+                <div className="w-[80%] mx-auto h-[98%] flex gap-[2%]">
+
                     {/* Gráfico */}
-                    <div className="w-[50%] h-[450px] flex justify-center items-center flex-col border border-primary bg-white rounded-xl gap-8">
+                    <div className="w-[50%] h-[100%] flex justify-center items-center flex-col bg-white rounded-xl gap-8 shadow">
                         <h3 className="text-lg font-semibold mb-4 text-gray-700">Fluxo de Atendimentos – Últimos 7 Dias</h3>
                         <ResponsiveContainer width="90%" height="80%">
                             <BarChart data={weeklyData}>
@@ -71,8 +197,10 @@ export default function KpiSection() {
                     </div>
 
                     {/* Lista de Agendamentos */}
-                    <div className="w-[50%] h-full overflow-x-auto p-4 bg-white rounded-xl border border-primary">
-                        <h4 className="text-lg font-semibold text-center mb-4 text-gray-700">Agendamentos do Dia (20/20/2020)</h4>
+                    <div className="w-[50%] h-full overflow-x-auto p-4 bg-white rounded-xl shadow">
+                        <h4 className="text-lg font-semibold text-center mb-4 text-gray-700">
+                            Agendamentos do Dia ({dataSelecionada})
+                        </h4>
                         <div className="flex gap-4 overflow-x-auto pb-4 w-full">
                             {Array.from({ length: Math.ceil(agendamentosDoDia.length / 2) }, (_, colIndex) => (
                                 <div key={colIndex} className="flex flex-col gap-4 min-w-[260px] flex-shrink-0">
@@ -86,12 +214,24 @@ export default function KpiSection() {
                                                 onClick={() => setDetalhes(item)}
                                             >
                                                 <CardAppointment
-                                                    horarioInicio={item.horarioInicio}
-                                                    horarioFim={item.horarioFim}
+                                                    key={item.id}
                                                     cliente={item.cliente}
                                                     pet={item.pet}
                                                     procedimento={item.procedimento}
                                                     valor={item.valor}
+                                                    horarioInicio={item.horarioInicio}
+                                                    horarioFim={item.horarioFim}
+                                                    detalhesExtras={{
+                                                        cpf: item.cpf,
+                                                        email: item.email,
+                                                        telefone: item.telefone,
+                                                        endereco: item.endereco,
+                                                        funcionario: item.funcionario,
+                                                        idade: item.petIdade,
+                                                        especie: item.petEspecie,
+                                                        pelagem: item.petPelagem,
+                                                        porte: item.petPorte,
+                                                    }}
                                                 />
                                             </div>
                                         );
@@ -104,6 +244,7 @@ export default function KpiSection() {
             </div>
 
             {/* Modal de Ficha */}
+            {/** Modal de Ficha */}
             <AnimatePresence>
                 {detalhes && (
                     <motion.div
@@ -129,25 +270,26 @@ export default function KpiSection() {
                             </button>
                             <h2 className="text-xl font-bold text-primary text-center mb-4">Ficha de Atendimento</h2>
                             <div className="text-left text-gray-800 space-y-4">
-                                 {/* DONO */}
-                                 <div>
+                                {/* DONO */}
+                                {/* DONO */}
+                                <div>
                                     <h3 className="font-semibold text-lg text-primary mb-1">Dono</h3>
                                     <p><strong>Nome:</strong> {detalhes.cliente}</p>
-                                    <p><strong>CPF:</strong> 123.456.789-00</p>
-                                    <p><strong>Telefone:</strong> (11) 98765-4321</p>
-                                    <p><strong>Email:</strong> nicollas@email.com</p>
-                                    <p><strong>Endereço:</strong> Rua das Flores, 123, Apto 45, São Paulo - 01234-567</p>
+                                    <p><strong>CPF:</strong> {detalhes.cpf}</p>
+                                    <p><strong>Telefone:</strong> ({detalhes.telefone.slice(0, 2)}) {detalhes.telefone.slice(2, 7)}-{detalhes.telefone.slice(7)}</p>
+                                    <p><strong>Email:</strong> {detalhes.email}</p>
+                                    <p><strong>Endereço:</strong> {detalhes.endereco}</p>
                                 </div>
 
                                 {/* PET */}
                                 <div>
                                     <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Pet</h3>
-                                    <p><strong>Nome:</strong> {detalhes.pet.split(' - ')[0]}</p>
-                                    <p><strong>Espécie:</strong> Cachorro</p>
-                                    <p><strong>Raça:</strong> {detalhes.pet.split(' - ')[1]}</p>
-                                    <p><strong>Idade:</strong> 5 anos</p>
-                                    <p><strong>Sexo:</strong> Fêmea</p>
-                                    <p><strong>Pelagem:</strong> Curta</p>
+                                    <p><strong>Nome:</strong> {detalhes.petNome}</p>
+                                    <p><strong>Espécie:</strong> {detalhes.petEspecie}</p>
+                                    <p><strong>Raça:</strong> {detalhes.petRaca}</p>
+                                    <p><strong>Idade:</strong> {detalhes.petIdade} ano(s)</p>
+                                    <p><strong>Sexo:</strong> {detalhes.petSexo}</p>
+                                    <p><strong>Pelagem:</strong> {detalhes.petPelagem}</p>
                                 </div>
 
                                 {/* SERVIÇO */}
@@ -160,20 +302,20 @@ export default function KpiSection() {
                                 {/* ÚLTIMOS AGENDAMENTOS DO DONO */}
                                 <div>
                                     <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos Agendamentos desse Dono</h3>
-                                    <ul className="list-disc list-inside">
-                                        <li>01/05/2025 14:00 - 15:00 – Tosa – 30R$</li>
-                                        <li>03/05/2025 09:00 - 10:00 – Banho – 10R$</li>
-                                        <li>03/05/2025 09:00 - 10:00 – Banho – 10R$</li>
+                                    <ul className="list-disc list-inside text-sm">
+                                        <li>01/05/2025 14:00 - 15:00 – Tosa – R$30</li>
+                                        <li>03/05/2025 09:00 - 10:00 – Banho – R$10</li>
+                                        <li>03/05/2025 09:00 - 10:00 – Banho – R$10</li>
                                     </ul>
                                 </div>
 
                                 {/* ÚLTIMOS AGENDAMENTOS DO PET */}
                                 <div>
                                     <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos Agendamentos desse Pet</h3>
-                                    <ul className="list-disc list-inside">
-                                        <li>01/04/2025 13:00 - 14:00– Tosa – 30R$</li>
-                                        <li>15/04/2025 11:00 - 12:00 – Banho – 10R$</li>
-                                        <li>15/04/2025 11:00 - 13:00 – Banho – 10R$</li>
+                                    <ul className="list-disc list-inside text-sm">
+                                        <li>01/04/2025 13:00 - 14:00 – Tosa – R$30</li>
+                                        <li>15/04/2025 11:00 - 12:00 – Banho – R$10</li>
+                                        <li>15/04/2025 11:00 - 13:00 – Banho – R$10</li>
                                     </ul>
                                 </div>
                             </div>

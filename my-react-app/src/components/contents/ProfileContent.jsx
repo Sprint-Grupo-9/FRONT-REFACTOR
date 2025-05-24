@@ -18,7 +18,6 @@ function ProfileContent() {
         logradouro: 'Rua Vergueiro',
         bairro: 'Liberdade'
     };
-
     const [editable, setEditable] = useState(false)
     const [userData, setUserData] = useState(initialData)
     const originalData = useRef(initialData)
