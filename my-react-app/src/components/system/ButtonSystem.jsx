@@ -8,8 +8,9 @@ function ButtonSystem(props) {
         blue: "bg-secondary text-white",
         red: "bg-primary text-white",
         transp: "border-2 border-white text-white hover:border-slate-300",
-        orange: "bg-orange-400 text-white ",
-        redTransp: "border-2 border-primary text-primary hover:border-slate-300"
+        orange: "bg-orange-400 text-white",
+        redTransp: "border-2 border-primary text-primary hover:border-slate-300",
+        test: "bg-purple-400 text-white"
     };
 
     const variantClass = variants[props.variant || "white"];

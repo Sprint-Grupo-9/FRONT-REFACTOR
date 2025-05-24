@@ -6,6 +6,7 @@ import { CgClose } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
+import { savePetProfile, loadPetProfile, clearPetProfile } from "../../utils/mockStorage";
 
 function PetProfileContent() {
 
@@ -24,8 +25,10 @@ function PetProfileContent() {
     };
 
     const [editable, setEditable] = useState(false)
-    const [userData, setUserData] = useState(initialData)
-    const originalData = useRef(initialData)
+
+    const savedData = loadPetProfile();
+    const [userData, setUserData] = useState(savedData || initialData);
+    const originalData = useRef(savedData || initialData);
 
 
     const toggleEdit = () => {
@@ -39,6 +42,7 @@ function PetProfileContent() {
     };
 
     const saveData = () => {
+        savePetProfile(userData);
         console.log("Dados salvos:", userData)
         setEditable(false)
     };
@@ -56,13 +60,13 @@ function PetProfileContent() {
             <div className="flex relative w-full">
                 <div className="flex pl-20">
                     <ButtonSystem
-                    variant="redTransp"
-                    text="Voltar"
-                    click={goToPets}
-                    logo={<IoChevronBackOutline />}
-                />
+                        variant="redTransp"
+                        text="Voltar"
+                        click={goToPets}
+                        logo={<IoChevronBackOutline />}
+                    />
                 </div>
-                
+
             </div>
             <div className="flex gap-6 pb-10">
                 {editable && (
