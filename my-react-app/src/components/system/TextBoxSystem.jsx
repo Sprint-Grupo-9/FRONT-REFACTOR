@@ -10,8 +10,7 @@ function TextBoxSystem(props) {
     return (
         <>
             <div className="flex flex-col">
-                <span className="text-slate-400 pb-2 pl-2 text-[14px]">{props.title}</span>
-
+                <span className="text-slate-400 pb-1 pl-2 text-[1rem]">{props.title}</span>
                 {mask ? (
                     <IMaskInput
                         {...rest}
@@ -36,11 +35,3 @@ function TextBoxSystem(props) {
 }
 
 export default TextBoxSystem
-
-
-
-{/* <IMaskInput
-  mask="(00) 00000-0000"
-  placeholder="(11) 91234-5678"
-  className="text-[18px] w-80 h-10 bg-white rounded-lg pl-2 border-2 border-slate-200 text-navy-blue"
-/> */}

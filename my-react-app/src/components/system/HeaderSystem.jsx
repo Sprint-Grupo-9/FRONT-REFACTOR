@@ -15,7 +15,7 @@ function HeaderSystem(props) {
         <div className="flex items-center h-full gap-6">
         <ButtonSystem variant="transp" click={goToSite} text="Voltar ao Site" logo={<IoChevronBackOutline />}/>
         </div>
-        <div className="h-full flex items-center text-[18px] text-white font-bold font-figtree">
+        <div className="h-full flex items-center text-[1.6rem] text-white font-bold font-figtree">
           {props.text}
         </div>
         <div className="flex items-center h-full">
