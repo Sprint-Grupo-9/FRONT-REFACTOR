@@ -5,7 +5,7 @@ import ProfileContent from "../components/contents/ProfileContent";
 function SystemProfile() {
     return (
         <>
-        <HeaderSystem text="Perfil" />
+        <HeaderSystem text="Meu Perfil" />
         <div className="w-full h-screen  flex flex-row">
             <SidebarSystem profile />
             <ProfileContent />

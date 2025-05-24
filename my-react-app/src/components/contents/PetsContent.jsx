@@ -26,8 +26,6 @@ function PetsContent() {
                 text="Adicionar Novo Pet" 
                 logo={<FaPlus/>} 
                 />
-
-                
             </div>
         </div>
     )
