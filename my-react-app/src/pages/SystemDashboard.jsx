@@ -5,13 +5,13 @@ import SidebarSystem from "../components/system/SidebarSystem";
 function SystemDashboard() {
 
   return (
-    <>
+    <div className="w-full h-full overflow-hidden" >
       <HeaderSystem text="Agendamentos" />
-      <div className="w-full h-screen flex flex-start">
-        <SidebarSystem appointments />
+      <div className="w-full h-screen flex flex-start ">
+        {/* <SidebarSystem appointments /> */}
         <KpiSection />
       </div>
-    </>
+    </div>
   )
 }
 
