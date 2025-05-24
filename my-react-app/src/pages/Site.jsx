@@ -5,21 +5,27 @@ import { Footer } from "../components/site/Footer";
 import Header from "../components/site/Header";
 import Servicos from "../components/site/Servicos";
 
-function Site (){
-    return (
-        <div>
-          <Header/>
-          <div className="pt-[84.4px]">
-          <Banner/>
-          </div>
-          <div>
-          <Servicos/>
-          <AboutUs/>
-          </div>
-          <Squad/>
-          <Footer/>
-        </div>
-    );
+function Site() {
+  return (
+    <div id="home">
+      <Header />
+      <div className="pt-[84.4px]">
+        <Banner />
+      </div>
+      <div id="services">
+        <Servicos />
+      </div>
+      <div id="about">
+        <AboutUs />
+      </div>
+      <div id="squad">
+        <Squad />
+      </div>
+      <div id="footer">
+        <Footer />
+      </div>
+    </div>
+  );
 }
 
 export default Site;
