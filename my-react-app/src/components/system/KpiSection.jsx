@@ -7,7 +7,7 @@ import Calendar from 'react-calendar';
 import './CalendarDash.css'
 import TextBoxSystem from "../system/TextBoxSystem";
 import axios from 'axios';
-
+import { capitalizeFirstLetter } from '../../utils/pass';
 
 
 
@@ -133,7 +133,25 @@ export default function KpiSection() {
 
                 const agendamentos = infoResponses.map((info) => {
                     const formatarAgendamento = (ag) => {
-                        return `${ag.date} ${ag.start} - ${ag.end} – ${ag.servicesNames} – R$${ag.price}`;
+                        // Converte a data completa em objeto Date
+                        const dataHoraInicio = new Date(`${ag.date}T${ag.start}`);
+                        const dataHoraFim = new Date(`${ag.date}T${ag.end}`);
+
+                        // Formata data brasileira: dd/mm/aaaa
+                        const dataFormatada = dataHoraInicio.toLocaleDateString('pt-BR');
+
+                        // Formata horário: hh:mm
+                        const horaInicio = dataHoraInicio.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        });
+
+                        const horaFim = dataHoraFim.toLocaleTimeString('pt-BR', {
+                            hour: '2-digit',
+                            minute: '2-digit',
+                        });
+
+                        return `${dataFormatada} ${horaInicio} - ${horaFim} – ${ag.servicesNames} – R$${ag.price}`;
                     };
 
                     const ultimosDoDono = info.lastOwnerAppointments?.dtoList
@@ -146,21 +164,21 @@ export default function KpiSection() {
 
                     return {
                         id: info.id,
-                        cliente: info.pet.owner.name,
+                        cliente: capitalizeFirstLetter(info.pet.owner.name),
                         cpf: info.pet.owner.cpf,
-                        email: info.pet.owner.email,
+                        email: capitalizeFirstLetter(info.pet.owner.email),
                         telefone: info.pet.owner.phoneNumber,
-                        endereco: `${info.pet.owner.street}, ${info.pet.owner.number} - ${info.pet.owner.neighborhood}`,
-                        pet: `${info.pet.name} - ${info.pet.breed}`,
-                        petNome: info.pet.name,
-                        petRaca: info.pet.breed,
+                        endereco: `${capitalizeFirstLetter(info.pet.owner.street)}, ${info.pet.owner.number} - ${capitalizeFirstLetter(info.pet.owner.neighborhood)}`,
+                        pet: `${capitalizeFirstLetter(info.pet.name)} - ${capitalizeFirstLetter(info.pet.breed)}`,
+                        petNome: capitalizeFirstLetter(info.pet.name),
+                        petRaca: capitalizeFirstLetter(info.pet.breed),
                         petIdade: info.pet.age,
-                        petSexo: info.pet.sex,
-                        petEspecie: info.pet.species,
-                        petPorte: info.pet.size,
-                        petPelagem: info.pet.coat,
-                        funcionario: info.employee.name,
-                        procedimento: info.services,
+                        petSexo: capitalizeFirstLetter(info.pet.sex),
+                        petEspecie: capitalizeFirstLetter(info.pet.species),
+                        petPorte: capitalizeFirstLetter(info.pet.size),
+                        petPelagem: capitalizeFirstLetter(info.pet.coat),
+                        funcionario: capitalizeFirstLetter(info.employee.name),
+                        procedimento: capitalizeFirstLetter(info.services),
                         valor: `${info.totalPrice}R$`,
                         horarioInicio: info.startDateTime.split('T')[1].slice(0, 5),
                         horarioFim: info.endDateTime.split('T')[1].slice(0, 5),
@@ -355,7 +373,7 @@ export default function KpiSection() {
                             <h2 className="text-xl font-bold text-primary text-center mb-4">Ficha de Atendimento</h2>
                             <div className="text-left text-gray-800 space-y-4">
                                 {/* DONO */}
-                                {/* DONO */}
+
                                 <div>
                                     <h3 className="font-semibold text-lg text-primary mb-1">Dono</h3>
                                     <p><strong>Nome:</strong> {detalhes.cliente}</p>
@@ -385,9 +403,9 @@ export default function KpiSection() {
 
                                 {/* ÚLTIMOS AGENDAMENTOS DO DONO */}
                                 {detalhes.ultimosAgendamentosDono && detalhes.ultimosAgendamentosDono.length > 0 && (
-                                    <div>
-                                        <h4  className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do dono:</h4>
-                                        <ul>
+                                    <div >
+                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do dono:</h4>
+                                        <ul className='text-left text-gray-800 space-y-4 mb-2'>
                                             {detalhes.ultimosAgendamentosDono.map((item, index) => (
                                                 <li key={index}>{item}</li>
                                             ))}
