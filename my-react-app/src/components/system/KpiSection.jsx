@@ -72,7 +72,7 @@ export default function KpiSection() {
     }, []);
 
 
- const [dataKPI3, setDataKPI3] = useState(null);
+    const [dataKPI3, setDataKPI3] = useState(null);
 
     useEffect(() => {
         fetch("http://localhost:8080/dashboards/procedures/most-procedures-timing-last-thirty-days", {
@@ -132,6 +132,18 @@ export default function KpiSection() {
                 const { infoResponses } = res.data;
 
                 const agendamentos = infoResponses.map((info) => {
+                    const formatarAgendamento = (ag) => {
+                        return `${ag.date} ${ag.start} - ${ag.end} – ${ag.servicesNames} – R$${ag.price}`;
+                    };
+
+                    const ultimosDoDono = info.lastOwnerAppointments?.dtoList
+                        ?.slice(0, 3)
+                        .map(formatarAgendamento) || [];
+
+                    const ultimosDoPet = info.lastPetAppointments?.dtoList
+                        ?.slice(0, 3)
+                        .map(formatarAgendamento) || [];
+
                     return {
                         id: info.id,
                         cliente: info.pet.owner.name,
@@ -152,6 +164,8 @@ export default function KpiSection() {
                         valor: `${info.totalPrice}R$`,
                         horarioInicio: info.startDateTime.split('T')[1].slice(0, 5),
                         horarioFim: info.endDateTime.split('T')[1].slice(0, 5),
+                        ultimosAgendamentosDono: ultimosDoDono,
+                        ultimosAgendamentosPet: ultimosDoPet,
                     };
                 });
 
@@ -163,7 +177,7 @@ export default function KpiSection() {
             });
     }, [dataSelecionada]);
 
-    console.log(dataSelecionada)
+    console.log("Agendamentos do dia:", agendamentosDoDia);
 
     const [calendarOpen, setCalendarOpen] = useState(false);
 
@@ -200,7 +214,7 @@ export default function KpiSection() {
                     )}
                 </>
                 {/* <CardKpi title="Procedimento com Menor Demanda " description="Tosa / 1" /> */}
-    <>
+                <>
                     {dataKPI3 && (
                         <CardKpi
                             title={
@@ -214,7 +228,7 @@ export default function KpiSection() {
                     )}
                 </>
                 {/* <CardKpi title="Horário de Maior Movimento" description="10:00 - 12:00 / 1" /> */}
-                    <>
+                <>
                     {dataKPI4 && (
                         <CardKpi
                             title={
@@ -370,24 +384,27 @@ export default function KpiSection() {
                                 </div>
 
                                 {/* ÚLTIMOS AGENDAMENTOS DO DONO */}
-                                <div>
-                                    <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos Agendamentos desse Dono</h3>
-                                    <ul className="list-disc list-inside text-sm">
-                                        <li>01/05/2025 14:00 - 15:00 – Tosa – R$30</li>
-                                        <li>03/05/2025 09:00 - 10:00 – Banho – R$10</li>
-                                        <li>03/05/2025 09:00 - 10:00 – Banho – R$10</li>
-                                    </ul>
-                                </div>
+                                {detalhes.ultimosAgendamentosDono && detalhes.ultimosAgendamentosDono.length > 0 && (
+                                    <div>
+                                        <h4  className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do dono:</h4>
+                                        <ul>
+                                            {detalhes.ultimosAgendamentosDono.map((item, index) => (
+                                                <li key={index}>{item}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
 
-                                {/* ÚLTIMOS AGENDAMENTOS DO PET */}
-                                <div>
-                                    <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos Agendamentos desse Pet</h3>
-                                    <ul className="list-disc list-inside text-sm">
-                                        <li>01/04/2025 13:00 - 14:00 – Tosa – R$30</li>
-                                        <li>15/04/2025 11:00 - 12:00 – Banho – R$10</li>
-                                        <li>15/04/2025 11:00 - 13:00 – Banho – R$10</li>
-                                    </ul>
-                                </div>
+                                {detalhes.ultimosAgendamentosPet && detalhes.ultimosAgendamentosPet.length > 0 && (
+                                    <div>
+                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do pet:</h4>
+                                        <ul>
+                                            {detalhes.ultimosAgendamentosPet.map((item, index) => (
+                                                <li key={index}>{item}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
                             </div>
                         </motion.div>
                     </motion.div>
