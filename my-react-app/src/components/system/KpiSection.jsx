@@ -44,7 +44,7 @@ export default function KpiSection() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/dashboards/procedures/most-performed-month", {
+        fetch("http://localhost:8080/dashboards/procedures/most-performed-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -60,7 +60,7 @@ export default function KpiSection() {
     const [dataKPI2, setDataKPI2] = useState(null);
 
     useEffect(() => {
-        fetch(" http://localhost:8080/dashboards/procedures/least-performed-month", {
+        fetch("http://localhost:8080/dashboards/procedures/least-performed-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -70,6 +70,36 @@ export default function KpiSection() {
             .then((json) => setDataKPI2(json))
             .catch((err) => console.error("Erro ao buscar dados:", err));
     }, []);
+
+
+ const [dataKPI3, setDataKPI3] = useState(null);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/dashboards/procedures/most-procedures-timing-last-thirty-days", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+            .then((res) => res.json())
+            .then((json) => setDataKPI3(json))
+            .catch((err) => console.error("Erro ao buscar dados:", err));
+    }, []);
+
+    const [dataKPI4, setDataKPI4] = useState(null);
+
+    useEffect(() => {
+        fetch("http://localhost:8080/dashboards/procedures/least-procedures-timing-last-thirty-days", {
+            headers: {
+                Authorization: `Bearer ${token}`
+            }
+        })
+
+            .then((res) => res.json())
+            .then((json) => setDataKPI4(json))
+            .catch((err) => console.error("Erro ao buscar dados:", err));
+    }, []);
+
 
     const [agendamentosDoDia, setAgendamentosDoDia] = useState([]);
     const [dataSelecionada, setdataSelecionada] = useState(new Date());// pode vir de um state depois
@@ -170,8 +200,34 @@ export default function KpiSection() {
                     )}
                 </>
                 {/* <CardKpi title="Procedimento com Menor Demanda " description="Tosa / 1" /> */}
-                <CardKpi title="Horário de Maior Movimento" description="10:00 - 12:00 / 1" />
-                <CardKpi title="Horário de Menor Movimento" description="10:00 - 12:00 / 1" />
+    <>
+                    {dataKPI3 && (
+                        <CardKpi
+                            title={
+                                <>
+                                    Horário de Maior Movimento -<br />
+                                    ({dataKPI3.start}) - ({dataKPI3.end})
+                                </>
+                            }
+                            description={`${dataKPI3.hour} / ${dataKPI3.count}`}
+                        />
+                    )}
+                </>
+                {/* <CardKpi title="Horário de Maior Movimento" description="10:00 - 12:00 / 1" /> */}
+                    <>
+                    {dataKPI4 && (
+                        <CardKpi
+                            title={
+                                <>
+                                    Horário de Maior Movimento -<br />
+                                    ({dataKPI4.start}) - ({dataKPI4.end})
+                                </>
+                            }
+                            description={`${dataKPI4.hour} / ${dataKPI4.count}`}
+                        />
+                    )}
+                </>
+                {/* <CardKpi title="Horário de Menor Movimento" description="10:00 - 12:00 / 1" /> */}
             </div>
 
             {/* Gráfico + Lista */}
