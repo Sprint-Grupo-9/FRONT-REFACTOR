@@ -5,9 +5,9 @@ import { CardKpi } from './CardKpi';
 import { CardAppointment } from './CardAppointment';
 import Calendar from 'react-calendar';
 import './CalendarDash.css'
-import TextBoxSystem from "../system/TextBoxSystem";
+    import TextBoxSystem from "../system/TextBoxSystem";
 import axios from 'axios';
-import { capitalizeFirstLetter } from '../../utils/pass';
+import { capitalizeFirstLetter,formatDateToBR } from '../../utils/pass';
 
 
 
@@ -151,7 +151,7 @@ export default function KpiSection() {
                             minute: '2-digit',
                         });
 
-                        return `${dataFormatada} ${horaInicio} - ${horaFim} – ${ag.servicesNames} – R$${ag.price}`;
+                        return `Agendamento do dia: ${dataFormatada} - Horario: ${horaInicio} ${horaFim} Serviço: ${ag.servicesNames} – R$${ag.price}`;
                     };
 
                     const ultimosDoDono = info.lastOwnerAppointments?.dtoList
@@ -201,20 +201,18 @@ export default function KpiSection() {
 
 
     return (
-        <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]">
+        <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]  font-figtree">
 
             {/* KPIs */}
             <div className="w-[95%] h-[25%]  flex flex-row gap-[2%] justify-center pt-[2%]">
                 <>
                     {data && (
                         <CardKpi
-                            title={
-                                <>
-                                    Procedimento mais Realizado -<br />
-                                    ({data.start}) - ({data.end})
-                                </>
-                            }
-                            description={`${data.serviceName} / ${data.count}`}
+                            title={<>Procedimento mais Realizado</>}
+                            date={<>
+                                ({formatDateToBR(data.start)}) - ({formatDateToBR(data.end)})
+                            </>}
+                            description={`${data.serviceName} - ${data.count} vezes`}
                         />
                     )}
                 </>
@@ -223,11 +221,13 @@ export default function KpiSection() {
                         <CardKpi
                             title={
                                 <>
-                                    Procedimento menos Realizado -<br />
-                                    ({dataKPI2.start}) - ({dataKPI2.end})
+                                    Procedimento menos Realizado
                                 </>
                             }
-                            description={`${dataKPI2.serviceName} / ${dataKPI2.count}`}
+                            date={<>
+                               ({formatDateToBR(dataKPI2.start)}) - ({formatDateToBR(dataKPI2.end)})
+                            </>}
+                            description={`${dataKPI2.serviceName} - ${dataKPI2.count} vezes`}
                         />
                     )}
                 </>
@@ -237,11 +237,13 @@ export default function KpiSection() {
                         <CardKpi
                             title={
                                 <>
-                                    Horário de Maior Movimento -<br />
-                                    ({dataKPI3.start}) - ({dataKPI3.end})
+                                    Horário de Maior Movimento 
                                 </>
                             }
-                            description={`${dataKPI3.hour} / ${dataKPI3.count}`}
+                              date={<>
+                                            ({formatDateToBR(dataKPI3.start)}) - ({formatDateToBR(dataKPI3.end)})
+                            </>}
+                            description={`${dataKPI3.hour.slice(0, 5)} - ${dataKPI3.count}  vezes`}
                         />
                     )}
                 </>
@@ -251,11 +253,13 @@ export default function KpiSection() {
                         <CardKpi
                             title={
                                 <>
-                                    Horário de Maior Movimento -<br />
-                                    ({dataKPI4.start}) - ({dataKPI4.end})
+                                    Horário de Menor Movimento 
                                 </>
                             }
-                            description={`${dataKPI4.hour} / ${dataKPI4.count}`}
+                              date={<>
+                                  ({formatDateToBR(dataKPI4.start)}) - ({formatDateToBR(dataKPI4.end)})
+                            </>}
+                            description={`${dataKPI4.hour.slice(0, 5)} - ${dataKPI4.count}  vezes`}
                         />
                     )}
                 </>
@@ -269,7 +273,7 @@ export default function KpiSection() {
 
                     {/* Gráfico */}
                     <div className="w-[50%] h-[100%] flex justify-center items-center flex-col bg-white rounded-xl gap-8 shadow">
-                        <h3 className="text-lg font-semibold mb-4 text-gray-700">Fluxo de Atendimentos – Últimos 7 Dias</h3>
+                        <h3 className="text-lg font-semibold mb-4 text-gray-700 pt-2">Fluxo de Atendimentos – Últimos 7 Dias</h3>
                         <ResponsiveContainer width="90%" height="80%">
                             <BarChart data={weeklyData}>
                                 <XAxis dataKey="day" />
@@ -283,8 +287,8 @@ export default function KpiSection() {
                     {/* Lista de Agendamentos */}
                     <div className="w-[50%] h-full overflow-x-auto p-4 bg-white rounded-xl shadow">
                         <div className="relative flex justify-center mb-4">
-                            <div className="w-64 border rounded px-2 py-1  text-center">
-                                <div className="text-xs">Agendamento do Dia</div>
+                            <div className="w-64 border rounded px-2 py-1 font-semibold mb-4 text-gray-700  text-center">
+                                <div className="text-[90%]  font-semibold flex-1 ">Agendamento do Dia</div>
                                 <div
                                     className="text-sm text-black cursor-pointer"
                                     onClick={() => setCalendarOpen(!calendarOpen)}
@@ -404,7 +408,7 @@ export default function KpiSection() {
                                 {/* ÚLTIMOS AGENDAMENTOS DO DONO */}
                                 {detalhes.ultimosAgendamentosDono && detalhes.ultimosAgendamentosDono.length > 0 && (
                                     <div >
-                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do dono:</h4>
+                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do dono</h4>
                                         <ul className='text-left text-gray-800 space-y-4 mb-2'>
                                             {detalhes.ultimosAgendamentosDono.map((item, index) => (
                                                 <li key={index}>{item}</li>
@@ -415,8 +419,8 @@ export default function KpiSection() {
 
                                 {detalhes.ultimosAgendamentosPet && detalhes.ultimosAgendamentosPet.length > 0 && (
                                     <div>
-                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do pet:</h4>
-                                        <ul>
+                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do pet {detalhes.petNome}</h4>
+                                      <ul className='text-left text-gray-800 space-y-4 mb-2'>
                                             {detalhes.ultimosAgendamentosPet.map((item, index) => (
                                                 <li key={index}>{item}</li>
                                             ))}
