@@ -7,10 +7,10 @@ import 'react-calendar/dist/Calendar.css';
 import '../contents/Calendar.css'
 import ServiceTabSystem from "../system/ServiceTabSystem";
 import { useState } from "react";
-import servicesDataDefault from "../../utils/servicesDataDefault";
 import SelectSystem from "../system/SelectSystem";
 import TextBoxSystem from "../system/TextBoxSystem";
 import ConfirmationModalSystem from "../system/ConfirmationModalSystem";
+import postNewAppointment from "../../services/api";
 
 function CalendarContent() {
 
@@ -18,10 +18,20 @@ function CalendarContent() {
     const location = useLocation();
 
     const [selectedDate, setSelectedDate] = useState(new Date());
-
+    const [selectedPet, setSelectedPet] = useState(null);
+    const [selectedTime, setSelectedTime] = useState(null);
+    const [selectedEmployee, setSelectedEmployee] = useState(null);
     const [services, setServices] = useState(location.state?.selectedServices || []);
-
     const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+    const newAppointment = {
+        petId: 0,
+        employee_id: 0,
+        servicesNames: "string",
+        totalPrice: 0,
+        startDateTime: "2025-05-26T02:37:13.293Z",
+        durationMinutes: 0
+    };
 
     const handleDateChange = (date) => {
         setSelectedDate(date);
@@ -43,7 +53,25 @@ function CalendarContent() {
         setShowConfirmModal(false);
     };
 
-    const goToAppoitments = () => navigate("/system-appointments");
+    const goToAppoitments = () => {
+        navigate("/system-pets", {
+            state: {
+                date: selectedDate,
+                pet: selectedPet,
+                time: selectedTime,
+                employee: selectedEmployee,
+                services: services
+            }
+        });
+    }
+
+
+
+    const handleCreateAppointment = () => {
+        postNewAppointment
+        addAppointment(newAppointment);
+    }
+
 
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center">
@@ -58,23 +86,23 @@ function CalendarContent() {
                     />
                 </div>
 
-                
+
                 <div className="flex justify-center">
                     {showConfirmModal && (
-                        <ConfirmationModalSystem 
-                        text={"Deseja sair e perder os serviços selecionados?"} 
-                        onCancel={handleCancelBack} 
-                        onConfirm={goToServices}
+                        <ConfirmationModalSystem
+                            text={"Deseja sair e perder os serviços selecionados?"}
+                            onCancel={handleCancelBack}
+                            onConfirm={goToServices}
                         />
                     )}
-                    
+
                     <Calendar
                         className="rounded-lg shadow-lg p-1 bg-white text-black"
                         value={selectedDate}
                         minDate={new Date()}
                         onChange={handleDateChange}
                     />
-                    
+
                     <div className="flex justify-end pl-10">
                         <TextBoxSystem
                             hint="12/10/2025"
@@ -90,28 +118,31 @@ function CalendarContent() {
                 </div>
                 <div className="absolute gap-20 flex bottom-0">
                     <SelectSystem
-                        title="Pet:" 
+                        title="Pet:"
                         options={[
-                            "Mike", 
-                            "Josh", 
+                            "Mike",
+                            "Josh",
                             "Maria"
                         ].map(name => ({ value: name.toLowerCase(), label: name }))}
+                        onChange={(option) => setSelectedPet(option)}
                     />
                     <SelectSystem
-                        title="Horário:" 
+                        title="Horário:"
                         options={[
-                            "14h", 
-                            "12h", 
+                            "14h",
+                            "12h",
                             "10h"
                         ].map(name => ({ value: name.toLowerCase(), label: name }))}
+                        onChange={(option) => setSelectedTime(option)}
                     />
                     <SelectSystem
                         title="Funcionário:"
                         options={[
-                            "André", 
-                            "Helena", 
+                            "André",
+                            "Helena",
                             "Flávia"
                         ].map(name => ({ value: name.toLowerCase(), label: name }))}
+                        onChange={(option) => setSelectedEmployee(option)}
                     />
                 </div>
 
@@ -119,7 +150,7 @@ function CalendarContent() {
                     <ButtonSystem
                         variant="blue"
                         text="Salvar Agendamento"
-                        click={goToAppoitments}
+                        click={{ goToServices, handleCreateAppointment }}
                         logo={<IoIosSave />}
                     />
                 </div>

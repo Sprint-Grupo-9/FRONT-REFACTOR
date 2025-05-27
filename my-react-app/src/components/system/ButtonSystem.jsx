@@ -1,4 +1,3 @@
-
 function ButtonSystem(props) {
 
     const baseStyles = `font-bold text-[1rem] py-1.5 px-6 rounded-lg transition-all duration-900 flex items-center gap-2 hover:bg-slate-300 hover:text-white shadow-sm`;
@@ -18,7 +17,10 @@ function ButtonSystem(props) {
     const alignClass = props.align ? "" : "justify-center";
 
     return (
-        <button onClick={props.click} className={`${baseStyles} ${variantClass} ${alignClass}`}>
+        <button
+            onClick={typeof props.click === "function" ? props.click : undefined}
+            className={`${baseStyles} ${variantClass} ${alignClass}`}
+        >
             {props.logo} {props.text}
         </button>
     )

@@ -4,14 +4,14 @@ import { MdMiscellaneousServices } from "react-icons/md";
 import { MdOutlinePets } from "react-icons/md";
 import { useNavigate } from 'react-router-dom';
 import ButtonSystem from "./ButtonSystem";
-import userImage from "../../assets/user-image.svg"
+import userImage from "../../assets/user-profile.svg"
 
 function SidebarSystem({
     profile = false,
     services = false,
     appointments = false,
     pets = false,
-    username = "Matheus"
+    username = (localStorage.getItem("name")?.match(/^[^\s]+/)?.[0]) || "Usuário"
 }) {
 
     const navigate = useNavigate();
