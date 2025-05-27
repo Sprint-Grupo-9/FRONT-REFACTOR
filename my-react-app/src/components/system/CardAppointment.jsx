@@ -2,7 +2,7 @@ import { MdOutlineExpand } from "react-icons/md";
 
 export function CardAppointment(props) {
     return (
-        <div className="flex h[100%] w-[100%] bg-white rounded-xl shadow-lg flex-col">	
+        <div className="flex h[100%] w-[40vh] bg-white rounded-xl shadow-lg flex-col">	
             <div className="bg-primary text-white text-center py-2 rounded-t-xl font-bold text-sm ">
                 <p>{props.horarioInicio} - {props.horarioFim}</p>
             </div>
