@@ -4,6 +4,11 @@ import { BsCalendar2WeekFill } from "react-icons/bs";
 
 function AppointmentCardSystem(props) {
 
+    const price = "Preço"
+    const date = "Data"
+    const time = "Horário"
+    const employee = "Funcionário"
+
     return (
         <div className="bg-white py-4 px-4 flex flex-row items-center gap-6 text-[1rem] font-bold rounded-lg shadow-sm">
             {props.hasChevron && props.active ? <FiChevronDown className={`size-10 text-secondary hover:bg-slate-200 hover:rounded-full transition-all duration-200 ${props.rotate ? '-rotate-180' : ''}`} onClick={props.clickChevron} /> : ""}
@@ -21,7 +26,7 @@ function AppointmentCardSystem(props) {
                     {props.price}
                 </div>
                 <div className="text-[0.8rem] font-thin">
-                    Preço
+                    {price}
                 </div>
             </div>
 
@@ -32,7 +37,7 @@ function AppointmentCardSystem(props) {
                     {props.date}
                 </div>
                 <div className="text-[0.8rem] font-thin">
-                    Data    
+                    {date}    
                 </div>
             </div>
 
@@ -43,7 +48,7 @@ function AppointmentCardSystem(props) {
                     {props.time}
                 </div>
                 <div className="text-[0.8rem] font-thin">
-                    Hora
+                    {time}
                 </div>
             </div>
 
@@ -55,7 +60,7 @@ function AppointmentCardSystem(props) {
                     {props.employee}
                 </div>
                 <div className="text-[0.8rem] font-thin">
-                    Funcionário
+                    {employee}
                 </div>
             </div>
            

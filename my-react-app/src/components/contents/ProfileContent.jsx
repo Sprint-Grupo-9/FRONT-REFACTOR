@@ -2,58 +2,100 @@ import { useEffect, useRef, useState } from "react";
 import TextBoxSystem from "../system/TextBoxSystem"
 import ButtonSystem from "../system/ButtonSystem";
 import { MdModeEdit } from "react-icons/md";
-import { CgClose } from "react-icons/cg";
+import { CgClose, CgNametag } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
-import { saveUserProfile, loadUserProfile, clearUserProfile  } from "../../utils/mockStorage";
-import { getOwnerInformation } from "../../services/api";
-
+import { saveUserProfile, loadUserProfile, clearUserProfile } from "../../utils/mockStorage";
+import { putUserData, getOwnerInformation } from "../../services/api";
+import { number } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 function ProfileContent() {
 
+    const [name, setName] = useState("")
+    const [cpf, setCpf] = useState("")
+    const [email, setEmail] = useState("")
+    const [telefone, setTelefone] = useState("")
+    const [cep, setCep] = useState("")
+    const [numero, setNumero] = useState("")
+    const [complemento, setComplemento] = useState("")
+    const [logradouro, setLogradouro] = useState("")
+    const [bairro, setBairro] = useState("")
+
     const initialData = {
-        nome: '',
-        cpf: '',
-        email: '',
-        telefone: '',
-        cep: '',
-        numero: '',
-        complemento: '',
-        logradouro: '',
-        bairro: ''
+        name: name,
+        cpf: cpf,
+        email: email,
+        telefone: telefone,
+        cep: cep,
+        numero: numero,
+        complemento: complemento,
+        logradouro: logradouro,
+        bairro: bairro
     };
+
     const [editable, setEditable] = useState(false)
     const [userData, setUserData] = useState(initialData)
     const originalData = useRef(initialData)
 
+    const navigate = useNavigate()
+
     useEffect(() => {
         const id = localStorage.getItem("id");
+        console.log("ID:", id);
+
         if (id) {
             getOwnerInformation(id)
                 .then(res => {
+                    console.log("Resposta da API:", res);
                     setUserData({
-                        nome: res.data.name || '',
-                        cpf: res.data.cpf || '',
-                        email: res.data.email || '',
-                        telefone: res.data.phoneNumber || '',
-                        cep: res.data.cep || '',
-                        numero: res.data.number || '',
-                        complemento: res.data.complement || '',
-                        logradouro: res.data.street || '',
-                        bairro: res.data.neighborhood || ''
-                    });
+                    nome: res.data.name || "",
+                    cpf: res.data.cpf || "",
+                    email: res.data.email || "",
+                    telefone: res.data.phoneNumber || "",
+                    cep: res.data.cep || "",
+                    numero: res.data.number || "",
+                    complemento: res.data.complement || "",
+                    logradouro: res.data.street || "",
+                    bairro: res.data.neighborhood || ""
+                });
                 })
-                 .catch(err => {
-                    console.error('Erro ao buscar dados do usuário:', err);
+                .catch(err => {
+                    console.error(`Erro ao buscar dados do usuário (ID: ${id}):`, err);
                 });
         }
-    })
+    }, []);
 
-    const saveData = () => {
-        saveUserProfile(userData);
-        console.log("Dados salvos:", userData);
-        setEditable(false);
+
+    const saveData = async () => {
+        const json = {
+            phoneNumber: userData.telefone,
+            email: userData.email,
+            cep: userData.cep,
+            neighborhood: userData.bairro,
+            street: userData.logradouro,
+            number: userData.numero,
+            complement: userData.complemento
+        }
+
+        const originalEmail = originalData.current.email;
+
+        await putUserData(localStorage.getItem("id"), json)
+
+        try {
+            await putUserData(localStorage.getItem("id"), json);
+            console.log("Dados salvos:", userData);
+
+            if (userData.email !== originalEmail) {
+                alert("Email alterado. Você será desconectado.");
+                localStorage.clear();
+                navigate("/");
+            }
+
+            setEditable(false);
+        } catch (err) {
+            console.error("Erro ao salvar dados:", err);
+        }
     };
-
 
     const toggleEdit = () => {
         if (!editable) {
@@ -83,7 +125,6 @@ function ProfileContent() {
                         text="Salvar Dados"
                         logo={<IoIosSave />}
                         click={saveData}
-
                     />
                 )}
                 <ButtonSystem
@@ -123,6 +164,7 @@ function ProfileContent() {
                     onChange={handleChange}
                     value={userData.email}
                     disabled={!editable}
+                    
                 />
 
                 <TextBoxSystem
