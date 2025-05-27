@@ -45,4 +45,20 @@ export const putUserData = async (id, userData) => {
     return await api.put(`/owners/${id}`, userData);
 };
 
+export const updateOwner = async (id, ownerData) => {
+    return await api.put(`/owners/${id}`, ownerData);
+};
+
+export const getPetById = async (ownerId) => {
+    return await api.get(`/pets/all/${ownerId}`);
+};
+
+export const createPet = async (ownerId, petData) => {
+    return await api.post(`/pets/${ownerId}`, petData);
+};
+
+export const updatePet = async (petId, petData) => {
+    return await api.put(`/pets/${petId}`, petData);
+};
+
 export default api;

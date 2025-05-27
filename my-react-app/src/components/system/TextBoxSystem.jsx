@@ -22,14 +22,14 @@ function TextBoxSystem(props) {
                             {...rest}
                             mask={mask}
                             placeholder={props.hint}
-                            defaultValue={props.value}
+                            value={props.value}
                             className={`text-[18px] ${widthClass} h-10 bg-white rounded-lg ${icon ? 'pl-10' : 'pl-2'} pr-2 shadow-sm ${hasBlock} ${error ? 'border border-red-500' : 'border border-gray-300'} focus:outline-none focus:border-primary`}
                         />
                     ) : (
                         <input
                             {...rest}
                             placeholder={props.hint}
-                            defaultValue={props.value}
+                            value={props.value}
                             className={`text-[18px] ${widthClass} h-10 bg-white rounded-lg ${icon ? 'pl-10' : 'pl-2'} pr-2 shadow-sm ${hasBlock} ${error ? 'border border-red-500' : 'border border-gray-300'} focus:outline-none focus:border-primary`}
                         />
                     )}

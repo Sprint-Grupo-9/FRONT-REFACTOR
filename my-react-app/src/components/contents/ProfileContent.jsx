@@ -4,13 +4,12 @@ import ButtonSystem from "../system/ButtonSystem";
 import { MdModeEdit } from "react-icons/md";
 import { CgClose, CgNametag } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
-import { saveUserProfile, loadUserProfile, clearUserProfile } from "../../utils/mockStorage";
 import { putUserData, getOwnerInformation } from "../../services/api";
-import { number } from "framer-motion";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import ErrorBox from "../system/ErrorBox";
 
 function ProfileContent() {
-
     const [name, setName] = useState("")
     const [cpf, setCpf] = useState("")
     const [email, setEmail] = useState("")
@@ -20,9 +19,11 @@ function ProfileContent() {
     const [complemento, setComplemento] = useState("")
     const [logradouro, setLogradouro] = useState("")
     const [bairro, setBairro] = useState("")
+    const [errorMessage, setErrorMessage] = useState("")
 
-    const initialData = {
-        name: name,
+    const [editable, setEditable] = useState(false)
+    const [userData, setUserData] = useState({
+        nome: name,
         cpf: cpf,
         email: email,
         telefone: telefone,
@@ -31,44 +32,84 @@ function ProfileContent() {
         complemento: complemento,
         logradouro: logradouro,
         bairro: bairro
-    };
-
-    const [editable, setEditable] = useState(false)
-    const [userData, setUserData] = useState(initialData)
-    const originalData = useRef(initialData)
-
+    });
+    const originalData = useRef(userData)
     const navigate = useNavigate()
+    const { logout } = useAuth()
 
     useEffect(() => {
         const id = localStorage.getItem("id");
-        console.log("ID:", id);
-
         if (id) {
             getOwnerInformation(id)
                 .then(res => {
-                    console.log("Resposta da API:", res);
                     setUserData({
-                    nome: res.data.name || "",
-                    cpf: res.data.cpf || "",
-                    email: res.data.email || "",
-                    telefone: res.data.phoneNumber || "",
-                    cep: res.data.cep || "",
-                    numero: res.data.number || "",
-                    complemento: res.data.complement || "",
-                    logradouro: res.data.street || "",
-                    bairro: res.data.neighborhood || ""
-                });
+                        nome: res.data.name || "",
+                        cpf: res.data.cpf || "",
+                        email: res.data.email || "",
+                        telefone: res.data.phoneNumber || "",
+                        cep: res.data.cep || "",
+                        numero: res.data.number || "",
+                        complemento: res.data.complement || "",
+                        logradouro: res.data.street || "",
+                        bairro: res.data.neighborhood || ""
+                    });
+                    originalData.current = {
+                        nome: res.data.name || "",
+                        cpf: res.data.cpf || "",
+                        email: res.data.email || "",
+                        telefone: res.data.phoneNumber || "",
+                        cep: res.data.cep || "",
+                        numero: res.data.number || "",
+                        complemento: res.data.complement || "",
+                        logradouro: res.data.street || "",
+                        bairro: res.data.neighborhood || ""
+                    };
                 })
                 .catch(err => {
                     console.error(`Erro ao buscar dados do usuário (ID: ${id}):`, err);
+                    setErrorMessage("Erro ao carregar dados do usuário");
                 });
         }
     }, []);
 
+    useEffect(() => {
+        if (errorMessage) {
+            const timer = setTimeout(() => {
+                setErrorMessage("");
+            }, 3000)
+            return () => clearTimeout(timer)
+        }
+    }, [errorMessage]);
+
+    const handleCepChange = async (e) => {
+        const cepValue = e.target.value.replace(/\D/g, '');
+        if (cepValue.length === 8) {
+            try {
+                const response = await fetch(`https://viacep.com.br/ws/${cepValue}/json/`);
+                const data = await response.json();
+                if (!data.erro) {
+                    setUserData(prev => ({
+                        ...prev,
+                        cep: cepValue,
+                        logradouro: data.logradouro,
+                        bairro: data.bairro
+                    }));
+                }
+            } catch (error) {
+                console.error('Erro ao buscar CEP:', error);
+                setErrorMessage("Erro ao buscar CEP");
+            }
+        } else {
+            setUserData(prev => ({
+                ...prev,
+                cep: cepValue
+            }));
+        }
+    };
 
     const saveData = async () => {
         const json = {
-            phoneNumber: userData.telefone,
+            phoneNumber: userData.telefone.replace(/\D/g, ''),
             email: userData.email,
             cep: userData.cep,
             neighborhood: userData.bairro,
@@ -79,21 +120,23 @@ function ProfileContent() {
 
         const originalEmail = originalData.current.email;
 
-        await putUserData(localStorage.getItem("id"), json)
-
         try {
             await putUserData(localStorage.getItem("id"), json);
             console.log("Dados salvos:", userData);
 
             if (userData.email !== originalEmail) {
-                alert("Email alterado. Você será desconectado.");
-                localStorage.clear();
-                navigate("/");
+                setErrorMessage("Email alterado. Você será desconectado.");
+                setTimeout(() => {
+                    logout();
+                    navigate("/");
+                }, 2000);
+                return;
             }
 
             setEditable(false);
         } catch (err) {
             console.error("Erro ao salvar dados:", err);
+            setErrorMessage("Erro ao salvar os dados. Tente novamente.");
         }
     };
 
@@ -109,15 +152,22 @@ function ProfileContent() {
 
     const handleChange = (e) => {
         const { id, value } = e.target
-        setUserData(prev => ({
-            ...prev,
-            [id]: value
-        }));
+        if (id === 'cep') {
+            handleCepChange(e);
+        } else {
+            setUserData(prev => ({
+                ...prev,
+                [id]: value
+            }));
+        }
     };
-
 
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
+            {errorMessage && (
+                <ErrorBox text={errorMessage}/>
+            )}
+            
             <div className="flex justify-center gap-6 pb-10 relative">
                 {editable && (
                     <ButtonSystem
@@ -157,6 +207,7 @@ function ProfileContent() {
                     block={true}
                 />
             </div>
+            
             <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBoxSystem
                     id="email"
@@ -164,7 +215,6 @@ function ProfileContent() {
                     onChange={handleChange}
                     value={userData.email}
                     disabled={!editable}
-                    
                 />
 
                 <TextBoxSystem
@@ -173,8 +223,10 @@ function ProfileContent() {
                     onChange={handleChange}
                     value={userData.telefone}
                     mask="(00) 00000-0000"
-                    disabled={!editable} />
+                    disabled={!editable} 
+                />
             </div>
+
             <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <div className="flex flex-row gap-8">
                     <TextBoxSystem
@@ -184,7 +236,8 @@ function ProfileContent() {
                         onChange={handleChange}
                         value={userData.cep}
                         mask="00000-000"
-                        disabled={!editable} />
+                        disabled={!editable} 
+                    />
 
                     <TextBoxSystem
                         id="numero"
@@ -192,29 +245,34 @@ function ProfileContent() {
                         width="w-28"
                         onChange={handleChange}
                         value={userData.numero}
-                        disabled={!editable} />
+                        disabled={!editable} 
+                    />
                 </div>
                 <TextBoxSystem
                     id="complemento"
                     title="Complemento"
                     onChange={handleChange}
                     value={userData.complemento}
-                    disabled={!editable} />
+                    disabled={!editable} 
+                />
             </div>
+
             <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBoxSystem
                     id="logradouro"
                     title="Logradouro"
                     onChange={handleChange}
                     value={userData.logradouro}
-                    disabled={!editable} />
+                    disabled={!editable} 
+                />
 
                 <TextBoxSystem
                     id="bairro"
                     title="Bairro"
                     onChange={handleChange}
                     value={userData.bairro}
-                    disabled={!editable} />
+                    disabled={!editable} 
+                />
             </div>
         </div>
     )

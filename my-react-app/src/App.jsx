@@ -24,7 +24,7 @@ function App() {
             <Route path="/system-calendar" element={<SystemCalendar />} />
             <Route path="/system-appointments" element={<SystemAppointments />} />
             <Route path="/system-pets" element={<SystemPets />} />
-            <Route path="/system-pet-profile" element={<SystemPetProfile />} />
+            <Route path="/system-pet-profile/:petId" element={<SystemPetProfile />} />
             <Route path="/system-dashboard" element={<SystemDashboard />} />
           </Routes>
         </div>
