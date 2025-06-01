@@ -1,99 +1,118 @@
+import { useState } from 'react';
+import { IoSearchOutline } from "react-icons/io5";
 
-import ServiceIndividualTabSystem from "./ServiceIndividualTabSystem";
+function ServiceTabSystem({ services = [], setServices, allServices = [], disabled }) {
+    const [searchTerm, setSearchTerm] = useState('');
 
-
-function ServiceTabSystem({ services, setServices }) {
-
-    const toggleServiceActive = (serviceId) => {
-        setServices(prev =>
-            prev.map(service =>
-                service.id === serviceId ? {
-                    ...service, 
-                    active: !service.active,
-                    hasChevron: service.subServices.length > 0 ? !service.hasChevron : false
-                } : service
-            )
+    // Filtrar serviços baseado na busca
+    const filteredServices = searchTerm
+        ? allServices.filter(service =>
+            service.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+            service.description?.toLowerCase().includes(searchTerm.toLowerCase())
         )
-    }
+        : allServices;
 
-    const toggleSubServiceActive = (serviceId, subServiceId) => {
-        setServices(prev =>
-            prev.map(service =>
-                service.id === serviceId ? {
-                    ...service,
-                    subServices: service.subServices.map(sub =>
-                        sub.id === subServiceId ? {
-                            ...sub, active: !sub.active
-                        } : sub
-                    )
-                } : service
-            )
-        )
-    }
-
-    const toggleAll = (serviceId) => {
-        setServices(prev =>
-            prev.map(service => {
-                if (service.id !== serviceId) return service
-
-                return {
-                    ...service,
-                    subServices: service.subServices
-                        .map(sub =>
-                        ({
-                            ...sub,
-                            active: false
-                        }))
-                }
+    const handleServiceChange = (service) => {
+        setServices(prev => {
+            const isSelected = prev.some(s => s.id === service.id);
+            if (isSelected) {
+                return prev.filter(s => s.id !== service.id);
+            } else {
+                return [...prev, { ...service, active: true }];
             }
-            )
-        )
-    }
+        });
+    };
 
-    const toggleServiceActiveWithSub = (serviceId) => {
-        toggleAll(serviceId);
-        toggleServiceActive(serviceId);
+    const isServiceSelected = (serviceId) => {
+        return services.some(s => s.id === serviceId);
+    };
+
+    const calculateTotal = () => {
+        return services.reduce((total, service) => total + (service.price || 0), 0);
     };
 
     return (
-        <>
-            <div className="w-auto h-auto text-[12px] text-slate-400">
-                Serviços selecionados:
+        <div className="flex flex-col h-[calc(100vh-200px)]">
+            {/* Barra de Busca */}
+            <div className="flex-none mb-4">
+                <div className="relative">
+                    <input
+                        type="text"
+                        placeholder="Buscar serviços..."
+                        value={searchTerm}
+                        onChange={(e) => setSearchTerm(e.target.value)}
+                        className="w-full pl-10 pr-4 py-2 rounded-lg border border-slate-200 focus:border-blue-500 focus:ring-1 focus:ring-blue-500 outline-none transition-colors"
+                        disabled={disabled}
+                    />
+                    <IoSearchOutline className="absolute left-3 top-1/2 transform -translate-y-1/2 text-slate-400" />
+                </div>
             </div>
-            <div className="flex flex-row gap-1 bg-slate-200 p-1 border-2 rounded-lg">
-                {services
-                    .filter(service => service.active || service.subServices?.some(sub => sub.active))
-                    .map(service => (
-                        <div key={service.id}>
-                            <ServiceIndividualTabSystem
-                                click={() => toggleServiceActiveWithSub(service.id)}
-                                title={service.title}
-                                sizeText={"1rem"}
+
+            {/* Lista de Serviços */}
+            <div className="flex-1 overflow-y-auto">
+                <div className="space-y-2">
+                    {filteredServices.map(service => (
+                        <label
+                            key={service.id}
+                            className={`flex items-center space-x-3 p-3 rounded-lg cursor-pointer transition-colors ${
+                                isServiceSelected(service.id)
+                                    ? 'bg-blue-50 hover:bg-blue-100'
+                                    : 'bg-white hover:bg-slate-50'
+                            }`}
+                        >
+                            <input
+                                type="checkbox"
+                                checked={isServiceSelected(service.id)}
+                                onChange={() => handleServiceChange(service)}
+                                disabled={disabled}
+                                className="h-4 w-4 text-blue-600 rounded border-slate-300 focus:ring-blue-500"
                             />
-
-                            {service.subServices?.some(sub => sub.active) && (
-                                <div className="flex flex-row flex-wrap gap-1 pt-2 pl-4">
-                                    {service.subServices
-                                        .filter(sub => sub.active)
-                                        .map(sub => (
-                                            <div key={sub.id}>
-                                                <ServiceIndividualTabSystem
-                                                    click={() => toggleSubServiceActive(service.id, sub.id)}
-                                                    title={sub.title}
-                                                    sizeText={"0.8rem"}
-                                                />
-                                            </div>
-                                        ))}
+                            <div className="flex-1 min-w-0">
+                                <div className="flex items-center justify-between">
+                                    <span className="text-sm font-medium text-slate-700 truncate">
+                                        {service.name}
+                                    </span>
+                                    {service.price && (
+                                        <span className="text-sm font-medium text-blue-600 ml-2 flex-shrink-0">
+                                            R$ {service.price.toFixed(2)}
+                                        </span>
+                                    )}
                                 </div>
-                            )}
-                        </div>
+                                {service.description && (
+                                    <p className="text-xs text-slate-500 mt-0.5 truncate">
+                                        {service.description}
+                                    </p>
+                                )}
+                            </div>
+                        </label>
                     ))}
+                </div>
             </div>
 
-
-        </>
-    )
-
+            {/* Resumo dos Serviços Selecionados */}
+            {services.length > 0 && (
+                <div className="flex-none mt-4 bg-blue-50 rounded-lg p-3">
+                    <div className="flex justify-between items-center">
+                        <div>
+                            <h3 className="text-sm font-medium text-blue-700">
+                                {services.length} serviço(s) selecionado(s)
+                            </h3>
+                            <p className="text-sm text-blue-600 mt-1">
+                                Total: R$ {calculateTotal().toFixed(2)}
+                            </p>
+                        </div>
+                        <button
+                            onClick={() => setServices([])}
+                            className="text-sm text-blue-600 hover:text-blue-700"
+                            disabled={disabled}
+                        >
+                            Limpar seleção
+                        </button>
+                    </div>
+                </div>
+            )}
+        </div>
+    );
 }
 
 export default ServiceTabSystem;

@@ -15,6 +15,9 @@ api.interceptors.request.use(
             config.headers.Authorization = `Bearer ${token}`;
         }
         return config;
+    },
+    (error) => {
+        return Promise.reject(error);
     }
 );
 
@@ -49,7 +52,7 @@ export const updateOwner = async (id, ownerData) => {
     return await api.put(`/owners/${id}`, ownerData);
 };
 
-export const getPetById = async (ownerId) => {
+export const getAllPetsByOwnerId = async (ownerId) => {
     return await api.get(`/pets/all/${ownerId}`);
 };
 
@@ -59,6 +62,75 @@ export const createPet = async (ownerId, petData) => {
 
 export const updatePet = async (petId, petData) => {
     return await api.put(`/pets/${petId}`, petData);
+};
+
+export const deletePet = async (petId) => {
+    return await api.delete(`/pets/${petId}`);
+};
+
+export const getPetDetails = async (petId) => {
+    return await api.get(`/pets/${petId}`);
+};
+
+export const getAllServices = async () => {
+    return await api.get('/services');
+};
+
+export const getServiceById = async (id) => {
+    return await api.get(`/services/${id}`);
+};
+
+export const getEmployeesByServices = async (serviceIds) => {
+    const params = new URLSearchParams({
+        serviceIds: serviceIds.join(',')
+    });
+    return await api.get(`/services/employees?${params}`);
+};
+
+// Funções para gerenciar agendamentos
+export const createAppointment = async (appointmentData) => {
+    try {
+        const response = await api.post('/appointments', appointmentData);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
+};
+
+export const updateAppointment = async (id, appointmentData) => {
+    return await api.put(`/appointments/${id}`, appointmentData);
+};
+
+export const deleteAppointment = async (id) => {
+    return await api.delete(`/appointments/${id}`);
+};
+
+export const getAppointmentsByOwner = async () => {
+    const ownerId = localStorage.getItem('id');
+    if (!ownerId) {
+        throw new Error('ID do proprietário não encontrado');
+    }
+    const response = await api.get(`/appointments/${ownerId}`);
+    return response.data;
+};
+
+export const getAvailableTimes = async (petId, requestData) => {
+    try {
+        const response = await api.post(`/appointments/available-times/${petId}`, requestData);
+        return response;
+    } catch (error) {
+        console.error('Erro ao buscar horários disponíveis:', error);
+        throw error;
+    }
+};
+
+export const cancelAppointment = async (appointmentId) => {
+    try {
+        const response = await api.delete(`/appointments/${appointmentId}`);
+        return response.data;
+    } catch (error) {
+        throw error;
+    }
 };
 
 export default api;

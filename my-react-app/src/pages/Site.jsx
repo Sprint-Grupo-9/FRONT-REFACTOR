@@ -4,8 +4,20 @@ import { Squad } from "../components/site/Squad";
 import { Footer } from "../components/site/Footer";
 import Header from "../components/site/Header";
 import Servicos from "../components/site/Servicos";
+import { useNavigate } from 'react-router-dom';
 
 function Site() {
+  const navigate = useNavigate();
+
+  const handleAgendamentoClick = () => {
+    const token = localStorage.getItem('token');
+    if (token) {
+      navigate('/system-appointments/new');
+    } else {
+      navigate('/cadastro');
+    }
+  };
+
   return (
     <div id="home">
       <Header />

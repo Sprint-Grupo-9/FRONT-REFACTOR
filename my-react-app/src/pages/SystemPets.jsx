@@ -1,9 +1,10 @@
 import HeaderSystem from "../components/system/HeaderSystem";
-import SidebarSystem from "../components/system/SidebarSystem";
+import SlidebarSystem from "../components/system/SlidebarSystem";
 import PetsContent from "../components/contents/PetsContent";
 import { useEffect, useState } from "react";
-import { getPetById } from "../services/api";
+import { getAllPetsByOwnerId } from "../services/api";
 import ErrorBox from "../components/system/ErrorBox";
+
 
 function SystemPets() {
     const [pets, setPets] = useState([]);
@@ -18,7 +19,7 @@ function SystemPets() {
         
         const fetchPets = async () => {
             try {
-                const response = await getPetById(ownerId);
+                const response = await getAllPetsByOwnerId(ownerId);
                 if (response && response.data) {
                     setPets(response.data);
                 } else {
@@ -46,7 +47,7 @@ function SystemPets() {
         <>
             <HeaderSystem text="Pets" />
             <div className="w-full h-screen flex flex-row">
-                <SidebarSystem pets />
+                <SlidebarSystem />
                 {errorMessage && <ErrorBox text={errorMessage} />}
                 <PetsContent pets={pets} setPets={setPets} />
             </div>

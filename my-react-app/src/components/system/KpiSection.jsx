@@ -15,7 +15,7 @@ export default function KpiSection() {
     // Estado para armazenar os detalhes do agendamento
     const [detalhes, setDetalhes] = useState(null);
 
-    const token = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJzb2xhcml1bS50ZXN0ZUBlbWFpbC5jb20iLCJpYXQiOjE3NDgwNTUxNzEsImV4cCI6MTgzNDQ1NTE3MX0.lG9GhIkZJ_Wj4qXS2pt8BUwOrS25c2QFByCk5Q8a-pBr_LYTsaUk8Ru9fuU3xywKb3zS8KoINHBhaDzDMDM7BQ';  // Aqui você pode colocar o token fixo ou pegar do localStorage
+    const token = localStorage.getItem('token');
 
     const [weeklyData, setWeeklyData] = useState([]);
 
@@ -201,7 +201,7 @@ export default function KpiSection() {
 
 
     return (
-        <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col mt-[85px]  font-figtree">
+        <div className="flex-1 bg-slate-100 flex justify-center items-center flex-col font-figtree">
 
             {/* KPIs */}
             <div className="w-[95%] h-[25%]  flex flex-row gap-[2%] justify-center pt-[2%]">
@@ -243,7 +243,7 @@ export default function KpiSection() {
                               date={<>
                                             ({formatDateToBR(dataKPI3.start)}) - ({formatDateToBR(dataKPI3.end)})
                             </>}
-                            description={`${dataKPI3.hour.slice(0, 5)} - ${dataKPI3.count}  vezes`}
+                            description={`${dataKPI3.hour ? dataKPI3.hour.slice(0, 5) : 'N/A'} - ${dataKPI3.count}  vezes`}
                         />
                     )}
                 </>
@@ -259,7 +259,7 @@ export default function KpiSection() {
                               date={<>
                                   ({formatDateToBR(dataKPI4.start)}) - ({formatDateToBR(dataKPI4.end)})
                             </>}
-                            description={`${dataKPI4.hour.slice(0, 5)} - ${dataKPI4.count}  vezes`}
+                            description={`${dataKPI4.hour ? dataKPI4.hour.slice(0, 5) : 'N/A'} - ${dataKPI4.count}  vezes`}
                         />
                     )}
                 </>

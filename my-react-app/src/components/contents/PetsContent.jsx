@@ -7,7 +7,8 @@ import { useState, useEffect } from "react";
 import { createPet } from "../../services/api";
 import ErrorBox from "../system/ErrorBox";
 import TextBoxSystem from "../system/TextBoxSystem";
-import ConfirmationModalSystem from "../system/ConfirmationModalSystem";
+import SelectSystem from "../system/SelectSystem";
+import { MdPets, MdScale, MdWbSunny, MdMale, MdFemale } from "react-icons/md";
 
 function PetsContent({ pets, setPets }) {
     const navigate = useNavigate();
@@ -22,6 +23,37 @@ function PetsContent({ pets, setPets }) {
         age: "",
         sex: ""
     });
+
+    const sizeOptions = [
+        { value: "pp", label: "PP (0 a 2,9kg)" },
+        { value: "p", label: "P (3 a 7,9kg)" },
+        { value: "m", label: "M (8 a 19,9kg)" },
+        { value: "g", label: "G (20 a 29,9kg)" },
+        { value: "gg", label: "GG (30 a 60kg)" }
+    ];
+
+    const coatOptions = [
+        { value: "curta", label: "Curta" },
+        { value: "longa", label: "Longa" }
+    ];
+
+    const sexOptions = [
+        { value: "macho", label: "Macho" },
+        { value: "femea", label: "Fêmea" }
+    ];
+
+    const speciesOptions = [
+        { value: "cao", label: "Cão" },
+        { value: "gato", label: "Gato" },
+        { value: "passaro", label: "Pássaro" },
+        { value: "peixe", label: "Peixe" },
+        { value: "hamster", label: "Hamster" },
+        { value: "porquinho", label: "Porquinho-da-índia" },
+        { value: "coelho", label: "Coelho" },
+        { value: "lagarto", label: "Lagarto" },
+        { value: "tartaruga", label: "Tartaruga" },
+        { value: "furao", label: "Furão" }
+    ];
 
     const goToPetProfile = (petId) => {
         navigate(`/system-pet-profile/${petId}`);
@@ -57,6 +89,13 @@ function PetsContent({ pets, setPets }) {
         setNewPet(prev => ({
             ...prev,
             [id]: value
+        }));
+    };
+
+    const handleSelectChange = (field, option) => {
+        setNewPet(prev => ({
+            ...prev,
+            [field]: option.value
         }));
     };
 
@@ -104,42 +143,55 @@ function PetsContent({ pets, setPets }) {
                                 title="Nome"
                                 value={newPet.name}
                                 onChange={handleInputChange}
+                                icon={<MdPets />}
                             />
-                            <TextBoxSystem
-                                id="species"
+                            
+                            <SelectSystem
                                 title="Espécie"
+                                options={speciesOptions}
+                                onChange={(option) => handleSelectChange('species', option)}
                                 value={newPet.species}
-                                onChange={handleInputChange}
+                                icon={<MdPets />}
                             />
-                            <TextBoxSystem
-                                id="size"
+
+                            <SelectSystem
                                 title="Porte"
+                                options={sizeOptions}
+                                onChange={(option) => handleSelectChange('size', option)}
                                 value={newPet.size}
-                                onChange={handleInputChange}
+                                icon={<MdScale />}
                             />
+
                             <TextBoxSystem
                                 id="breed"
                                 title="Raça"
                                 value={newPet.breed}
                                 onChange={handleInputChange}
+                                icon={<MdPets />}
                             />
+
+                            <SelectSystem
+                                title="Pelagem"
+                                options={coatOptions}
+                                onChange={(option) => handleSelectChange('coat', option)}
+                                value={newPet.coat}
+                                icon={<MdWbSunny />}
+                            />
+
                             <TextBoxSystem
                                 id="age"
                                 title="Idade"
                                 value={newPet.age}
                                 onChange={handleInputChange}
+                                icon={<MdPets />}
                             />
-                            <TextBoxSystem
-                                id="sex"
+
+                            <SelectSystem
                                 title="Sexo"
+                                options={sexOptions}
+                                onChange={(option) => handleSelectChange('sex', option)}
                                 value={newPet.sex}
-                                onChange={handleInputChange}
-                            />
-                            <TextBoxSystem
-                                id="coat"
-                                title="Pelagem"
-                                value={newPet.coat}
-                                onChange={handleInputChange}
+                                icon={newPet.sex === 'macho' ? <MdMale /> : <MdFemale />}
                             />
                         </div>
 

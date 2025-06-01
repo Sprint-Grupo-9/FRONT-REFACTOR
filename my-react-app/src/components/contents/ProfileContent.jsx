@@ -168,7 +168,7 @@ function ProfileContent() {
                 <ErrorBox text={errorMessage}/>
             )}
             
-            <div className="flex justify-center gap-6 pb-10 relative">
+            <div className="flex justify-center gap-4 mt-8 mb-2">
                 {editable && (
                     <ButtonSystem
                         variant="blue"
@@ -185,7 +185,7 @@ function ProfileContent() {
                 />
             </div>
 
-            <div className="flex flex-row gap-20 w-11/12 justify-center">
+            <div className="grid grid-cols-2 gap-x-20 gap-y-6 w-11/12 max-w-5xl">
                 <TextBoxSystem
                     id="nome"
                     title="Nome"
@@ -195,7 +195,6 @@ function ProfileContent() {
                     logo={true}
                     block={true}
                 />
-
                 <TextBoxSystem
                     id="cpf"
                     title="CPF"
@@ -206,9 +205,6 @@ function ProfileContent() {
                     logo={true}
                     block={true}
                 />
-            </div>
-            
-            <div className="flex flex-row gap-20 w-4/5 justify-center">
                 <TextBoxSystem
                     id="email"
                     title="Email"
@@ -216,7 +212,6 @@ function ProfileContent() {
                     value={userData.email}
                     disabled={!editable}
                 />
-
                 <TextBoxSystem
                     id="telefone"
                     title="Telefone"
@@ -225,29 +220,23 @@ function ProfileContent() {
                     mask="(00) 00000-0000"
                     disabled={!editable} 
                 />
-            </div>
-
-            <div className="flex flex-row gap-20 w-4/5 justify-center">
-                <div className="flex flex-row gap-8">
-                    <TextBoxSystem
-                        id="cep"
-                        title="CEP"
-                        width="w-60"
-                        onChange={handleChange}
-                        value={userData.cep}
-                        mask="00000-000"
-                        disabled={!editable} 
-                    />
-
-                    <TextBoxSystem
-                        id="numero"
-                        title="Número"
-                        width="w-28"
-                        onChange={handleChange}
-                        value={userData.numero}
-                        disabled={!editable} 
-                    />
-                </div>
+                <TextBoxSystem
+                    id="cep"
+                    title="CEP"
+                    width="w-60"
+                    onChange={handleChange}
+                    value={userData.cep}
+                    mask="00000-000"
+                    disabled={!editable} 
+                />
+                <TextBoxSystem
+                    id="numero"
+                    title="Número"
+                    width="w-28"
+                    onChange={handleChange}
+                    value={userData.numero}
+                    disabled={!editable} 
+                />
                 <TextBoxSystem
                     id="complemento"
                     title="Complemento"
@@ -255,9 +244,7 @@ function ProfileContent() {
                     value={userData.complemento}
                     disabled={!editable} 
                 />
-            </div>
-
-            <div className="flex flex-row gap-20 w-4/5 justify-center">
+                <div></div>
                 <TextBoxSystem
                     id="logradouro"
                     title="Logradouro"
@@ -265,7 +252,6 @@ function ProfileContent() {
                     value={userData.logradouro}
                     disabled={!editable} 
                 />
-
                 <TextBoxSystem
                     id="bairro"
                     title="Bairro"
@@ -275,7 +261,7 @@ function ProfileContent() {
                 />
             </div>
         </div>
-    )
+    );
 }
 
-export default ProfileContent
+export default ProfileContent;

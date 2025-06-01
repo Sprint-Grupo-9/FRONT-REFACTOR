@@ -6,8 +6,10 @@ import { CgClose } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
 import { IoChevronBackOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { getPetById, updatePet } from "../../services/api";
+import { getPetDetails, updatePet, deletePet } from "../../services/api";
 import ErrorBox from "../system/ErrorBox";
+import SelectSystem from "../system/SelectSystem";
+import { MdPets, MdScale, MdWbSunny, MdMale, MdFemale } from "react-icons/md";
 
 function PetProfileContent({ petId }) {
     const navigate = useNavigate();
@@ -24,10 +26,41 @@ function PetProfileContent({ petId }) {
     });
     const originalData = useRef(userData);
 
+    const sizeOptions = [
+        { value: "pp", label: "PP (0 a 2,9kg)" },
+        { value: "p", label: "P (3 a 7,9kg)" },
+        { value: "m", label: "M (8 a 19,9kg)" },
+        { value: "g", label: "G (20 a 29,9kg)" },
+        { value: "gg", label: "GG (30 a 60kg)" }
+    ];
+
+    const coatOptions = [
+        { value: "curta", label: "Curta" },
+        { value: "longa", label: "Longa" }
+    ];
+
+    const sexOptions = [
+        { value: "macho", label: "Macho" },
+        { value: "femea", label: "Fêmea" }
+    ];
+
+    const speciesOptions = [
+        { value: "cao", label: "Cão" },
+        { value: "gato", label: "Gato" },
+        { value: "passaro", label: "Pássaro" },
+        { value: "peixe", label: "Peixe" },
+        { value: "hamster", label: "Hamster" },
+        { value: "porquinho", label: "Porquinho-da-índia" },
+        { value: "coelho", label: "Coelho" },
+        { value: "lagarto", label: "Lagarto" },
+        { value: "tartaruga", label: "Tartaruga" },
+        { value: "furao", label: "Furão" }
+    ];
+
     useEffect(() => {
         const fetchPetData = async () => {
             try {
-                const response = await getPetById(petId);
+                const response = await getPetDetails(petId);
                 if (response && response.data) {
                     const petData = {
                         name: response.data.name || '',
@@ -40,15 +73,18 @@ function PetProfileContent({ petId }) {
                     };
                     setUserData(petData);
                     originalData.current = petData;
+                } else {
+                    navigate("/system-pets");
                 }
             } catch (err) {
                 console.error('Erro ao buscar dados do pet:', err);
                 setErrorMessage("Erro ao carregar os dados do pet");
+                navigate("/system-pets");
             }
         };
 
         fetchPetData();
-    }, [petId]);
+    }, [petId, navigate]);
 
     useEffect(() => {
         if (errorMessage) {
@@ -92,6 +128,20 @@ function PetProfileContent({ petId }) {
         }
     };
 
+    const deleteCurrentPet = async () => {
+        try {
+            await deletePet(petId);
+            setErrorMessage("Pet excluído com sucesso!");
+            setTimeout(() => {
+                navigate("/system-pets");
+            }, 1000);
+
+        } catch (err) {
+            console.error('Erro ao excluir pet:', err);
+            setErrorMessage("Erro ao excluir o pet");
+        }
+    };
+
     const handleChange = (e) => {
         const { id, value } = e.target;
         setUserData(prev => ({
@@ -100,21 +150,24 @@ function PetProfileContent({ petId }) {
         }));
     };
 
+    const handleSelectChange = (field, option) => {
+        setUserData(prev => ({
+            ...prev,
+            [field]: option.value
+        }));
+    };
+
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
             {errorMessage && <ErrorBox text={errorMessage} />}
             
-            <div className="flex relative w-full">
-                <div className="flex pl-20">
-                    <ButtonSystem
-                        variant="redTransp"
-                        text="Voltar"
-                        click={goToPets}
-                        logo={<IoChevronBackOutline />}
-                    />
-                </div>
-            </div>
-            <div className="flex gap-6 pb-10">
+            <div className="flex justify-center gap-6 pb-10">
+                <ButtonSystem
+                    variant="redTransp"
+                    text="Voltar"
+                    click={goToPets}
+                    logo={<IoChevronBackOutline />}
+                />
                 {editable && (
                     <ButtonSystem
                         variant="blue"
@@ -129,9 +182,16 @@ function PetProfileContent({ petId }) {
                     logo={editable ? <CgClose /> : <MdModeEdit />}
                     click={toggleEdit}
                 />
+                {!editable && (
+                    <ButtonSystem
+                        variant="red"
+                        text="Excluir Pet"
+                        click={deleteCurrentPet}
+                    />
+                )}
             </div>
 
-            <div className="flex flex-row gap-20 w-11/12 justify-center">
+            <div className="grid grid-cols-2 gap-x-20 gap-y-6 w-11/12 max-w-5xl">
                 <TextBoxSystem
                     id="name"
                     title="Nome"
@@ -141,24 +201,24 @@ function PetProfileContent({ petId }) {
                     disabled={!editable}
                 />
 
-                <TextBoxSystem
+                <SelectSystem
                     id="species"
-                    title="Tipo"
-                    hint="Gato"
-                    onChange={handleChange}
+                    title="Espécie"
+                    options={speciesOptions}
+                    onChange={(option) => handleSelectChange('species', option)}
                     value={userData.species}
                     disabled={!editable}
+                    icon={<MdPets />}
                 />
-            </div>
-            
-            <div className="flex flex-row gap-20 w-4/5 justify-center">
-                <TextBoxSystem
+
+                <SelectSystem
                     id="size"
                     title="Porte"
-                    hint="Pequeno"
-                    onChange={handleChange}
+                    options={sizeOptions}
+                    onChange={(option) => handleSelectChange('size', option)}
                     value={userData.size}
                     disabled={!editable}
+                    icon={<MdScale />}
                 />
 
                 <TextBoxSystem
@@ -169,37 +229,34 @@ function PetProfileContent({ petId }) {
                     value={userData.breed}
                     disabled={!editable}
                 />
-            </div>
-            
-            <div className="flex flex-row gap-20 w-4/5 justify-center">
-                <div className="flex flex-row gap-8">
-                    <TextBoxSystem
-                        id="coat"
-                        title="Pelagem"
-                        hint="Curta"
-                        width="w-60"
-                        onChange={handleChange}
-                        value={userData.coat}
-                        disabled={!editable}
-                    />
 
-                    <TextBoxSystem
-                        id="age"
-                        title="Idade"
-                        hint="10"
-                        width="w-28"
-                        onChange={handleChange}
-                        value={userData.age}
-                        disabled={!editable}
-                    />
-                </div>
+                <SelectSystem
+                    id="coat"
+                    title="Pelagem"
+                    options={coatOptions}
+                    onChange={(option) => handleSelectChange('coat', option)}
+                    value={userData.coat}
+                    disabled={!editable}
+                    icon={<MdWbSunny />}
+                />
+
                 <TextBoxSystem
+                    id="age"
+                    title="Idade"
+                    hint="10"
+                    onChange={handleChange}
+                    value={userData.age}
+                    disabled={!editable}
+                />
+
+                <SelectSystem
                     id="sex"
                     title="Sexo"
-                    hint="Masculino"
-                    onChange={handleChange}
+                    options={sexOptions}
+                    onChange={(option) => handleSelectChange('sex', option)}
                     value={userData.sex}
                     disabled={!editable}
+                    icon={userData.sex === 'macho' ? <MdMale /> : <MdFemale />}
                 />
             </div>
         </div>

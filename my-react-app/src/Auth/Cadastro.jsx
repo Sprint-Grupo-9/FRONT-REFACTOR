@@ -33,10 +33,16 @@ function validateCPF(cpf) {
     return true;
 }
 function validatePhone(phone) {
-    return /^\(\d{2}\) \d{5}-\d{4}$/.test(phone);
+    // Remove tudo que não for número
+    const onlyNumbers = phone.replace(/\D/g, '');
+    // Deve ter 11 dígitos (ex: 11987654321)
+    return onlyNumbers.length === 11;
 }
 function validateCEP(cep) {
-    return /^\d{5}-\d{3}$/.test(cep);
+    // Remove tudo que não for número
+    const onlyNumbers = cep.replace(/\D/g, '');
+    // Deve ter 8 dígitos
+    return onlyNumbers.length === 8;
 }
 function validatePassword(s) {
     return s.length >= 6;
@@ -66,11 +72,12 @@ export function Cadastro() {
     const handleChange = async (e) => {
         const { id, value } = e.target;
         setForm((prev) => ({ ...prev, [id]: value }));
-        // Busca CEP automático
+
         if (id === "cep" && validateCEP(value)) {
             setLoadingCep(true);
             try {
-                const res = await api.get(`https://viacep.com.br/ws/${value.replace(/\D/g, "")}/json/`);
+                const cleanCep = value.replace(/\D/g, "");
+                const res = await api.get(`https://viacep.com.br/ws/${cleanCep}/json/`);
                 if (!res.data.erro) {
                     setForm((prev) => ({
                         ...prev,
@@ -251,9 +258,7 @@ export function Cadastro() {
                     )}
                 </div>
                 {/* Imagem lateral */}
-                <div className="hidden md:flex items-end justify-end w-1/2">
-                    <img src={userImage} alt="Pessoa com cachorro" className="rounded-l-3xl w-[350px] h-[350px] object-cover" />
-                </div>
+                
             </div>
         </div>
     );
