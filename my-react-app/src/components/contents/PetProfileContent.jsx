@@ -1,7 +1,7 @@
 import { useRef, useState, useEffect } from "react";
 import TextBoxSystem from "../system/TextBoxSystem"
 import ButtonSystem from "../system/ButtonSystem";
-import { MdModeEdit } from "react-icons/md";
+import { MdModeEdit, MdWarning } from "react-icons/md";
 import { CgClose } from "react-icons/cg";
 import { IoIosSave } from "react-icons/io";
 import { IoChevronBackOutline } from "react-icons/io5";
@@ -10,11 +10,13 @@ import { getPetDetails, updatePet, deletePet } from "../../services/api";
 import ErrorBox from "../system/ErrorBox";
 import SelectSystem from "../system/SelectSystem";
 import { MdPets, MdScale, MdWbSunny, MdMale, MdFemale } from "react-icons/md";
+import { FaTrash } from "react-icons/fa";
 
 function PetProfileContent({ petId }) {
     const navigate = useNavigate();
     const [errorMessage, setErrorMessage] = useState("");
     const [editable, setEditable] = useState(false);
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [userData, setUserData] = useState({
         name: '',
         size: '',
@@ -128,18 +130,27 @@ function PetProfileContent({ petId }) {
         }
     };
 
-    const deleteCurrentPet = async () => {
+    const handleDeleteClick = () => {
+        setShowDeleteModal(true);
+    };
+
+    const handleDeleteConfirm = async () => {
         try {
             await deletePet(petId);
             setErrorMessage("Pet excluído com sucesso!");
             setTimeout(() => {
                 navigate("/system-pets");
             }, 1000);
-
         } catch (err) {
             console.error('Erro ao excluir pet:', err);
             setErrorMessage("Erro ao excluir o pet");
+        } finally {
+            setShowDeleteModal(false);
         }
+    };
+
+    const handleDeleteCancel = () => {
+        setShowDeleteModal(false);
     };
 
     const handleChange = (e) => {
@@ -186,7 +197,8 @@ function PetProfileContent({ petId }) {
                     <ButtonSystem
                         variant="red"
                         text="Excluir Pet"
-                        click={deleteCurrentPet}
+                        logo={<FaTrash />}
+                        click={handleDeleteClick}
                     />
                 )}
             </div>
@@ -259,6 +271,36 @@ function PetProfileContent({ petId }) {
                     icon={userData.sex === 'macho' ? <MdMale /> : <MdFemale />}
                 />
             </div>
+
+            {/* Modal de Confirmação */}
+            {showDeleteModal && (
+                <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
+                        <div className="flex items-center gap-3 mb-4">
+                            <MdWarning className="text-yellow-500 text-3xl" />
+                            <h3 className="text-xl font-semibold text-gray-800">Confirmar Exclusão</h3>
+                        </div>
+                        <p className="text-gray-600 mb-6">
+                            Tem certeza que deseja excluir o pet {userData.name}? Esta ação não poderá ser desfeita.
+                        </p>
+                        <div className="flex justify-end gap-4">
+                            <button
+                                onClick={handleDeleteCancel}
+                                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+                            >
+                                Cancelar
+                            </button>
+                            <button
+                                onClick={handleDeleteConfirm}
+                                className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 transition-colors flex items-center gap-2"
+                            >
+                                <FaTrash />
+                                Excluir
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            )}
         </div>
     );
 }

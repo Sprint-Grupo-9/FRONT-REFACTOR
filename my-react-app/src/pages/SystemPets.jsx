@@ -22,8 +22,6 @@ function SystemPets() {
                 const response = await getAllPetsByOwnerId(ownerId);
                 if (response && response.data) {
                     setPets(response.data);
-                } else {
-                    setErrorMessage("Nenhum pet encontrado");
                 }
             } catch (err) {
                 console.error('Erro ao buscar pets:', err);

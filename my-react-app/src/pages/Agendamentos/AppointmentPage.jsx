@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBackOutline } from "react-icons/io5";
-import { MdPets, MdPerson, MdAccessTime, MdCalendarMonth, MdCheckCircle } from "react-icons/md";
+import { MdPets, MdPerson, MdAccessTime, MdCalendarMonth, MdCheckCircle, MdExpandMore, MdExpandLess } from "react-icons/md";
 import ButtonSystem from '../../components/system/ButtonSystem';
 import SelectSystem from '../../components/system/SelectSystem';
 import ErrorBox from '../../components/system/ErrorBox';
@@ -33,12 +33,25 @@ function AppointmentPage() {
     const [showAlert, setShowAlert] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('error'); // 'error' ou 'success'
+    const [expandedService, setExpandedService] = useState(null);
 
     const steps = [
         { id: 1, title: 'Pet e Serviços', description: 'Selecione seu pet e os serviços desejados' },
         { id: 2, title: 'Data e Horário', description: 'Escolha a data e horário disponíveis' },
         { id: 3, title: 'Confirmação', description: 'Revise e confirme seu agendamento' }
     ];
+
+    const subServices = {
+        'Banho': [
+            { id: 8, name: 'Hidratação', description: 'Hidratação profunda para o pelo do seu pet' },
+            { id: 7, name: 'Escovação Dentária', description: 'Limpeza e escovação dos dentes' },
+            { id: 6, name: 'Desembolo', description: 'Remoção de nós e embaraços' },
+            { id: 5, name: 'Botinha', description: 'Corte das unhas das patas' },
+            { id: 4, name: 'Tosa Bebê', description: 'Tosa especial para filhotes' },
+            { id: 3, name: 'Tosa na Máquina', description: 'Tosa realizada com máquina' },
+            { id: 2, name: 'Tosa Higiênica', description: 'Tosa focada na higiene' }
+        ]
+    };
 
     useEffect(() => {
         setIsLoading(false);
@@ -61,12 +74,15 @@ function AppointmentPage() {
 
                 if (servicesResponse?.data) {
                     console.log('Serviços recebidos:', servicesResponse.data);
-                    setServices(servicesResponse.data);
+                    const mainServices = servicesResponse.data.filter(service => 
+                        !subServices['Banho'].some(sub => Number(sub.id) === Number(service.id))
+                    );
+                    setServices(mainServices);
                 }
                 if (petsResponse?.data) {
                     console.log('Pets recebidos:', petsResponse.data);
                     const petsOptions = petsResponse.data.map(pet => ({
-                        value: String(pet.id),
+                        value: pet.id,
                         label: pet.name
                     }));
                     console.log('Opções de pets formatadas:', petsOptions);
@@ -129,9 +145,30 @@ function AppointmentPage() {
         setSelectedServices(prev => {
             const isSelected = prev.some(s => s.id === service.id);
             if (isSelected) {
+                // Se estiver removendo o banho, remove também todos os subserviços
+                if (service.name === 'Banho') {
+                    return prev.filter(s => s.id !== service.id && !subServices['Banho'].some(sub => sub.id === s.id));
+                }
                 return prev.filter(s => s.id !== service.id);
             } else {
                 return [...prev, service];
+            }
+        });
+    };
+
+    const handleSubServiceToggle = (subService) => {
+        const banhoService = selectedServices.find(s => s.name === 'Banho');
+        if (!banhoService) {
+            showAlertMessage('É necessário selecionar o serviço de banho primeiro');
+            return;
+        }
+
+        setSelectedServices(prev => {
+            const isSelected = prev.some(s => s.id === subService.id);
+            if (isSelected) {
+                return prev.filter(s => s.id !== subService.id);
+            } else {
+                return [...prev, { ...subService, parentService: 'Banho' }];
             }
         });
     };
@@ -208,10 +245,18 @@ function AppointmentPage() {
             const [hours, minutes] = selectedTime.split(':');
             const appointmentDate = new Date(year, month - 1, day, hours, minutes);
 
+            // Formata os serviços para incluir os subserviços do banho
+            const formattedServices = selectedServices.map(service => {
+                if (service.parentService === 'Banho') {
+                    return `${service.name} (Banho)`;
+                }
+                return service.name;
+            });
+
             const appointmentData = {
                 petId: Number(selectedPet.value),
                 employee_id: Number(selectedEmployee.value),
-                servicesNames: selectedServices.map(service => service.name).join(', '),
+                servicesNames: formattedServices.join(', '),
                 startDateTime: appointmentDate.toISOString().slice(0, 16),
                 totalPrice: Number(totalPrice),
                 durationMinutes: Number(totalDuration)
@@ -242,38 +287,91 @@ function AppointmentPage() {
                                 options={pets}
                                 onChange={(option) => {
                                     console.log('Pet selecionado no SelectSystem:', option);
-                                    if (option) {
-                                        setSelectedPet({
-                                            value: String(option.value),
-                                            label: option.label
-                                        });
-                                    } else {
-                                        setSelectedPet(null);
-                                    }
+                                    setSelectedPet(option);
                                 }}
                                 value={selectedPet?.value}
-                                icon={<MdPets />}
                                 disabled={isLoading}
+                                placeholder="Selecione um pet"
                             />
                         </div>
 
                         <div className="bg-white rounded-lg shadow-md p-6">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Selecione os Serviços</h2>
                             <div className="space-y-4">
-                                {services.map(service => (
-                                    <div
-                                        key={service.id}
-                                        className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                                            selectedServices.some(s => s.id === service.id)
-                                                ? 'border-blue-500 bg-blue-50'
-                                                : 'border-gray-200 hover:border-blue-300'
-                                        }`}
-                                        onClick={() => handleServiceToggle(service)}
-                                    >
-                                        <div>
-                                            <h3 className="font-medium text-gray-800">{service.name}</h3>
-                                            <p className="text-sm text-gray-600">{service.description}</p>
+                                {services
+                                    .filter(service => 
+                                        // Mostra apenas o corte de unha fora do banho
+                                        Number(service.id) === 9
+                                    )
+                                    .map(service => (
+                                    <div key={service.id}>
+                                        <div
+                                            className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                                                selectedServices.some(s => Number(s.id) === Number(service.id))
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-blue-300'
+                                            }`}
+                                            onClick={() => handleServiceToggle(service)}
+                                        >
+                                            <div>
+                                                <h3 className="font-medium text-gray-800">{service.name}</h3>
+                                                <p className="text-sm text-gray-600">{service.description}</p>
+                                            </div>
                                         </div>
+                                    </div>
+                                ))}
+
+                                {/* Serviço de Banho com subserviços */}
+                                {services
+                                    .filter(service => Number(service.id) === 1)
+                                    .map(service => (
+                                    <div key={service.id}>
+                                        <div
+                                            className={`p-4 rounded-lg border cursor-pointer transition-all ${
+                                                selectedServices.some(s => Number(s.id) === Number(service.id))
+                                                    ? 'border-blue-500 bg-blue-50'
+                                                    : 'border-gray-200 hover:border-blue-300'
+                                            }`}
+                                            onClick={() => {
+                                                handleServiceToggle(service);
+                                                setExpandedService(expandedService === service.id ? null : service.id);
+                                            }}
+                                        >
+                                            <div className="flex justify-between items-center">
+                                                <div>
+                                                    <h3 className="font-medium text-gray-800">{service.name}</h3>
+                                                    <p className="text-sm text-gray-600">{service.description}</p>
+                                                </div>
+                                                <button
+                                                    onClick={(e) => {
+                                                        e.stopPropagation();
+                                                        setExpandedService(expandedService === service.id ? null : service.id);
+                                                    }}
+                                                    className="text-gray-500 hover:text-gray-700"
+                                                >
+                                                    {expandedService === service.id ? <MdExpandLess size={24} /> : <MdExpandMore size={24} />}
+                                                </button>
+                                            </div>
+                                        </div>
+                                        
+                                        {expandedService === service.id && (
+                                            <div className="ml-8 mt-2 space-y-2">
+                                                {subServices['Banho'].map(subService => (
+                                                    <div
+                                                        key={subService.id}
+                                                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
+                                                            selectedServices.some(s => Number(s.id) === Number(subService.id))
+                                                                ? 'border-blue-500 bg-blue-50'
+                                                                : 'border-gray-200 hover:border-blue-300'
+                                                        }`}
+                                                        onClick={() => handleSubServiceToggle(subService)}
+                                                    >
+                                                        <h4 className="font-medium text-gray-800">{subService.name}</h4>
+                                                        <p className="text-sm text-gray-600">{subService.description}</p>
+                                                    </div>
+                                                ))}
+                                            </div>
+                                        )}
                                     </div>
                                 ))}
                             </div>

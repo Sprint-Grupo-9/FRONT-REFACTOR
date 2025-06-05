@@ -163,102 +163,120 @@ function ProfileContent() {
     };
 
     return (
-        <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
+        <div className="flex-1 h-full bg-slate-100 flex flex-col pt-16">
             {errorMessage && (
                 <ErrorBox text={errorMessage}/>
             )}
             
-            <div className="flex justify-center gap-4 mt-8 mb-2">
-                {editable && (
-                    <ButtonSystem
-                        variant="blue"
-                        text="Salvar Dados"
-                        logo={<IoIosSave />}
-                        click={saveData}
-                    />
-                )}
-                <ButtonSystem
-                    variant={editable ? "redTransp" : "blue"}
-                    text={editable ? "Cancelar" : "Editar Dados"}
-                    logo={editable ? <CgClose /> : <MdModeEdit />}
-                    click={toggleEdit}
-                />
-            </div>
+            {/* Conteúdo com rolagem */}
+            <div className="flex-1 overflow-y-auto py-8">
+                <div className="w-11/12 max-w-5xl mx-auto space-y-8">
+                    {/* Informações Pessoais */}
+                    <div className="bg-white rounded-lg p-6 shadow-sm">
+                        <div className="flex justify-between items-center mb-6">
+                            <h2 className="text-xl font-semibold text-gray-800">Informações Pessoais</h2>
+                            <div className="flex gap-2">
+                                {editable && (
+                                    <ButtonSystem
+                                        variant="blue"
+                                        text=""
+                                        logo={<IoIosSave className="text-xl" />}
+                                        click={saveData}
+                                    />
+                                )}
+                                <ButtonSystem
+                                    variant={editable ? "redTransp" : "blue"}
+                                    text=""
+                                    logo={editable ? <CgClose className="text-xl" /> : <MdModeEdit className="text-xl" />}
+                                    click={toggleEdit}
+                                />
+                            </div>
+                        </div>
+                        <div className="grid grid-cols-2 gap-x-20 gap-y-6">
+                            <TextBoxSystem
+                                id="nome"
+                                title="Nome"
+                                onChange={handleChange}
+                                value={userData.nome}
+                                disabled={true}
+                                logo={true}
+                                block={true}
+                            />
+                            <TextBoxSystem
+                                id="cpf"
+                                title="CPF"
+                                onChange={handleChange}
+                                value={userData.cpf}
+                                mask="000.000.000-00"
+                                disabled={true}
+                                logo={true}
+                                block={true}
+                            />
+                            <TextBoxSystem
+                                id="email"
+                                title="Email"
+                                onChange={handleChange}
+                                value={userData.email}
+                                disabled={!editable}
+                            />
+                            <TextBoxSystem
+                                id="telefone"
+                                title="Telefone"
+                                onChange={handleChange}
+                                value={userData.telefone}
+                                mask="(00) 00000-0000"
+                                disabled={!editable} 
+                            />
+                        </div>
+                    </div>
 
-            <div className="grid grid-cols-2 gap-x-20 gap-y-6 w-11/12 max-w-5xl">
-                <TextBoxSystem
-                    id="nome"
-                    title="Nome"
-                    onChange={handleChange}
-                    value={userData.nome}
-                    disabled={true}
-                    logo={true}
-                    block={true}
-                />
-                <TextBoxSystem
-                    id="cpf"
-                    title="CPF"
-                    onChange={handleChange}
-                    value={userData.cpf}
-                    mask="000.000.000-00"
-                    disabled={true}
-                    logo={true}
-                    block={true}
-                />
-                <TextBoxSystem
-                    id="email"
-                    title="Email"
-                    onChange={handleChange}
-                    value={userData.email}
-                    disabled={!editable}
-                />
-                <TextBoxSystem
-                    id="telefone"
-                    title="Telefone"
-                    onChange={handleChange}
-                    value={userData.telefone}
-                    mask="(00) 00000-0000"
-                    disabled={!editable} 
-                />
-                <TextBoxSystem
-                    id="cep"
-                    title="CEP"
-                    width="w-60"
-                    onChange={handleChange}
-                    value={userData.cep}
-                    mask="00000-000"
-                    disabled={!editable} 
-                />
-                <TextBoxSystem
-                    id="numero"
-                    title="Número"
-                    width="w-28"
-                    onChange={handleChange}
-                    value={userData.numero}
-                    disabled={!editable} 
-                />
-                <TextBoxSystem
-                    id="complemento"
-                    title="Complemento"
-                    onChange={handleChange}
-                    value={userData.complemento}
-                    disabled={!editable} 
-                />
-                <div></div>
-                <TextBoxSystem
-                    id="logradouro"
-                    title="Logradouro"
-                    onChange={handleChange}
-                    value={userData.logradouro}
-                    disabled={!editable} 
-                />
-                <TextBoxSystem
-                    id="bairro"
-                    title="Bairro"
-                    onChange={handleChange}
-                    value={userData.bairro}
-                    disabled={!editable} 
-                />
+                    {/* Endereço */}
+                    <div className="bg-white rounded-lg p-6 shadow-sm">
+                        <h2 className="text-xl font-semibold text-gray-800 mb-6">Endereço</h2>
+                        <div className="grid grid-cols-2 gap-x-20 gap-y-6">
+                            <div className="flex gap-4">
+                                <TextBoxSystem
+                                    id="cep"
+                                    title="CEP"
+                                    width="w-60"
+                                    onChange={handleChange}
+                                    value={userData.cep}
+                                    mask="00000-000"
+                                    disabled={!editable} 
+                                />
+                                <TextBoxSystem
+                                    id="numero"
+                                    title="Número"
+                                    width="w-28"
+                                    onChange={handleChange}
+                                    value={userData.numero}
+                                    disabled={!editable} 
+                                />
+                            </div>
+                            <TextBoxSystem
+                                id="complemento"
+                                title="Complemento"
+                                onChange={handleChange}
+                                value={userData.complemento}
+                                disabled={!editable} 
+                            />
+                            <TextBoxSystem
+                                id="logradouro"
+                                title="Logradouro"
+                                onChange={handleChange}
+                                value={userData.logradouro}
+                                disabled={!editable}
+                            />
+                            <TextBoxSystem
+                                id="bairro"
+                                title="Bairro"
+                                onChange={handleChange}
+                                value={userData.bairro}
+                                disabled={!editable}
+                            />
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     );

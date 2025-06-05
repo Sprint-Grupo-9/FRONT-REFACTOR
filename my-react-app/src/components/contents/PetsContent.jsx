@@ -113,23 +113,42 @@ function PetsContent({ pets, setPets }) {
             {errorMessage && <ErrorBox text={errorMessage} />}
             
             <div className="flex justify-start w-11/12 h-4/5 mt-20 gap-6 flex-col relative">
-                {pets && pets.map(pet => (
-                    <PetCardSystem
-                        key={pet.id}
-                        title={pet.name}
-                        subtitle={pet.species}
-                        variant="blue"
-                        logo={<MdModeEdit />}
-                        clickButton={() => goToPetProfile(pet.id)}
-                    />
-                ))}
-
-                <ButtonSystem
-                    variant="blue"
-                    text="Adicionar Novo Pet"
-                    logo={<FaPlus />}
-                    click={() => setShowCreateModal(true)}
-                />
+                {pets && pets.length > 0 ? (
+                    <>
+                        {pets.map(pet => (
+                            <PetCardSystem
+                                key={pet.id}
+                                title={pet.name}
+                                subtitle={pet.species}
+                                variant="blue"
+                                logo={<MdModeEdit />}
+                                clickButton={() => goToPetProfile(pet.id)}
+                            />
+                        ))}
+                        <ButtonSystem
+                            variant="blue"
+                            text="Adicionar Novo Pet"
+                            logo={<FaPlus />}
+                            click={() => setShowCreateModal(true)}
+                        />
+                    </>
+                ) : (
+                    <div className="flex flex-col items-center justify-center gap-6 text-center">
+                        <MdPets className="text-primary text-6xl" />
+                        <h2 className="text-2xl font-semibold text-slate-800">
+                            Nenhum pet cadastrado
+                        </h2>
+                        <p className="text-slate-600 max-w-md">
+                            Você ainda não cadastrou nenhum pet. Clique no botão abaixo para adicionar seu primeiro pet.
+                        </p>
+                        <ButtonSystem
+                            variant="blue"
+                            text="Adicionar Novo Pet"
+                            logo={<FaPlus />}
+                            click={() => setShowCreateModal(true)}
+                        />
+                    </div>
+                )}
             </div>
 
             {showCreateModal && (

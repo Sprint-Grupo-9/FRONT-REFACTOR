@@ -1,5 +1,5 @@
 import HeaderSystem from "../components/system/HeaderSystem";
-import SidebarSystem from "../components/system/SidebarSystem";
+import SlidebarSystem from "../components/system/SlidebarSystem";
 import ProfileContent from "../components/contents/ProfileContent";
 import PetProfileContent from "../components/contents/PetProfileContent";
 import { useParams, Navigate } from "react-router-dom";
@@ -15,7 +15,7 @@ function SystemPetProfile() {
         <>
         <HeaderSystem text="Perfil do Pet" />
         <div className="w-full h-screen  flex flex-row">
-            <SidebarSystem pets />
+            <SlidebarSystem />
             <PetProfileContent petId={petId} />
         </div>
         </>

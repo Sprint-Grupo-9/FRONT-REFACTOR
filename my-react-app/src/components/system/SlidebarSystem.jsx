@@ -21,34 +21,36 @@ function SlidebarSystem() {
                     </div>
                 </div>
 
-                <ButtonSystem
-                    variant="white"
-                    text="Perfil"
-                    click={() => navigate('/system-profile')}
-                    logo={<MdPerson />}
-                    className={`text-primary ${location.pathname === '/system-profile' ? 'bg-primary/10' : ''}`}
-                />
-                <ButtonSystem
-                    variant="white"
-                    text="Pets"
-                    click={() => navigate('/system-pets')}
-                    logo={<MdPets />}
-                    className={`text-primary ${location.pathname === '/system-pets' ? 'bg-primary/10' : ''}`}
-                />
-                <ButtonSystem
-                    variant="white"
-                    text="Agendamentos"
-                    click={() => navigate('/system-appointments')}
-                    logo={<MdCalendarMonth />}
-                    className={`text-primary ${location.pathname === '/system-appointments' ? 'bg-primary/10' : ''}`}
-                />
-                <ButtonSystem
-                    variant="white"
-                    text="Dashboard"
-                    click={() => navigate('/system-dashboard')}
-                    logo={<MdDashboard />}
-                    className={`text-primary ${location.pathname === '/system-dashboard' ? 'bg-primary/10' : ''}`}
-                />
+                <div className="flex flex-col gap-2">
+                    <ButtonSystem
+                        variant="white"
+                        text="Perfil"
+                        click={() => navigate('/system-profile')}
+                        logo={<MdPerson />}
+                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-profile' ? 'bg-primary/10' : ''}`}
+                    />
+                    <ButtonSystem
+                        variant="white"
+                        text="Pets"
+                        click={() => navigate('/system-pets')}
+                        logo={<MdPets />}
+                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-pets' ? 'bg-primary/10' : ''}`}
+                    />
+                    <ButtonSystem
+                        variant="white"
+                        text="Agendamentos"
+                        click={() => navigate('/system-appointments')}
+                        logo={<MdCalendarMonth />}
+                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-appointments' ? 'bg-primary/10' : ''}`}
+                    />
+                    <ButtonSystem
+                        variant="white"
+                        text="Dashboard"
+                        click={() => navigate('/system-dashboard')}
+                        logo={<MdDashboard />}
+                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-dashboard' ? 'bg-primary/10' : ''}`}
+                    />
+                </div>
             </div>
         </div>
     );

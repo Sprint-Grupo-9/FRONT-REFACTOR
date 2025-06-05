@@ -65,7 +65,13 @@ function AppointmentCardSystem(props) {
             </div>
            
             <div className="flex-1 flex justify-end">
-                <ButtonSystem variant={props.variant} text="Remover Agendamento" logo={props.logo} click={props.clickButton} />
+                <button
+                    onClick={props.clickButton}
+                    className="p-2 text-red-500 hover:bg-red-50 rounded-full transition-colors"
+                    title="Remover agendamento"
+                >
+                    {props.logo}
+                </button>
             </div>
         </div>
     )
