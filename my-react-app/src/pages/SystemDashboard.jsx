@@ -1,19 +1,15 @@
-import HeaderSystem from "../components/system/HeaderSystem";
 import KpiSection from "../components/system/KpiSection";
-import SidebarSystem from "../components/system/SidebarSystem";
+import SlidebarSystem from "../components/system/SlidebarSystem";
 
 function SystemDashboard() {
-
   return (
-    <div className="w-full h-full overflow-hidden" >
-      <HeaderSystem text="Agendamentos" />
-      <div className="w-full h-screen flex flex-start ">
-        {/* <SidebarSystem appointments /> */}
+    <div className="w-full h-full overflow-hidden">
+      <div className="w-full h-screen flex flex-start">
+        <SlidebarSystem />
         <KpiSection />
       </div>
     </div>
   )
 }
-
 
 export default SystemDashboard;

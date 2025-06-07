@@ -1,6 +1,5 @@
-import SlidebarSystem from "../components/system/SlidebarSystem";
 import { useNavigate } from "react-router-dom";
-import ButtonSystem from "../components/system/ButtonSystem";
+import ButtonSystem from "./ButtonSystem";
 import { IoCalendarOutline } from "react-icons/io5";
 
 function SystemServices() {
@@ -26,4 +25,4 @@ function SystemServices() {
     );
 }
 
-export default SystemServices;
+export default SystemServices; 

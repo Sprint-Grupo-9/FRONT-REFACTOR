@@ -31,12 +31,20 @@ function Header() {
               <li className="cursor-pointer hover:translate-y-[-2px] transition-all duration-900" onClick={() => scrollToSection('about')}>Sobre Nós</li>
               <li className="cursor-pointer hover:translate-y-[-2px] transition-all duration-900" onClick={() => scrollToSection('squad')}>Equipe</li>
               <li className="cursor-pointer hover:translate-y-[-2px] transition-all duration-900" onClick={() => scrollToSection('footer')}>Contato</li>
+              {user && (
+                <li 
+                  className="cursor-pointer hover:translate-y-[-2px] transition-all duration-900" 
+                  onClick={() => navigate('/system-profile')}
+                >
+                  Meu Perfil
+                </li>
+              )}
             </ul>
           </div>
           <div className="flex items-center h-full gap-6">
             {!user ? (
               <>
-                <button onClick={() => navigate('/cadastro')} className="bg-secondary text-white font-bold font-figtree py-2 px-6 rounded-lg transition-all duration-900 hover:bg-white hover:text-primary">
+                <button onClick={() => navigate('/cadastro')} className="bg-[#23C3E3] text-white font-bold font-figtree py-2 px-6 rounded-lg transition-all duration-900 hover:bg-white hover:text-primary">
                   Cadastre-se
                 </button>
                 <button

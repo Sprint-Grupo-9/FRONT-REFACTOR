@@ -1,30 +1,46 @@
-function ButtonSystem(props) {
+import { useNavigate } from 'react-router-dom';
 
-    const baseStyles = `font-bold text-[1rem] py-1.5 px-6 rounded-lg transition-all duration-900 flex items-center gap-2 hover:bg-slate-300 hover:text-white shadow-sm`;
+function ButtonSystem({ text, click, logo, variant = "blue", disabled = false, className = "", type = "button" }) {
+    const navigate = useNavigate();
 
-    const variants = {
-        white: "bg-white text-navy-blue",
-        blue: "bg-secondary text-white",
-        red: "bg-primary text-white",
-        transp: "border-2 border-white text-white hover:border-slate-300",
-        orange: "bg-orange-400 text-white",
-        redTransp: "border-2 border-primary text-primary hover:border-slate-300",
-        test: "bg-purple-400 text-white"
+    const handleClick = async () => {
+        if (click) {
+            try {
+                await click();
+            } catch (error) {
+                console.error('Erro ao executar ação:', error);
+            }
+        }
     };
 
-    const variantClass = variants[props.variant || "white"];
-
-    const alignClass = props.align ? "" : "justify-center";
+    const getVariantClasses = () => {
+        switch (variant) {
+            case "blue":
+                return "bg-[#23C3E3] text-white hover:bg-[#BDBDBD]";
+            case "red":
+                return "bg-red-600 text-white hover:bg-red-700";
+            case "white":
+                return "bg-white text-primary hover:bg-gray-50";
+            case "whiteTransp":
+                return "bg-white/10 text-white hover:bg-white/20";
+            case "redTransp":
+                return "bg-red-100 text-red-600 hover:bg-red-200";
+            default:
+                return "bg-primary text-white hover:bg-primary/90";
+        }
+    };
 
     return (
         <button
-            onClick={typeof props.click === "function" ? props.click : undefined}
-            className={`${baseStyles} ${variantClass} ${alignClass}`}
+            type={type}
+            onClick={handleClick}
+            disabled={disabled}
+            className={`flex items-center gap-2 px-4 py-2 rounded-md transition-colors ${getVariantClasses()} ${className} ${disabled ? 'opacity-50 cursor-not-allowed' : ''}`}
         >
-            {props.logo} {props.text}
+            {logo && <span className="text-xl">{logo}</span>}
+            {text}
         </button>
-    )
-
+    );
 }
 
 export default ButtonSystem;

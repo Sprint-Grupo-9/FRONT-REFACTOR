@@ -1,5 +1,5 @@
 import HeaderSystem from "../components/system/HeaderSystem";
-import SidebarSystem from "../components/system/SidebarSystem";
+import SlidebarSystem from "../components/system/SlidebarSystem";
 import ProfileContent from "../components/contents/ProfileContent";
 
 function SystemProfile() {
@@ -7,7 +7,7 @@ function SystemProfile() {
         <>
         <HeaderSystem text="Meu Perfil" />
         <div className="w-full h-screen  flex flex-row">
-            <SidebarSystem profile />
+            <SlidebarSystem />
             <ProfileContent />
         </div>
         </>
