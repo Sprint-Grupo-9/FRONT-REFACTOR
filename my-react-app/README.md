@@ -11,6 +11,7 @@ Este é um sistema web desenvolvido em React para gerenciamento de agendamentos 
 - React Icons
 - React Hot Toast
 - Axios
+- Vite
 
 ## 📋 Pré-requisitos
 
@@ -24,18 +25,31 @@ Antes de começar, você precisa ter instalado em sua máquina:
 
 1. Clone o repositório:
 ```bash
-git clone [URL_DO_REPOSITÓRIO]
+git clone https://github.com/Sprint-Grupo-9/FRONT-REFACTOR.git
 ```
 
 2. Entre na pasta do projeto:
 ```bash
-cd my-react-app
+cd FRONT-REFACTOR
 ```
 
 3. Instale as dependências:
 ```bash
 npm install
 ```
+
+4. Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
+```env
+VITE_API_URL=http://localhost:8080
+```
+
+## 🔗 API Backend
+
+Este projeto depende da API backend do PataService. Para que o frontend funcione corretamente, você precisa ter a API rodando localmente ou acessar a versão em produção.
+
+Repositório da API: [https://github.com/Sprint-Grupo-9/BACK-REFACTOR](https://github.com/Sprint-Grupo-9/BACK-REFACTOR)
+
+A API está configurada para rodar na porta 8080 por padrão. Certifique-se de que a API esteja rodando antes de iniciar o frontend.
 
 ## 📦 Dependências do Projeto
 
@@ -63,10 +77,10 @@ O projeto utiliza as seguintes dependências principais:
 
 1. Inicie o servidor de desenvolvimento:
 ```bash
-npm start
+npm run dev
 ```
 
-2. O projeto estará disponível em `http://localhost:3000`
+2. O projeto estará disponível em `http://localhost:5173`
 
 ## 📁 Estrutura do Projeto
 
@@ -87,20 +101,11 @@ my-react-app/
 └── README.md
 ```
 
-## 🔑 Variáveis de Ambiente
-
-Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
-
-```env
-REACT_APP_API_URL=sua_url_da_api
-```
-
 ## 🛠️ Scripts Disponíveis
 
-- `npm start`: Inicia o servidor de desenvolvimento
-- `npm test`: Executa os testes
+- `npm run dev`: Inicia o servidor de desenvolvimento
 - `npm run build`: Cria a versão de produção
-- `npm run eject`: Ejecta o projeto (irreversível)
+- `npm run preview`: Visualiza a versão de produção localmente
 
 ## 📝 Funcionalidades Principais
 
