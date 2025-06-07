@@ -11,7 +11,7 @@ import SystemPetProfile from './pages/SystemPetProfile';
 import { Cadastro } from './Auth/Cadastro';
 import { AuthProvider } from './context/AuthContext';
 import { LoadingProvider } from './context/LoadingContext';
-import AppointmentPage from './pages/agendamentos/AppointmentPage';
+import AppointmentPage from './pages/Agendamentos/AppointmentPage';
 import { Toaster } from 'react-hot-toast';
 import LoadingSystem from './components/system/LoadingSystem';
 
