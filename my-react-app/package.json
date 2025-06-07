@@ -4,6 +4,8 @@
   "version": "0.0.0",
   "type": "module",
   "scripts": {
+    "start": "node ./my-react-app/src/main.js",
+    "postinstall": "cd my-react-app && npm install",
     "dev": "vite",
     "build": "vite build",
     "lint": "eslint .",
