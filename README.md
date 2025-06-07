@@ -92,7 +92,7 @@ my-react-app/
 Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
 ```env
-REACT_APP_API_URL=sua_url_da_api
+VITE_API_URL=sua_url_da_api
 ```
 
 ## 🛠️ Scripts Disponíveis
