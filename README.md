@@ -24,7 +24,7 @@ Antes de começar, você precisa ter instalado em sua máquina:
 
 1. Clone o repositório:
 ```bash
-git clone [[URL_DO_REPOSITÓRIO](https://github.com/Sprint-Grupo-9/FRONT-REFACTOR.git)]
+git clone [URL_DO_REPOSITÓRIO](https://github.com/Sprint-Grupo-9/FRONT-REFACTOR.git)
 ```
 
 2. Entre na pasta do projeto:
