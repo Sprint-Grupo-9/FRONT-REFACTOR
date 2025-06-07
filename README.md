@@ -1,55 +1,130 @@
-Detalhes da Estrutura
+# Columbia Petshop - Sistema de Agendamento para Pets
 
+Este é um sistema web desenvolvido em React para gerenciamento de agendamentos de serviços para pets, como banho, tosa e outros cuidados.
 
-public/: Para arquivos estáticos que serão servidos diretamente, como ícones, imagens não processadas etc.
+## 🚀 Tecnologias Utilizadas
 
-src/: Principal diretório de código-fonte.
+- React.js
+- Node.js
+- Tailwind CSS
+- React Router DOM
+- React Icons
+- React Hot Toast
+- Axios
 
-assets/: Para recursos como imagens e estilos. Pode conter subpastas para organizar tipos de arquivos.
+## 📋 Pré-requisitos
 
-components/: Contém todos os componentes reutilizáveis e organizados por áreas funcionais.
+Antes de começar, você precisa ter instalado em sua máquina:
 
-common/: Componentes que serão usados em várias partes do site, como botões ou a barra de navegação.
+- Node.js (versão 14.x ou superior)
+- npm (gerenciador de pacotes do Node.js)
+- Git
 
-institutional/: Componentes específicos do site institucional, como páginas de início e sobre.
+## 🔧 Instalação
 
-dashboard/: Componentes específicos do sistema pós-login, como painéis e configurações de usuário.
+1. Clone o repositório:
+```bash
+git clone [URL_DO_REPOSITÓRIO]
+```
 
+2. Entre na pasta do projeto:
+```bash
+cd my-react-app
+```
 
+3. Instale as dependências:
+```bash
+npm install
+```
 
-contexts/: Para contextos do React, caso esteja usando o Context API para gerenciamento de estado.
+## 📦 Dependências do Projeto
 
-hooks/: Custom Hooks que encapsulam lógica reutilizável.
+O projeto utiliza as seguintes dependências principais:
 
-pages/: Componentes de nível de página que combinam vários componentes para formar uma página completa.
+```json
+{
+  "dependencies": {
+    "@testing-library/jest-dom": "^5.17.0",
+    "@testing-library/react": "^13.4.0",
+    "@testing-library/user-event": "^13.5.0",
+    "axios": "^1.6.2",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "react-hot-toast": "^2.4.1",
+    "react-icons": "^4.12.0",
+    "react-router-dom": "^6.20.1",
+    "react-scripts": "5.0.1",
+    "web-vitals": "^2.1.4"
+  }
+}
+```
 
-Institutional.jsx: Importa e renderiza páginas relacionadas ao site institucional.
+## 🚀 Como Executar
 
-Dashboard.jsx: Importa e renderiza páginas específicas da área logada.
+1. Inicie o servidor de desenvolvimento:
+```bash
+npm start
+```
 
+2. O projeto estará disponível em `http://localhost:3000`
 
+## 📁 Estrutura do Projeto
 
-utils/: Funções utilitárias e helpers que podem ser usadas em toda a aplicação.
+```
+my-react-app/
+├── public/
+├── src/
+│   ├── components/
+│   │   ├── contents/
+│   │   ├── shared/
+│   │   ├── site/
+│   │   └── system/
+│   ├── context/
+│   ├── pages/
+│   ├── services/
+│   └── App.js
+├── package.json
+└── README.md
+```
 
-routes/: Configuração de rotas da aplicação, separando rotas públicas e privadas.
+## 🔑 Variáveis de Ambiente
 
-PublicRoutes.jsx: Define rotas acessíveis sem autenticação.
+Crie um arquivo `.env` na raiz do projeto com as seguintes variáveis:
 
-PrivateRoutes.jsx: Define rotas que requerem autenticação.
+```env
+REACT_APP_API_URL=sua_url_da_api
+```
 
+## 🛠️ Scripts Disponíveis
 
+- `npm start`: Inicia o servidor de desenvolvimento
+- `npm test`: Executa os testes
+- `npm run build`: Cria a versão de produção
+- `npm run eject`: Ejecta o projeto (irreversível)
 
+## 📝 Funcionalidades Principais
 
+- Cadastro e login de usuários
+- Gerenciamento de pets
+- Agendamento de serviços
+- Visualização de histórico de agendamentos
+- Perfil do usuário
+- Dashboard administrativo
 
+## 🤝 Contribuindo
 
-Boas Práticas
+1. Faça um Fork do projeto
+2. Crie uma Branch para sua Feature (`git checkout -b feature/AmazingFeature`)
+3. Faça o Commit de suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Faça o Push para a Branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
 
+## 📄 Licença
 
-Modularidade: Certifique-se de que os componentes são modulares e reutilizáveis sempre que possível.
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
 
-Separação de Preocupações: Tente separar a lógica de apresentação da lógica de negócios. Componentes devem ser focados em UI, enquanto lógica complexa deve ser isolada em hooks ou contextos.
+## ✨ Agradecimentos
 
-Escalabilidade: Pense na estrutura em termos de escalabilidade. À medida que o projeto cresce, a estrutura deve ser flexível o bastante para incluir novos componentes e funcionalidades sem se tornar desorganizada.
-
-
-Essa estrutura deve proporcionar uma base sólida para o desenvolvimento do seu projeto, facilitando o gerenciamento e o crescimento do código à medida que novas funcionalidades são adicionadas.
+- Equipe de desenvolvimento
+- Contribuidores
+- Comunidade open source
