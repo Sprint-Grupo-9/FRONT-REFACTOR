@@ -464,9 +464,6 @@ function AppointmentPage() {
                                         {selectedServices.map(service => (
                                             <div key={service.id} className="flex justify-between">
                                                 <span className="text-gray-600">{service.name}</span>
-                                                <span className="text-gray-800">
-                                                    R$ {totalPrice.toFixed(2)}
-                                                </span>
                                             </div>
                                         ))}
                                     </div>

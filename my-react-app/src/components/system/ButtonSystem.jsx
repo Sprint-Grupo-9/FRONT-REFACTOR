@@ -16,7 +16,7 @@ function ButtonSystem({ text, click, logo, variant = "blue", disabled = false, c
     const getVariantClasses = () => {
         switch (variant) {
             case "blue":
-                return "bg-primary text-white hover:bg-primary/90";
+                return "bg-[#23C3E3] text-white hover:bg-[#BDBDBD]";
             case "red":
                 return "bg-red-600 text-white hover:bg-red-700";
             case "white":
