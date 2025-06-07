@@ -117,7 +117,7 @@ export default function KpiSection() {
         const dataFormatada = dataSelecionada.toISOString().split('T')[0]; // YYYY-MM-DD
 
         axios
-            .get("http://localhost:8080/dashboards/appointments/date", {
+            .get(`${import.meta.env.VITE_API_URL}/dashboards/appointments/date`, {
                 params: { date: dataFormatada },
                 headers: {
                     Authorization: `Bearer ${token}`,
