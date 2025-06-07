@@ -1,4 +1,4 @@
-# PataService - Sistema de Agendamento para Pets
+# Columbia Petshop - Sistema de Agendamento para Pets
 
 Este é um sistema web desenvolvido em React para gerenciamento de agendamentos de serviços para pets, como banho, tosa e outros cuidados.
 
