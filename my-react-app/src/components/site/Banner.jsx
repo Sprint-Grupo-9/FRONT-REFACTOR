@@ -23,7 +23,7 @@ function Banner() {
                 <div className=" p-10 w-[400px] h-full">
                     {showAlert && (
                         <div className="fixed left-1/2 -translate-x-1/2 top-28 bg-red-500 text-white px-6 py-2 rounded-lg shadow-lg z-50 text-sm animate-fade-in-down">
-                            Você precisa estar logado para agendar!
+                            Você precisa estar logado para agendar!.
                         </div>
                     )}
                     <span className="flex flex-col">
