@@ -45,13 +45,8 @@ function PetsContent({ pets, setPets }) {
     const speciesOptions = [
         { value: "cao", label: "Cão" },
         { value: "gato", label: "Gato" },
-        { value: "passaro", label: "Pássaro" },
-        { value: "peixe", label: "Peixe" },
-        { value: "hamster", label: "Hamster" },
         { value: "porquinho", label: "Porquinho-da-índia" },
         { value: "coelho", label: "Coelho" },
-        { value: "lagarto", label: "Lagarto" },
-        { value: "tartaruga", label: "Tartaruga" },
         { value: "furao", label: "Furão" }
     ];
 
@@ -111,7 +106,7 @@ function PetsContent({ pets, setPets }) {
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center">
             {errorMessage && <ErrorBox text={errorMessage} />}
-            
+
             <div className="flex justify-start w-11/12 h-4/5 mt-20 gap-6 flex-col relative">
                 {pets && pets.length > 0 ? (
                     <>
@@ -155,7 +150,7 @@ function PetsContent({ pets, setPets }) {
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-8 rounded-lg w-[500px] max-h-[90vh] overflow-y-auto">
                         <h2 className="text-2xl font-bold text-primary mb-6">Novo Pet</h2>
-                        
+
                         <div className="space-y-4">
                             <TextBoxSystem
                                 id="name"
@@ -164,7 +159,7 @@ function PetsContent({ pets, setPets }) {
                                 onChange={handleInputChange}
                                 icon={<MdPets />}
                             />
-                            
+
                             <SelectSystem
                                 title="Espécie"
                                 options={speciesOptions}
