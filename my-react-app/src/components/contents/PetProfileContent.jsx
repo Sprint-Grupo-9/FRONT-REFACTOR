@@ -49,13 +49,8 @@ function PetProfileContent({ petId }) {
     const speciesOptions = [
         { value: "cao", label: "Cão" },
         { value: "gato", label: "Gato" },
-        { value: "passaro", label: "Pássaro" },
-        { value: "peixe", label: "Peixe" },
-        { value: "hamster", label: "Hamster" },
         { value: "porquinho", label: "Porquinho-da-índia" },
         { value: "coelho", label: "Coelho" },
-        { value: "lagarto", label: "Lagarto" },
-        { value: "tartaruga", label: "Tartaruga" },
         { value: "furao", label: "Furão" }
     ];
 
@@ -171,7 +166,7 @@ function PetProfileContent({ petId }) {
     return (
         <div className="flex-1 h-full bg-slate-100 flex justify-center items-center flex-col gap-8">
             {errorMessage && <ErrorBox text={errorMessage} />}
-            
+
             <div className="flex justify-center gap-6 pb-10">
                 <ButtonSystem
                     variant="redTransp"

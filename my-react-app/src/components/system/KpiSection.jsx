@@ -5,9 +5,9 @@ import { CardKpi } from './CardKpi';
 import { CardAppointment } from './CardAppointment';
 import Calendar from 'react-calendar';
 import './CalendarDash.css'
-    import TextBoxSystem from "../system/TextBoxSystem";
+import TextBoxSystem from "../system/TextBoxSystem";
 import axios from 'axios';
-import { capitalizeFirstLetter,formatDateToBR } from '../../utils/pass';
+import { capitalizeFirstLetter, formatDateToBR } from '../../utils/pass';
 
 
 
@@ -117,7 +117,7 @@ export default function KpiSection() {
         const dataFormatada = dataSelecionada.toISOString().split('T')[0]; // YYYY-MM-DD
 
         axios
-            .get(`${import.meta.env.VITE_API_URL}/dashboards/appointments/date`, {
+            .get(`http://localhost:8080/dashboards/appointments/date`, {
                 params: { date: dataFormatada },
                 headers: {
                     Authorization: `Bearer ${token}`,
@@ -225,7 +225,7 @@ export default function KpiSection() {
                                 </>
                             }
                             date={<>
-                               ({formatDateToBR(dataKPI2.start)}) - ({formatDateToBR(dataKPI2.end)})
+                                ({formatDateToBR(dataKPI2.start)}) - ({formatDateToBR(dataKPI2.end)})
                             </>}
                             description={`${dataKPI2.serviceName} - ${dataKPI2.count} vezes`}
                         />
@@ -237,11 +237,11 @@ export default function KpiSection() {
                         <CardKpi
                             title={
                                 <>
-                                    Horário de Maior Movimento 
+                                    Horário de Maior Movimento
                                 </>
                             }
-                              date={<>
-                                            ({formatDateToBR(dataKPI3.start)}) - ({formatDateToBR(dataKPI3.end)})
+                            date={<>
+                                ({formatDateToBR(dataKPI3.start)}) - ({formatDateToBR(dataKPI3.end)})
                             </>}
                             description={`${dataKPI3.hour ? dataKPI3.hour.slice(0, 5) : 'N/A'} - ${dataKPI3.count}  vezes`}
                         />
@@ -253,11 +253,11 @@ export default function KpiSection() {
                         <CardKpi
                             title={
                                 <>
-                                    Horário de Menor Movimento 
+                                    Horário de Menor Movimento
                                 </>
                             }
-                              date={<>
-                                  ({formatDateToBR(dataKPI4.start)}) - ({formatDateToBR(dataKPI4.end)})
+                            date={<>
+                                ({formatDateToBR(dataKPI4.start)}) - ({formatDateToBR(dataKPI4.end)})
                             </>}
                             description={`${dataKPI4.hour ? dataKPI4.hour.slice(0, 5) : 'N/A'} - ${dataKPI4.count}  vezes`}
                         />
@@ -420,7 +420,7 @@ export default function KpiSection() {
                                 {detalhes.ultimosAgendamentosPet && detalhes.ultimosAgendamentosPet.length > 0 && (
                                     <div>
                                         <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do pet {detalhes.petNome}</h4>
-                                      <ul className='text-left text-gray-800 space-y-4 mb-2'>
+                                        <ul className='text-left text-gray-800 space-y-4 mb-2'>
                                             {detalhes.ultimosAgendamentosPet.map((item, index) => (
                                                 <li key={index}>{item}</li>
                                             ))}
