@@ -20,11 +20,11 @@ jobs:
         with:
           node-version: '22.x'
 
-      - name: Install dependencies and build
+      - name: Install dependencies and build Vite project
         working-directory: ./my-react-app
         run: |
-          npm install
-          npm run build
+          npm ci
+          NODE_ENV=production npm run build
 
       - name: Zip build output
         run: |
@@ -70,3 +70,4 @@ jobs:
           app-name: 'PetColumbia'
           slot-name: 'Production'
           package: .
+
