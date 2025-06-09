@@ -180,6 +180,8 @@ export default function KpiSection() {
                         funcionario: capitalizeFirstLetter(info.employee.name),
                         procedimento: capitalizeFirstLetter(info.services),
                         valor: `${info.totalPrice}R$`,
+                        observations: info.observations, 
+                        taxiService: info.taxiService,
                         horarioInicio: info.startDateTime.split('T')[1].slice(0, 5),
                         horarioFim: info.endDateTime.split('T')[1].slice(0, 5),
                         ultimosAgendamentosDono: ultimosDoDono,
@@ -330,12 +332,14 @@ export default function KpiSection() {
                                             valor={item.valor}
                                             horarioInicio={item.horarioInicio}
                                             horarioFim={item.horarioFim}
+                                            taxiService= {item.taxiService ? 'Sim' : 'Não'}
                                             detalhesExtras={{
                                                 cpf: item.cpf,
                                                 email: item.email,
                                                 telefone: item.telefone,
                                                 endereco: item.endereco,
                                                 funcionario: item.funcionario,
+                                                observations: item.observations,
                                                 idade: item.petIdade,
                                                 especie: item.petEspecie,
                                                 pelagem: item.petPelagem,
@@ -403,6 +407,8 @@ export default function KpiSection() {
                                     <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Serviço</h3>
                                     <p><strong>Nome:</strong> {detalhes.procedimento}</p>
                                     <p><strong>Preço:</strong> {detalhes.valor}</p>
+                                    <p><strong>Observação:</strong> {detalhes.observations || 'Nenhuma'}</p>
+                                    <p><strong>Taxi dog:</strong> {detalhes.taxiService ? 'Sim' : 'Não'}</p>
                                 </div>
 
                                 {/* ÚLTIMOS AGENDAMENTOS DO DONO */}
