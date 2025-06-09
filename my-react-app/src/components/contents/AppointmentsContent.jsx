@@ -104,6 +104,8 @@ function AppointmentsContent() {
                                 setAppointmentToDelete(appointment);
                                 setShowConfirmModal(true);
                             }}
+                            taxiService={appointment.taxiService}
+                            observations={appointment.observations}
                         />
                     ))
                 )}

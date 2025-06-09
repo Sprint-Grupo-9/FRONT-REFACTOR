@@ -11,6 +11,7 @@ import ErrorBox from "../system/ErrorBox";
 import SelectSystem from "../system/SelectSystem";
 import { MdPets, MdScale, MdWbSunny, MdMale, MdFemale } from "react-icons/md";
 import { FaTrash } from "react-icons/fa";
+import { BREEDS } from "../../utils/constants";
 
 function PetProfileContent({ petId }) {
     const navigate = useNavigate();
@@ -27,6 +28,7 @@ function PetProfileContent({ petId }) {
         sex: '',
     });
     const originalData = useRef(userData);
+    const [breedOptions, setBreedOptions] = useState([]);
 
     const sizeOptions = [
         { value: "pp", label: "PP (0 a 2,9kg)" },
@@ -91,6 +93,12 @@ function PetProfileContent({ petId }) {
             return () => clearTimeout(timer);
         }
     }, [errorMessage]);
+
+    useEffect(() => {
+        if (userData.species) {
+            setBreedOptions(BREEDS[userData.species] || []);
+        }
+    }, [userData.species]);
 
     const goToPets = () => navigate("/system-pets");
 
@@ -212,7 +220,13 @@ function PetProfileContent({ petId }) {
                     id="species"
                     title="Espécie"
                     options={speciesOptions}
-                    onChange={(option) => handleSelectChange('species', option)}
+                    onChange={(option) => {
+                        handleSelectChange('species', option);
+                        setUserData(prev => ({
+                            ...prev,
+                            breed: '' // Reset breed when species changes
+                        }));
+                    }}
                     value={userData.species}
                     disabled={!editable}
                     icon={<MdPets />}
@@ -228,13 +242,14 @@ function PetProfileContent({ petId }) {
                     icon={<MdScale />}
                 />
 
-                <TextBoxSystem
+                <SelectSystem
                     id="breed"
                     title="Raça"
-                    hint="Maltês"
-                    onChange={handleChange}
+                    options={breedOptions}
+                    onChange={(option) => handleSelectChange('breed', option)}
                     value={userData.breed}
-                    disabled={!editable}
+                    disabled={!editable || !userData.species}
+                    icon={<MdPets />}
                 />
 
                 <SelectSystem

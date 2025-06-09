@@ -1,6 +1,8 @@
 import { FiChevronDown } from "react-icons/fi";
 import ButtonSystem from "./ButtonSystem";
 import { BsCalendar2WeekFill } from "react-icons/bs";
+import { MdLocalTaxi } from "react-icons/md";
+import { IoChatbubbleEllipsesOutline } from "react-icons/io5";
 
 function AppointmentCardSystem(props) {
 
@@ -8,6 +10,8 @@ function AppointmentCardSystem(props) {
     const date = "Data"
     const time = "Horário"
     const employee = "Funcionário"
+    const taxi = "Taxi Dog"
+    const observations = "Observações"
 
     return (
         <div className="bg-white py-4 px-4 flex flex-row items-center gap-6 text-[1rem] font-bold rounded-lg shadow-sm">
@@ -54,13 +58,56 @@ function AppointmentCardSystem(props) {
 
             <div className="h-10 w-[1px] bg-slate-300 ml-2"></div>
 
-
             <div className="text-[0.8rem] font-bold pl-2">
                 <div className="text-[1rem] font-bold text-primary">
                     {props.employee}
                 </div>
                 <div className="text-[0.8rem] font-thin">
                     {employee}
+                </div>
+            </div>
+
+            <div className="h-10 w-[1px] bg-slate-300 ml-2"></div>
+
+            {/* Taxi Dog */}
+            <div className="text-[0.8rem] font-bold pl-2">
+                <div className="text-[1rem] font-bold text-primary flex items-center gap-2">
+                    {props.taxiService ? (
+                        <>
+                            <MdLocalTaxi className="text-green-500" />
+                            <span>Sim</span>
+                        </>
+                    ) : (
+                        <>
+                            <MdLocalTaxi className="text-gray-400" />
+                            <span>Não</span>
+                        </>
+                    )}
+                </div>
+                <div className="text-[0.8rem] font-thin">
+                    {taxi}
+                </div>
+            </div>
+
+            <div className="h-10 w-[1px] bg-slate-300 ml-2"></div>
+
+            {/* Observações */}
+            <div className="text-[0.8rem] font-bold pl-2">
+                <div className="text-[1rem] font-bold text-primary flex items-center gap-2">
+                    {props.observations ? (
+                        <>
+                            <IoChatbubbleEllipsesOutline className="text-blue-500" />
+                            <span>Sim</span>
+                        </>
+                    ) : (
+                        <>
+                            <IoChatbubbleEllipsesOutline className="text-gray-400" />
+                            <span>Não</span>
+                        </>
+                    )}
+                </div>
+                <div className="text-[0.8rem] font-thin">
+                    {observations}
                 </div>
             </div>
            
@@ -75,7 +122,6 @@ function AppointmentCardSystem(props) {
             </div>
         </div>
     )
-
 }
 
 export default AppointmentCardSystem;

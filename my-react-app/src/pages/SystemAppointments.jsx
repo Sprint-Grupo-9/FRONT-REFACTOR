@@ -142,6 +142,8 @@ function SystemAppointments() {
                                         variant="redTransp"
                                         logo={<FaTrash className="text-red-500" />}
                                         clickButton={() => handleDeleteClick(appointment)}
+                                        taxiService={appointment.taxiService}
+                                        observations={appointment.observations}
                                     />
                                 ))}
                                 <ButtonSystem

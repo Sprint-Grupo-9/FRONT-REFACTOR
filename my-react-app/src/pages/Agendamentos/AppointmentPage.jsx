@@ -34,6 +34,8 @@ function AppointmentPage() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('error'); // 'error' ou 'success'
     const [expandedService, setExpandedService] = useState(null);
+    const [taxiService, setTaxiService] = useState(false);
+    const [observations, setObservations] = useState('');
 
     const steps = [
         { id: 1, title: 'Pet e Serviços', description: 'Selecione seu pet e os serviços desejados' },
@@ -259,7 +261,9 @@ function AppointmentPage() {
                 servicesNames: formattedServices.join(', '),
                 startDateTime: appointmentDate.toISOString().slice(0, 16),
                 totalPrice: Number(totalPrice),
-                durationMinutes: Number(totalDuration)
+                durationMinutes: Number(totalDuration),
+                taxiService: taxiService,
+                observations: observations
             };
 
             console.log('Dados do agendamento:', appointmentData);
@@ -297,6 +301,26 @@ function AppointmentPage() {
 
                         <div className="bg-white rounded-lg shadow-md p-6">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Selecione os Serviços</h2>
+                            
+                            {/* Taxi Dog */}
+                            <div className="mb-4 p-4 border border-gray-200 rounded-lg">
+                                <div className="flex items-center justify-between">
+                                    <div>
+                                        <h3 className="text-lg font-medium text-gray-800">Taxi Dog</h3>
+                                        <p className="text-sm text-gray-600">Serviço de busca e entrega do seu pet</p>
+                                    </div>
+                                    <label className="relative inline-flex items-center cursor-pointer">
+                                        <input
+                                            type="checkbox"
+                                            className="sr-only peer"
+                                            checked={taxiService}
+                                            onChange={(e) => setTaxiService(e.target.checked)}
+                                        />
+                                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+                                    </label>
+                                </div>
+                            </div>
+
                             <div className="space-y-4">
                                 {services
                                     .filter(service => 
@@ -452,6 +476,22 @@ function AppointmentPage() {
                     <div className="space-y-6">
                         <div className="bg-white rounded-lg shadow-md p-6">
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Resumo do Agendamento</h2>
+                            
+                            {/* Observações */}
+                            <div className="mb-4">
+                                <label htmlFor="observations" className="block text-sm font-medium text-gray-700 mb-2">
+                                    Observações
+                                </label>
+                                <textarea
+                                    id="observations"
+                                    rows="3"
+                                    className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                    placeholder="Adicione observações importantes sobre o agendamento..."
+                                    value={observations}
+                                    onChange={(e) => setObservations(e.target.value)}
+                                />
+                            </div>
+
                             <div className="space-y-4">
                                 <div className="border-b pb-4">
                                     <h3 className="font-medium text-gray-800 mb-2">Pet</h3>
@@ -466,6 +506,11 @@ function AppointmentPage() {
                                                 <span className="text-gray-600">{service.name}</span>
                                             </div>
                                         ))}
+                                        {taxiService && (
+                                            <div className="flex justify-between">
+                                                <span className="text-gray-600">Taxi Dog (Busca e Entrega)</span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
 
