@@ -112,6 +112,7 @@ function AppointmentPage() {
                             name: service.name,
                             description: service.description
                         }))
+                        
                     };
                     const response = await getAvailableTimes(selectedPet.value, requestData);
                     if (response?.data) {
@@ -262,8 +263,8 @@ function AppointmentPage() {
                 startDateTime: appointmentDate.toISOString().slice(0, 16),
                 totalPrice: Number(totalPrice),
                 durationMinutes: Number(totalDuration),
-                taxiService: taxiService,
-                observations: observations
+                taxiService: Boolean(taxiService),
+                observations: observations || ''
             };
 
             console.log('Dados do agendamento:', appointmentData);
@@ -529,7 +530,14 @@ function AppointmentPage() {
                                 <div className="pt-4">
                                     <div className="flex justify-between text-lg font-semibold text-blue-600">
                                         <span>Total:</span>
-                                        <span>R$ {totalPrice.toFixed(2)}</span>
+                                        <div className="text-right">
+                                            <span>R$ {totalPrice.toFixed(2)}</span>
+                                            {taxiService && (
+                                                <div className="text-sm text-green-600">
+                                                    (inclui Taxi Dog +R$ 20,00)
+                                                </div>
+                                            )}
+                                        </div>
                                     </div>
                                     <p className="text-sm text-gray-500 mt-1">
                                         Duração estimada: {totalDuration} minutos

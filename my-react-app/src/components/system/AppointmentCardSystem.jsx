@@ -28,6 +28,9 @@ function AppointmentCardSystem(props) {
             <div className="text-[0.8rem] font-bold pl-24">
                 <div className="text-[1rem] font-bold text-primary">
                     {props.price}
+                    {props.taxiService && (
+                        <span className="text-xs text-green-600 ml-2">(inclui Taxi Dog)</span>
+                    )}
                 </div>
                 <div className="text-[0.8rem] font-thin">
                     {price}

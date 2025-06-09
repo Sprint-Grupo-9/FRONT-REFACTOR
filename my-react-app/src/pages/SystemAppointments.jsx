@@ -135,7 +135,7 @@ function SystemAppointments() {
                                         key={appointment.id}
                                         title={appointment.services}
                                         subtitle={`Pet: ${appointment.pet.name}`}
-                                        price={`R$ ${appointment.totalPrice.toFixed(2)}`}
+                                        price={`R$ ${appointment.totalPrice ? appointment.totalPrice.toFixed(2) : '0.00'}`}
                                         date={new Date(appointment.startDateTime).toLocaleDateString('pt-BR')}
                                         time={new Date(appointment.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
                                         employee={appointment.employee.name}
