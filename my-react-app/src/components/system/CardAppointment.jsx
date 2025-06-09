@@ -10,6 +10,7 @@ export function CardAppointment(props) {
                 <p><strong>Cliente:</strong> {props.cliente} <strong>Pet:</strong> {props.pet}</p> 
                 <p><strong>Procedimento:</strong> {props.procedimento}</p>
                 <p><strong>Valor:</strong> {props.valor}</p>
+                <p><strong>Taxi Dog:</strong> {props.taxiService}</p>
             </div>
              <div className="flex items-center justify-end px-4 pb-2 mt-auto text-gray-500 text-xs gap-1">
                 <span>Clique para expandir</span>
