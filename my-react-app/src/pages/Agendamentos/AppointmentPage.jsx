@@ -531,10 +531,10 @@ function AppointmentPage() {
                                     <div className="flex justify-between text-lg font-semibold text-blue-600">
                                         <span>Total:</span>
                                         <div className="text-right">
-                                            <span>R$ {totalPrice.toFixed(2)}</span>
+                                            <span>R$ {(totalPrice + (taxiService ? 20 : 0)).toFixed(2)}</span>
                                             {taxiService && (
                                                 <div className="text-sm text-green-600">
-                                                    (inclui Taxi Dog +R$ 20,00)
+                                                    (inclui Taxi Dog)
                                                 </div>
                                             )}
                                         </div>

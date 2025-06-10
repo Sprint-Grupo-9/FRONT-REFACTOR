@@ -10,7 +10,8 @@ export const BREEDS = {
         { value: "maltes", label: "Maltês" },
         { value: "pug", label: "Pug" },
         { value: "beagle", label: "Beagle" },
-        { value: "srd", label: "SDR (Sem Raça Definida)" }
+        { value: "srd", label: "SDR (Sem Raça Definida)" },
+        { value: "outros", label: "Outros" }
     ],
     gato: [
         { value: "siames", label: "Siamês" },
@@ -19,23 +20,27 @@ export const BREEDS = {
         { value: "sphynx", label: "Sphynx" },
         { value: "ragdoll", label: "Ragdoll" },
         { value: "bengala", label: "Bengala" },
-        { value: "srd", label: "SDR (Sem Raça Definida)" }
+        { value: "srd", label: "SDR (Sem Raça Definida)" },
+        { value: "outros", label: "Outros" }
     ],
     porquinho: [
         { value: "americano", label: "Americano" },
         { value: "peruano", label: "Peruano" },
         { value: "abissinio", label: "Abissínio" },
-        { value: "srd", label: "SDR (Sem Raça Definida)" }
+        { value: "srd", label: "SDR (Sem Raça Definida)" },
+        { value: "outros", label: "Outros" }
     ],
     coelho: [
         { value: "holandes", label: "Holandês" },
         { value: "angora", label: "Angorá" },
         { value: "rex", label: "Rex" },
-        { value: "srd", label: "SDR (Sem Raça Definida)" }
+        { value: "srd", label: "SDR (Sem Raça Definida)" },
+        { value: "outros", label: "Outros" }
     ],
     furao: [
         { value: "europeu", label: "Europeu" },
         { value: "americano", label: "Americano" },
-        { value: "srd", label: "SDR (Sem Raça Definida)" }
+        { value: "srd", label: "SDR (Sem Raça Definida)" },
+        { value: "outros", label: "Outros" }
     ]
 }; 
