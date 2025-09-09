@@ -14,6 +14,7 @@ import { LoadingProvider } from './context/LoadingContext';
 import AppointmentPage from './pages/agendamentos/AppointmentPage';
 import { Toaster } from 'react-hot-toast';
 import LoadingSystem from './components/system/LoadingSystem';
+import { RequireAuth } from './routes/Routes.jsx';
 
 function App() {
     const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -40,14 +41,17 @@ function App() {
                         <Routes>
                             <Route path="/" element={<Site />} />
                             <Route path='/cadastro' element={<Cadastro />} />
-                            <Route path="/system-profile" element={<SystemProfile />} />
-                            <Route path="/system-services" element={<SystemServices />} />
-                            <Route path="/system-calendar" element={<SystemCalendar />} />
-                            <Route path="/system-appointments" element={<SystemAppointments />} />
-                            <Route path="/system-pets" element={<SystemPets />} />
-                            <Route path="/system-pet-profile/:petId" element={<SystemPetProfile />} />
-                            <Route path="/system-dashboard" element={<SystemDashboard />} />
-                            <Route path="/system-appointments/new" element={<AppointmentPage />} />
+
+                            <Route element={<RequireAuth />}>
+                                <Route path="/system-profile" element={<SystemProfile />} />
+                                <Route path="/system-services" element={<SystemServices />} />
+                                <Route path="/system-calendar" element={<SystemCalendar />} />
+                                <Route path="/system-appointments" element={<SystemAppointments />} />
+                                <Route path="/system-pets" element={<SystemPets />} />
+                                <Route path="/system-pet-profile/:petId" element={<SystemPetProfile />} />
+                                <Route path="/system-dashboard" element={<SystemDashboard />} />
+                                <Route path="/system-appointments/new" element={<AppointmentPage />} />
+                            </Route>
                         </Routes>
                     </div>
                 </LoadingProvider>

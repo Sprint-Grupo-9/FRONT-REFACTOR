@@ -21,6 +21,25 @@ api.interceptors.request.use(
     }
 );
 
+// Auto-logout on 401 responses and redirect to home
+api.interceptors.response.use(
+    (response) => response,
+    (error) => {
+        if (error?.response?.status === 401) {
+            try {
+                localStorage.removeItem('token');
+                localStorage.removeItem('name');
+                localStorage.removeItem('id');
+            } catch { }
+            // Avoid crashing if window is undefined in some environments
+            if (typeof window !== 'undefined') {
+                window.location.href = '/';
+            }
+        }
+        return Promise.reject(error);
+    }
+);
+
 export const registerOwner = (ownerData) => {
     return api.post('/owners', ownerData);
 };
