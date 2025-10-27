@@ -15,6 +15,7 @@ import AppointmentPage from './pages/agendamentos/AppointmentPage';
 import { Toaster } from 'react-hot-toast';
 import LoadingSystem from './components/system/LoadingSystem';
 import { RequireAuth } from './routes/Routes.jsx';
+import ChatButton from './components/system/ChatButton';
 
 function App() {
     const [isInitialLoading, setIsInitialLoading] = useState(true);
@@ -38,6 +39,7 @@ function App() {
                 <LoadingProvider>
                     <div className='font-figtree'>
                         <Toaster position="top-right" />
+                        <ChatButton />
                         <Routes>
                             <Route path="/" element={<Site />} />
                             <Route path='/cadastro' element={<Cadastro />} />
