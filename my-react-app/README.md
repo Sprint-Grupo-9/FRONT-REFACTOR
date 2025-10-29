@@ -40,7 +40,7 @@ npm install
 
 4. Crie um arquivo `.env` na raiz do projeto com o seguinte conteúdo:
 ```env
-VITE_API_URL=http://localhost:8080
+VITE_API_URL=http://localhost:8080/api
 ```
 
 ## 🔗 API Backend

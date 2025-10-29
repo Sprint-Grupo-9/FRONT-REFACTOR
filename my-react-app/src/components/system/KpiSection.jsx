@@ -21,7 +21,7 @@ export default function KpiSection() {
 
     useEffect(() => {
 
-        axios.get('http://localhost:8080/dashboards/procedures/amount-last-seven-days', {
+        axios.get('http://localhost:8080/api/dashboards/procedures/amount-last-seven-days', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -44,7 +44,7 @@ export default function KpiSection() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/dashboards/procedures/most-performed-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/procedures/most-performed-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -60,7 +60,7 @@ export default function KpiSection() {
     const [dataKPI2, setDataKPI2] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/dashboards/procedures/least-performed-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/procedures/least-performed-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -75,7 +75,7 @@ export default function KpiSection() {
     const [dataKPI3, setDataKPI3] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/dashboards/procedures/most-procedures-timing-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/procedures/most-procedures-timing-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -89,7 +89,7 @@ export default function KpiSection() {
     const [dataKPI4, setDataKPI4] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/dashboards/procedures/least-procedures-timing-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/procedures/least-procedures-timing-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -117,7 +117,7 @@ export default function KpiSection() {
         const dataFormatada = dataSelecionada.toISOString().split('T')[0]; // YYYY-MM-DD
 
         axios
-            .get(`http://localhost:8080/dashboards/appointments/date`, {
+            .get(`http://localhost:8080/api/dashboards/appointments/date`, {
                 params: { date: dataFormatada },
                 headers: {
                     Authorization: `Bearer ${token}`,
