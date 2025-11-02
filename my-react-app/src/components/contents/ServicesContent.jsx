@@ -5,7 +5,7 @@ import ServiceTabSystem from "../system/ServiceTabSystem";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ErrorBox from "../system/ErrorBox";
-import { getAllServices } from "../../services/api";
+import { getAllPetOfferings } from "../../services/api";
 
 function ServicesContent() {
     const navigate = useNavigate();
@@ -16,7 +16,7 @@ function ServicesContent() {
     useEffect(() => {
         const fetchServices = async () => {
             try {
-                const response = await getAllServices();
+                const response = await getAllPetOfferings();
                 if (response && response.data) {
                     // Transforma os dados do backend para o formato esperado pelo frontend
                     const formattedServices = response.data.map(service => ({

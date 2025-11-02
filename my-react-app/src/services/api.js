@@ -83,27 +83,54 @@ export const updatePet = async (petId, petData) => {
     return await api.put(`/pets/${petId}`, petData);
 };
 
+// DEPRECATED: Este endpoint está marcado como deprecated no backend
+// Mantenha para compatibilidade, mas considere remover funcionalidade de exclusão
 export const deletePet = async (petId) => {
+    console.warn('⚠️ DELETE /pets/{id} está DEPRECATED no backend. Esta funcionalidade pode ser removida em breve.');
     return await api.delete(`/pets/${petId}`);
 };
 
 export const getPetDetails = async (petId) => {
-    return await api.get(`/pets/${petId}`);
+    const ownerId = localStorage.getItem('id');
+    return await api.get(`/pets/${petId}/${ownerId}`);
 };
 
+export const getAllPetOfferings = async () => {
+    return await api.get('/pet-offerings');
+};
+
+export const getPetOfferingById = async (id) => {
+    return await api.get(`/pet-offerings/${id}`);
+};
+
+export const getPetOfferingsPricesByPet = async (petId, petOfferingIds) => {
+    const params = new URLSearchParams({
+        petOfferingIds: petOfferingIds.join(',')
+    });
+    return await api.get(`/pet-offerings/price/${petId}?${params}`);
+};
+
+// Manter compatibilidade com código antigo (deprecated)
 export const getAllServices = async () => {
-    return await api.get('/services');
+    console.warn('getAllServices está deprecated. Use getAllPetOfferings');
+    return await getAllPetOfferings();
 };
 
 export const getServiceById = async (id) => {
-    return await api.get(`/services/${id}`);
+    console.warn('getServiceById está deprecated. Use getPetOfferingById');
+    return await getPetOfferingById(id);
 };
 
 export const getEmployeesByServices = async (serviceIds) => {
-    const params = new URLSearchParams({
-        serviceIds: serviceIds.join(',')
-    });
-    return await api.get(`/services/employees?${params}`);
+    console.warn('getEmployeesByServices está deprecated. Use getAvailableEmployees com petOfferingIds');
+    // Converte para o novo formato
+    return await api.get(`/employees/by-pet-offerings?${serviceIds.map(id => `petOfferingIds=${id}`).join('&')}`);
+};
+
+// Buscar funcionários disponíveis para os serviços selecionados (nova função)
+export const getAvailableEmployees = async (petOfferingIds) => {
+    const params = petOfferingIds.map(id => `petOfferingIds=${id}`).join('&');
+    return await api.get(`/employees/by-pet-offerings?${params}`);
 };
 
 // Funções para gerenciar agendamentos
@@ -124,12 +151,14 @@ export const deleteAppointment = async (id) => {
     return await api.delete(`/appointments/${id}`);
 };
 
-export const getAppointmentsByOwner = async () => {
+export const getAppointmentsByOwner = async (page = 0, size = 10) => {
     const ownerId = localStorage.getItem('id');
     if (!ownerId) {
         throw new Error('ID do proprietário não encontrado');
     }
-    const response = await api.get(`/appointments/${ownerId}`);
+    const response = await api.get(`/appointments/owner/${ownerId}`, {
+        params: { page, size }
+    });
     return response.data;
 };
 
