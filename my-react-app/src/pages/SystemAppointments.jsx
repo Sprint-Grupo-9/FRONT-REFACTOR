@@ -160,11 +160,11 @@ function SystemAppointments() {
             )}
             <div className="w-full h-screen flex flex-row">
                 <SlidebarSystem />
-                <div className="flex-1 h-full bg-slate-100 flex justify-center items-center">
-                    <div className="flex justify-start w-11/12 h-4/5 mt-20 gap-6 flex-col relative">
+                <div className="flex-1 h-full bg-slate-100 overflow-y-auto">
+                    <div className="flex flex-col w-11/12 mx-auto pt-24 pb-8 min-h-full">
                         {appointments && appointments.length > 0 ? (
                             <>
-                                <div className="flex justify-between items-center mb-4">
+                                <div className="flex justify-between items-center mb-6">
                                     <div className="text-sm text-gray-600">
                                         Mostrando {appointments.length} de {totalElements} agendamentos
                                     </div>
@@ -185,47 +185,53 @@ function SystemAppointments() {
                                         </select>
                                     </div>
                                 </div>
-                                {appointments.map(appointment => {
-                                    // Validação de dados antes de renderizar
-                                    if (!appointment || !appointment.pet || !appointment.employee) {
-                                        console.warn('Agendamento com dados incompletos:', appointment);
-                                        return null;
-                                    }
+                                <div className="flex flex-col gap-4 mb-6">
+                                    {appointments.map(appointment => {
+                                        // Validação de dados antes de renderizar
+                                        if (!appointment || !appointment.pet || !appointment.employee) {
+                                            console.warn('Agendamento com dados incompletos:', appointment);
+                                            return null;
+                                        }
 
-                                    return (
-                                        <AppointmentCardSystem
-                                            key={appointment.id}
-                                            title={appointment.petOfferingNames || 'Serviço não especificado'}
-                                            subtitle={`Pet: ${appointment.pet.name || 'Nome não disponível'}`}
-                                            price={`R$ ${(appointment.totalPrice || 0).toFixed(2)}`}
-                                            date={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleDateString('pt-BR') : 'Data não disponível'}
-                                            time={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--'}
-                                            employee={appointment.employee.name || 'Funcionário não especificado'}
-                                            variant="redTransp"
-                                            logo={<FaTrash className="text-red-500" />}
-                                            clickButton={() => handleDeleteClick(appointment)}
-                                        />
-                                    );
-                                })}
+                                        return (
+                                            <AppointmentCardSystem
+                                                key={appointment.id}
+                                                title={appointment.petOfferingNames || 'Serviço não especificado'}
+                                                subtitle={`Pet: ${appointment.pet.name || 'Nome não disponível'}`}
+                                                price={`R$ ${(appointment.totalPrice || 0).toFixed(2)}`}
+                                                date={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleDateString('pt-BR') : 'Data não disponível'}
+                                                time={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--'}
+                                                employee={appointment.employee.name || 'Funcionário não especificado'}
+                                                variant="redTransp"
+                                                logo={<FaTrash className="text-red-500" />}
+                                                clickButton={() => handleDeleteClick(appointment)}
+                                            />
+                                        );
+                                    })}
+                                </div>
 
                                 {/* Componente de Paginação */}
-                                <Pagination
-                                    currentPage={currentPage}
-                                    totalPages={totalPages}
-                                    onPageChange={handlePageChange}
-                                    isFirst={isFirst}
-                                    isLast={isLast}
-                                />
+                                <div className="mb-6">
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        onPageChange={handlePageChange}
+                                        isFirst={isFirst}
+                                        isLast={isLast}
+                                    />
+                                </div>
 
-                                <ButtonSystem
-                                    variant="blue"
-                                    text="Novo Agendamento"
-                                    click={() => navigate('/system-appointments/new')}
-                                    logo={<MdAdd />}
-                                />
+                                <div className="flex justify-center mt-4">
+                                    <ButtonSystem
+                                        variant="blue"
+                                        text="Novo Agendamento"
+                                        click={() => navigate('/system-appointments/new')}
+                                        logo={<MdAdd />}
+                                    />
+                                </div>
                             </>
                         ) : (
-                            <div className="flex flex-col items-center justify-center gap-6 text-center">
+                            <div className="flex flex-col items-center justify-center gap-6 text-center min-h-[60vh]">
                                 <h2 className="text-2xl font-semibold text-slate-800">
                                     Nenhum agendamento encontrado
                                 </h2>

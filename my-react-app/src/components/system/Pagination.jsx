@@ -25,75 +25,77 @@ function Pagination({ currentPage, totalPages, onPageChange, isFirst, isLast }) 
     const pageNumbers = getPageNumbers();
 
     return (
-        <div className="flex items-center justify-center gap-2 mt-6">
-            {/* Primeira página */}
-            <button
-                onClick={() => onPageChange(0)}
-                disabled={isFirst}
-                className={`p-2 rounded-lg transition-colors ${isFirst
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-blue-600 hover:bg-blue-50'
-                    }`}
-                title="Primeira página"
-            >
-                <MdFirstPage size={24} />
-            </button>
-
-            {/* Página anterior */}
-            <button
-                onClick={() => onPageChange(currentPage - 1)}
-                disabled={isFirst}
-                className={`p-2 rounded-lg transition-colors ${isFirst
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-blue-600 hover:bg-blue-50'
-                    }`}
-                title="Página anterior"
-            >
-                <MdNavigateBefore size={24} />
-            </button>
-
-            {/* Números das páginas */}
-            {pageNumbers.map((pageNum) => (
+        <div className="flex flex-col items-center gap-4 py-4">
+            <div className="flex items-center justify-center gap-2 flex-wrap">
+                {/* Primeira página */}
                 <button
-                    key={pageNum}
-                    onClick={() => onPageChange(pageNum)}
-                    className={`px-4 py-2 rounded-lg transition-colors ${currentPage === pageNum
+                    onClick={() => onPageChange(0)}
+                    disabled={isFirst}
+                    className={`p-2 rounded-lg transition-colors ${isFirst
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-blue-600 hover:bg-blue-50'
+                        }`}
+                    title="Primeira página"
+                >
+                    <MdFirstPage size={24} />
+                </button>
+
+                {/* Página anterior */}
+                <button
+                    onClick={() => onPageChange(currentPage - 1)}
+                    disabled={isFirst}
+                    className={`p-2 rounded-lg transition-colors ${isFirst
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-blue-600 hover:bg-blue-50'
+                        }`}
+                    title="Página anterior"
+                >
+                    <MdNavigateBefore size={24} />
+                </button>
+
+                {/* Números das páginas */}
+                {pageNumbers.map((pageNum) => (
+                    <button
+                        key={pageNum}
+                        onClick={() => onPageChange(pageNum)}
+                        className={`px-4 py-2 rounded-lg transition-colors min-w-[44px] ${currentPage === pageNum
                             ? 'bg-blue-600 text-white'
                             : 'text-gray-700 hover:bg-gray-100'
+                            }`}
+                    >
+                        {pageNum + 1}
+                    </button>
+                ))}
+
+                {/* Próxima página */}
+                <button
+                    onClick={() => onPageChange(currentPage + 1)}
+                    disabled={isLast}
+                    className={`p-2 rounded-lg transition-colors ${isLast
+                        ? 'text-gray-300 cursor-not-allowed'
+                        : 'text-blue-600 hover:bg-blue-50'
                         }`}
+                    title="Próxima página"
                 >
-                    {pageNum + 1}
+                    <MdNavigateNext size={24} />
                 </button>
-            ))}
 
-            {/* Próxima página */}
-            <button
-                onClick={() => onPageChange(currentPage + 1)}
-                disabled={isLast}
-                className={`p-2 rounded-lg transition-colors ${isLast
+                {/* Última página */}
+                <button
+                    onClick={() => onPageChange(totalPages - 1)}
+                    disabled={isLast}
+                    className={`p-2 rounded-lg transition-colors ${isLast
                         ? 'text-gray-300 cursor-not-allowed'
                         : 'text-blue-600 hover:bg-blue-50'
-                    }`}
-                title="Próxima página"
-            >
-                <MdNavigateNext size={24} />
-            </button>
-
-            {/* Última página */}
-            <button
-                onClick={() => onPageChange(totalPages - 1)}
-                disabled={isLast}
-                className={`p-2 rounded-lg transition-colors ${isLast
-                        ? 'text-gray-300 cursor-not-allowed'
-                        : 'text-blue-600 hover:bg-blue-50'
-                    }`}
-                title="Última página"
-            >
-                <MdLastPage size={24} />
-            </button>
+                        }`}
+                    title="Última página"
+                >
+                    <MdLastPage size={24} />
+                </button>
+            </div>
 
             {/* Info da página */}
-            <span className="ml-4 text-sm text-gray-600">
+            <span className="text-sm text-gray-600">
                 Página {currentPage + 1} de {totalPages}
             </span>
         </div>
