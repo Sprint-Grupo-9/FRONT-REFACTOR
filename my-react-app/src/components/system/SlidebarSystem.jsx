@@ -6,6 +6,7 @@ function SlidebarSystem() {
     const navigate = useNavigate();
     const location = useLocation();
     const userName = localStorage.getItem("name") || "Usuário";
+    const isAdmin = localStorage.getItem("admin") === "true";
 
     return (
         <div className="w-64 h-screen bg-white shadow-md pt-20">
@@ -43,13 +44,15 @@ function SlidebarSystem() {
                         logo={<MdCalendarMonth />}
                         className={`text-primary w-full text-left justify-start ${location.pathname === '/system-appointments' ? 'bg-primary/10' : ''}`}
                     />
-                    <ButtonSystem
-                        variant="white"
-                        text="Dashboard"
-                        click={() => navigate('/system-dashboard')}
-                        logo={<MdDashboard />}
-                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-dashboard' ? 'bg-primary/10' : ''}`}
-                    />
+                    {isAdmin && (
+                        <ButtonSystem
+                            variant="white"
+                            text="Dashboard"
+                            click={() => navigate('/system-dashboard')}
+                            logo={<MdDashboard />}
+                            className={`text-primary w-full text-left justify-start ${location.pathname === '/system-dashboard' ? 'bg-primary/10' : ''}`}
+                        />
+                    )}
                 </div>
             </div>
         </div>

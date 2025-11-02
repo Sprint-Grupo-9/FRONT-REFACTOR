@@ -16,5 +16,23 @@ export function RequireAuth() {
     return <Outlet />;
 }
 
+// Protects routes that require admin privileges
+export function RequireAdmin() {
+    const { user } = useAuth();
+    const location = useLocation();
+
+    if (!user) {
+        return <Navigate to="/" replace state={{ from: location }} />;
+    }
+
+    const isAdmin = localStorage.getItem("admin") === "true";
+
+    if (!isAdmin) {
+        return <Navigate to="/system-appointments" replace />;
+    }
+
+    return <Outlet />;
+}
+
 export default RequireAuth;
 

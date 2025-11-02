@@ -1,7 +1,7 @@
 import { useState } from "react";
-import Bannerimg from "../shared/Bannerimg";
 import { useAuth } from "../../context/AuthContext";
 import { useNavigate } from "react-router-dom";
+import bannerDog from "../../assets/banner-dog.svg";
 
 function Banner() {
     const { user } = useAuth();
@@ -19,7 +19,10 @@ function Banner() {
 
     return (
         <div className="w-full h-[600px] bg-white">
-            <div className="p-24 bg-banner-pattern bg-[center_14%] rounded-br-[150px] w-full h-full flex justify-start">
+            <div
+                className="p-24 rounded-br-[150px] w-full h-full flex justify-start bg-center bg-cover"
+                style={{ backgroundImage: `url(${bannerDog})` }}
+            >
                 <div className=" p-10 w-[400px] h-full">
                     {showAlert && (
                         <div className="fixed left-1/2 -translate-x-1/2 top-28 bg-red-500 text-white px-6 py-2 rounded-lg shadow-lg z-50 text-sm animate-fade-in-down">

@@ -2,8 +2,10 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBackOutline } from "react-icons/io5";
 import { MdPets, MdPerson, MdAccessTime, MdCalendarMonth, MdCheckCircle, MdExpandMore, MdExpandLess } from "react-icons/md";
+import { FaTaxi } from "react-icons/fa";
 import ButtonSystem from '../../components/system/ButtonSystem';
 import SelectSystem from '../../components/system/SelectSystem';
+import SwitchButtonSystem from '../../components/system/SwitchButtonSystem';
 import ErrorBox from '../../components/system/ErrorBox';
 import {
     getAllPetOfferings,
@@ -34,6 +36,10 @@ function AppointmentPage() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('error'); // 'error' ou 'success'
     const [expandedService, setExpandedService] = useState(null);
+    const [taxiService, setTaxiService] = useState(false);
+    const [baseTotalPrice, setBaseTotalPrice] = useState(0); // Preço base dos serviços
+    const [observations, setObservations] = useState(''); // Campo de observações
+    const TAXI_SERVICE_PRICE = 20.00;
 
     const steps = [
         { id: 1, title: 'Pet e Serviços', description: 'Selecione seu pet e os serviços desejados' },
@@ -56,6 +62,13 @@ function AppointmentPage() {
     useEffect(() => {
         setIsLoading(false);
     }, []);
+
+    // Atualiza o preço total quando o taxi service é ativado/desativado
+    useEffect(() => {
+        if (baseTotalPrice > 0) {
+            setTotalPrice(taxiService ? baseTotalPrice + TAXI_SERVICE_PRICE : baseTotalPrice);
+        }
+    }, [taxiService, baseTotalPrice]);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -120,7 +133,10 @@ function AppointmentPage() {
                         // Atualiza os totais com os valores da API
                         if (response.data.length > 0) {
                             const firstEmployee = response.data[0];
-                            setTotalPrice(firstEmployee.servicePrice);
+                            const basePrice = firstEmployee.servicePrice;
+                            setBaseTotalPrice(basePrice);
+                            // Adiciona o preço do taxi se estiver ativado
+                            setTotalPrice(taxiService ? basePrice + TAXI_SERVICE_PRICE : basePrice);
                             setTotalDuration(firstEmployee.durationTime);
                         }
                     }
@@ -260,7 +276,9 @@ function AppointmentPage() {
                 petOfferingNames: formattedServices.join(', '),
                 startDateTime: appointmentDate.toISOString().slice(0, 16),
                 totalPrice: Number(totalPrice),
-                durationMinutes: Number(totalDuration)
+                durationMinutes: Number(totalDuration),
+                taxiService: taxiService,
+                observations: observations || ""
             };
 
             console.log('Dados do agendamento:', appointmentData);
@@ -479,8 +497,65 @@ function AppointmentPage() {
                                     <p className="text-gray-600">{selectedEmployee?.label}</p>
                                 </div>
 
+                                {/* Campo de Observações */}
+                                <div className="border-b pb-4">
+                                    <h3 className="font-medium text-gray-800 mb-2">Observações</h3>
+                                    <textarea
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-none"
+                                        rows="4"
+                                        placeholder="Adicione observações sobre o agendamento (opcional)"
+                                        value={observations}
+                                        onChange={(e) => setObservations(e.target.value)}
+                                        maxLength={500}
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1 text-right">
+                                        {observations.length}/500 caracteres
+                                    </p>
+                                </div>
+
+                                {/* Serviço Taxi Dog */}
+                                <div className="border-b pb-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <FaTaxi className="text-yellow-500 text-2xl" />
+                                            <div>
+                                                <h3 className="font-medium text-gray-800">Serviço Taxi Dog</h3>
+                                                <p className="text-sm text-gray-500">
+                                                    Buscar e levar seu pet de volta para casa (+R$ 20,00)
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <SwitchButtonSystem
+                                            active={taxiService}
+                                            click={() => setTaxiService(!taxiService)}
+                                        />
+                                    </div>
+                                    {taxiService && (
+                                        <div className="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                                            <p className="text-sm text-yellow-800 font-medium">
+                                                ✓ Serviço de transporte incluído no agendamento
+                                            </p>
+                                            <p className="text-xs text-yellow-700 mt-1">
+                                                Valor adicional: R$ 20,00
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="pt-4">
-                                    <div className="flex justify-between text-lg font-semibold text-blue-600">
+                                    <div className="space-y-2 mb-3">
+                                        <div className="flex justify-between text-gray-600">
+                                            <span>Serviços:</span>
+                                            <span>R$ {baseTotalPrice.toFixed(2)}</span>
+                                        </div>
+                                        {taxiService && (
+                                            <div className="flex justify-between text-yellow-600">
+                                                <span>Taxi Dog:</span>
+                                                <span>R$ {TAXI_SERVICE_PRICE.toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex justify-between text-lg font-semibold text-blue-600 border-t pt-3">
                                         <span>Total:</span>
                                         <span>R$ {totalPrice.toFixed(2)}</span>
                                     </div>

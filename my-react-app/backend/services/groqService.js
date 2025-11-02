@@ -86,7 +86,7 @@ function getMockResponse(userMessage) {
     }
 
     if (lowerMessage.includes('oi') || lowerMessage.includes('olá') || lowerMessage.includes('ola') || lowerMessage.includes('bom dia') || lowerMessage.includes('boa tarde') || lowerMessage.includes('boa noite')) {
-        return '👋 Olá! Bem-vindo ao PetShop Care! 🐾\n\nSou seu assistente virtual e estou aqui para ajudar com informações sobre:\n\n• Serviços (banho, tosa, veterinário)\n• Horários e agendamentos\n• Dúvidas sobre cuidados com pets\n\nComo posso ajudar você hoje?';
+        return '👋 Olá! Bem-vindo ao PetShop Columbia! 🐾\n\nSou seu assistente virtual e estou aqui para ajudar com informações sobre:\n\n• Serviços (banho, tosa, veterinário)\n• Horários e agendamentos\n• Dúvidas sobre cuidados com pets\n\nComo posso ajudar você hoje?';
     }
 
     if (lowerMessage.includes('obrigado') || lowerMessage.includes('obrigada') || lowerMessage.includes('valeu')) {

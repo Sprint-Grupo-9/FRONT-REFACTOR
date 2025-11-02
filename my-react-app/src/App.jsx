@@ -14,7 +14,7 @@ import { LoadingProvider } from './context/LoadingContext';
 import AppointmentPage from './pages/agendamentos/AppointmentPage';
 import { Toaster } from 'react-hot-toast';
 import LoadingSystem from './components/system/LoadingSystem';
-import { RequireAuth } from './routes/Routes.jsx';
+import { RequireAuth, RequireAdmin } from './routes/Routes.jsx';
 import ChatButton from './components/system/ChatButton';
 
 function App() {
@@ -51,8 +51,12 @@ function App() {
                                 <Route path="/system-appointments" element={<SystemAppointments />} />
                                 <Route path="/system-pets" element={<SystemPets />} />
                                 <Route path="/system-pet-profile/:petId" element={<SystemPetProfile />} />
-                                <Route path="/system-dashboard" element={<SystemDashboard />} />
                                 <Route path="/system-appointments/new" element={<AppointmentPage />} />
+                            </Route>
+
+                            {/* Rota protegida para admins */}
+                            <Route element={<RequireAdmin />}>
+                                <Route path="/system-dashboard" element={<SystemDashboard />} />
                             </Route>
                         </Routes>
                     </div>

@@ -202,6 +202,8 @@ function SystemAppointments() {
                                                 date={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleDateString('pt-BR') : 'Data não disponível'}
                                                 time={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--'}
                                                 employee={appointment.employee.name || 'Funcionário não especificado'}
+                                                taxiService={appointment.taxiService || false}
+                                                observations={appointment.observations || ''}
                                                 variant="redTransp"
                                                 logo={<FaTrash className="text-red-500" />}
                                                 clickButton={() => handleDeleteClick(appointment)}

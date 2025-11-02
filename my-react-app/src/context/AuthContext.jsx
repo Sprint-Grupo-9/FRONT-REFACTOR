@@ -10,6 +10,7 @@ export function AuthProvider({ children }) {
         const token = localStorage.getItem("token");
         const name = localStorage.getItem("name");
         const id = localStorage.getItem("id");
+        const admin = localStorage.getItem("admin") === "true";
 
         if (token && name) {
             const isExpired = isJwtExpired(token);
@@ -17,24 +18,27 @@ export function AuthProvider({ children }) {
                 localStorage.removeItem("token");
                 localStorage.removeItem("name");
                 localStorage.removeItem("id");
+                localStorage.removeItem("admin");
                 setUser(null);
             } else {
-                setUser({ name, token, id });
+                setUser({ name, token, id, admin });
             }
         }
     }, []);
 
-    function login({ name, token, id }) {
+    function login({ name, token, id, admin }) {
         if (token) localStorage.setItem("token", token);
         if (name) localStorage.setItem("name", name);
         if (id) localStorage.setItem("id", id);
-        setUser({ name, token, id });
+        localStorage.setItem("admin", admin ? "true" : "false");
+        setUser({ name, token, id, admin });
     }
 
     function logout() {
         localStorage.removeItem("token");
         localStorage.removeItem("name");
         localStorage.removeItem("id");
+        localStorage.removeItem("admin");
         setUser(null);
     }
 
