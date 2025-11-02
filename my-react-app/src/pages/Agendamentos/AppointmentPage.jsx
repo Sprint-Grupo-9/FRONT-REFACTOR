@@ -2,11 +2,13 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { IoChevronBackOutline } from "react-icons/io5";
 import { MdPets, MdPerson, MdAccessTime, MdCalendarMonth, MdCheckCircle, MdExpandMore, MdExpandLess } from "react-icons/md";
+import { FaTaxi } from "react-icons/fa";
 import ButtonSystem from '../../components/system/ButtonSystem';
 import SelectSystem from '../../components/system/SelectSystem';
+import SwitchButtonSystem from '../../components/system/SwitchButtonSystem';
 import ErrorBox from '../../components/system/ErrorBox';
-import { 
-    getAllServices, 
+import {
+    getAllPetOfferings,
     getAllPetsByOwnerId,
     getAvailableTimes,
     createAppointment
@@ -34,6 +36,10 @@ function AppointmentPage() {
     const [alertMessage, setAlertMessage] = useState('');
     const [alertType, setAlertType] = useState('error'); // 'error' ou 'success'
     const [expandedService, setExpandedService] = useState(null);
+    const [taxiService, setTaxiService] = useState(false);
+    const [baseTotalPrice, setBaseTotalPrice] = useState(0); // Preço base dos serviços
+    const [observations, setObservations] = useState(''); // Campo de observações
+    const TAXI_SERVICE_PRICE = 20.00;
 
     const steps = [
         { id: 1, title: 'Pet e Serviços', description: 'Selecione seu pet e os serviços desejados' },
@@ -57,6 +63,13 @@ function AppointmentPage() {
         setIsLoading(false);
     }, []);
 
+    // Atualiza o preço total quando o taxi service é ativado/desativado
+    useEffect(() => {
+        if (baseTotalPrice > 0) {
+            setTotalPrice(taxiService ? baseTotalPrice + TAXI_SERVICE_PRICE : baseTotalPrice);
+        }
+    }, [taxiService, baseTotalPrice]);
+
     useEffect(() => {
         const fetchData = async () => {
             try {
@@ -68,13 +81,13 @@ function AppointmentPage() {
                 }
 
                 const [servicesResponse, petsResponse] = await Promise.all([
-                    getAllServices(),
+                    getAllPetOfferings(),
                     getAllPetsByOwnerId(ownerId)
                 ]);
 
                 if (servicesResponse?.data) {
-                    console.log('Serviços recebidos:', servicesResponse.data);
-                    const mainServices = servicesResponse.data.filter(service => 
+                    console.log('Pet Offerings recebidos:', servicesResponse.data);
+                    const mainServices = servicesResponse.data.filter(service =>
                         !subServices['Banho'].some(sub => Number(sub.id) === Number(service.id))
                     );
                     setServices(mainServices);
@@ -105,29 +118,33 @@ function AppointmentPage() {
                     setIsLoading(true);
                     const requestData = {
                         date: selectedDate,
-                        services: selectedServices.map(service => ({
-                            id: service.id,
-                            name: service.name,
-                            description: service.description
-                        }))
+                        petOfferingIds: selectedServices.map(service => Number(service.id))
                     };
+                    console.log('🔍 Request Data:', requestData);
+                    console.log('🐕 Pet ID:', selectedPet.value);
+
                     const response = await getAvailableTimes(selectedPet.value, requestData);
                     if (response?.data) {
-                        console.log('Horários disponíveis:', response.data);
+                        console.log('✅ Horários disponíveis:', response.data);
                         setAvailableEmployees(response.data);
                         setSelectedEmployee(null);
                         setSelectedTime('');
-                        
+
                         // Atualiza os totais com os valores da API
                         if (response.data.length > 0) {
                             const firstEmployee = response.data[0];
-                            setTotalPrice(firstEmployee.servicePrice);
+                            const basePrice = firstEmployee.servicePrice;
+                            setBaseTotalPrice(basePrice);
+                            // Adiciona o preço do taxi se estiver ativado
+                            setTotalPrice(taxiService ? basePrice + TAXI_SERVICE_PRICE : basePrice);
                             setTotalDuration(firstEmployee.durationTime);
                         }
                     }
                 } catch (error) {
-                    console.error('Erro ao carregar horários:', error);
-                    setErrorMessage("Erro ao carregar horários disponíveis");
+                    console.error('❌ Erro ao carregar horários:', error);
+                    const errorMsg = error.response?.data || "Erro ao carregar horários disponíveis";
+                    setErrorMessage(errorMsg);
+                    showAlertMessage(errorMsg, 'error');
                 } finally {
                     setIsLoading(false);
                 }
@@ -187,7 +204,7 @@ function AppointmentPage() {
         if (currentStep === 1) {
             console.log('Pet selecionado:', selectedPet);
             console.log('Serviços selecionados:', selectedServices);
-            
+
             if (!selectedPet) {
                 showAlertMessage("Por favor, selecione um pet");
                 return;
@@ -256,10 +273,12 @@ function AppointmentPage() {
             const appointmentData = {
                 petId: Number(selectedPet.value),
                 employee_id: Number(selectedEmployee.value),
-                servicesNames: formattedServices.join(', '),
+                petOfferingNames: formattedServices.join(', '),
                 startDateTime: appointmentDate.toISOString().slice(0, 16),
                 totalPrice: Number(totalPrice),
-                durationMinutes: Number(totalDuration)
+                durationMinutes: Number(totalDuration),
+                taxiService: taxiService,
+                observations: observations || ""
             };
 
             console.log('Dados do agendamento:', appointmentData);
@@ -299,81 +318,78 @@ function AppointmentPage() {
                             <h2 className="text-xl font-semibold text-gray-800 mb-4">Selecione os Serviços</h2>
                             <div className="space-y-4">
                                 {services
-                                    .filter(service => 
+                                    .filter(service =>
                                         // Mostra apenas o corte de unha fora do banho
                                         Number(service.id) === 9
                                     )
                                     .map(service => (
-                                    <div key={service.id}>
-                                        <div
-                                            className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                                                selectedServices.some(s => Number(s.id) === Number(service.id))
+                                        <div key={service.id}>
+                                            <div
+                                                className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedServices.some(s => Number(s.id) === Number(service.id))
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-blue-300'
-                                            }`}
-                                            onClick={() => handleServiceToggle(service)}
-                                        >
-                                            <div>
-                                                <h3 className="font-medium text-gray-800">{service.name}</h3>
-                                                <p className="text-sm text-gray-600">{service.description}</p>
+                                                    }`}
+                                                onClick={() => handleServiceToggle(service)}
+                                            >
+                                                <div>
+                                                    <h3 className="font-medium text-gray-800">{service.name}</h3>
+                                                    <p className="text-sm text-gray-600">{service.description}</p>
+                                                </div>
                                             </div>
                                         </div>
-                                    </div>
-                                ))}
+                                    ))}
 
                                 {/* Serviço de Banho com subserviços */}
                                 {services
                                     .filter(service => Number(service.id) === 1)
                                     .map(service => (
-                                    <div key={service.id}>
-                                        <div
-                                            className={`p-4 rounded-lg border cursor-pointer transition-all ${
-                                                selectedServices.some(s => Number(s.id) === Number(service.id))
+                                        <div key={service.id}>
+                                            <div
+                                                className={`p-4 rounded-lg border cursor-pointer transition-all ${selectedServices.some(s => Number(s.id) === Number(service.id))
                                                     ? 'border-blue-500 bg-blue-50'
                                                     : 'border-gray-200 hover:border-blue-300'
-                                            }`}
-                                            onClick={() => {
-                                                handleServiceToggle(service);
-                                                setExpandedService(expandedService === service.id ? null : service.id);
-                                            }}
-                                        >
-                                            <div className="flex justify-between items-center">
-                                                <div>
-                                                    <h3 className="font-medium text-gray-800">{service.name}</h3>
-                                                    <p className="text-sm text-gray-600">{service.description}</p>
+                                                    }`}
+                                                onClick={() => {
+                                                    handleServiceToggle(service);
+                                                    setExpandedService(expandedService === service.id ? null : service.id);
+                                                }}
+                                            >
+                                                <div className="flex justify-between items-center">
+                                                    <div>
+                                                        <h3 className="font-medium text-gray-800">{service.name}</h3>
+                                                        <p className="text-sm text-gray-600">{service.description}</p>
+                                                    </div>
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setExpandedService(expandedService === service.id ? null : service.id);
+                                                        }}
+                                                        className="text-gray-500 hover:text-gray-700"
+                                                    >
+                                                        {expandedService === service.id ? <MdExpandLess size={24} /> : <MdExpandMore size={24} />}
+                                                    </button>
                                                 </div>
-                                                <button
-                                                    onClick={(e) => {
-                                                        e.stopPropagation();
-                                                        setExpandedService(expandedService === service.id ? null : service.id);
-                                                    }}
-                                                    className="text-gray-500 hover:text-gray-700"
-                                                >
-                                                    {expandedService === service.id ? <MdExpandLess size={24} /> : <MdExpandMore size={24} />}
-                                                </button>
                                             </div>
-                                        </div>
-                                        
-                                        {expandedService === service.id && (
-                                            <div className="ml-8 mt-2 space-y-2">
-                                                {subServices['Banho'].map(subService => (
-                                                    <div
-                                                        key={subService.id}
-                                                        className={`p-3 rounded-lg border cursor-pointer transition-all ${
-                                                            selectedServices.some(s => Number(s.id) === Number(subService.id))
+
+                                            {expandedService === service.id && (
+                                                <div className="ml-8 mt-2 space-y-2">
+                                                    {subServices['Banho'].map(subService => (
+                                                        <div
+                                                            key={subService.id}
+                                                            className={`p-3 rounded-lg border cursor-pointer transition-all ${selectedServices.some(s => Number(s.id) === Number(subService.id))
                                                                 ? 'border-blue-500 bg-blue-50'
                                                                 : 'border-gray-200 hover:border-blue-300'
-                                                        }`}
-                                                        onClick={() => handleSubServiceToggle(subService)}
-                                                    >
-                                                        <h4 className="font-medium text-gray-800">{subService.name}</h4>
-                                                        <p className="text-sm text-gray-600">{subService.description}</p>
-                                                    </div>
-                                                ))}
-                                            </div>
-                                        )}
-                                    </div>
-                                ))}
+                                                                }`}
+                                                            onClick={() => handleSubServiceToggle(subService)}
+                                                        >
+                                                            <h4 className="font-medium text-gray-800">{subService.name}</h4>
+                                                            <p className="text-sm text-gray-600">{subService.description}</p>
+                                                        </div>
+                                                    ))}
+                                                </div>
+                                            )}
+                                        </div>
+                                    ))}
                             </div>
                         </div>
                     </div>
@@ -404,9 +420,9 @@ function AppointmentPage() {
                                     <SelectSystem
                                         id="employee"
                                         title="Funcionário"
-                                        options={availableEmployees.map(emp => ({ 
-                                            value: emp.employee.id, 
-                                            label: emp.employee.name 
+                                        options={availableEmployees.map(emp => ({
+                                            value: emp.employee.id,
+                                            label: emp.employee.name
                                         }))}
                                         onChange={(option) => {
                                             setSelectedEmployee(option);
@@ -481,8 +497,65 @@ function AppointmentPage() {
                                     <p className="text-gray-600">{selectedEmployee?.label}</p>
                                 </div>
 
+                                {/* Campo de Observações */}
+                                <div className="border-b pb-4">
+                                    <h3 className="font-medium text-gray-800 mb-2">Observações</h3>
+                                    <textarea
+                                        className="w-full p-3 border border-gray-300 rounded-md focus:ring-blue-500 focus:border-blue-500 resize-none"
+                                        rows="4"
+                                        placeholder="Adicione observações sobre o agendamento (opcional)"
+                                        value={observations}
+                                        onChange={(e) => setObservations(e.target.value)}
+                                        maxLength={500}
+                                    />
+                                    <p className="text-xs text-gray-500 mt-1 text-right">
+                                        {observations.length}/500 caracteres
+                                    </p>
+                                </div>
+
+                                {/* Serviço Taxi Dog */}
+                                <div className="border-b pb-4">
+                                    <div className="flex items-center justify-between">
+                                        <div className="flex items-center gap-3">
+                                            <FaTaxi className="text-yellow-500 text-2xl" />
+                                            <div>
+                                                <h3 className="font-medium text-gray-800">Serviço Taxi Dog</h3>
+                                                <p className="text-sm text-gray-500">
+                                                    Buscar e levar seu pet de volta para casa (+R$ 20,00)
+                                                </p>
+                                            </div>
+                                        </div>
+                                        <SwitchButtonSystem
+                                            active={taxiService}
+                                            click={() => setTaxiService(!taxiService)}
+                                        />
+                                    </div>
+                                    {taxiService && (
+                                        <div className="mt-3 p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+                                            <p className="text-sm text-yellow-800 font-medium">
+                                                ✓ Serviço de transporte incluído no agendamento
+                                            </p>
+                                            <p className="text-xs text-yellow-700 mt-1">
+                                                Valor adicional: R$ 20,00
+                                            </p>
+                                        </div>
+                                    )}
+                                </div>
+
                                 <div className="pt-4">
-                                    <div className="flex justify-between text-lg font-semibold text-blue-600">
+                                    <div className="space-y-2 mb-3">
+                                        <div className="flex justify-between text-gray-600">
+                                            <span>Serviços:</span>
+                                            <span>R$ {baseTotalPrice.toFixed(2)}</span>
+                                        </div>
+                                        {taxiService && (
+                                            <div className="flex justify-between text-yellow-600">
+                                                <span>Taxi Dog:</span>
+                                                <span>R$ {TAXI_SERVICE_PRICE.toFixed(2)}</span>
+                                            </div>
+                                        )}
+                                    </div>
+                                    <div className="flex justify-between text-lg font-semibold text-blue-600 border-t pt-3">
                                         <span>Total:</span>
                                         <span>R$ {totalPrice.toFixed(2)}</span>
                                     </div>
@@ -504,11 +577,10 @@ function AppointmentPage() {
         <div className="min-h-screen bg-slate-100">
             {showAlert && (
                 <div className="fixed top-4 left-1/2 transform -translate-x-1/2 z-50">
-                    <div className={`px-4 py-3 rounded relative ${
-                        alertType === 'error' 
-                            ? 'bg-red-100 border-red-400 text-red-700' 
-                            : 'bg-green-100 border-green-400 text-green-700'
-                    } border`} role="alert">
+                    <div className={`px-4 py-3 rounded relative ${alertType === 'error'
+                        ? 'bg-red-100 border-red-400 text-red-700'
+                        : 'bg-green-100 border-green-400 text-green-700'
+                        } border`} role="alert">
                         <span className="block sm:inline">{alertMessage}</span>
                     </div>
                 </div>
@@ -539,11 +611,10 @@ function AppointmentPage() {
                         <div className="flex items-center justify-between">
                             {steps.map((step, index) => (
                                 <div key={step.id} className="flex items-center">
-                                    <div className={`flex items-center justify-center w-10 h-10 rounded-full ${
-                                        currentStep >= step.id
-                                            ? 'bg-blue-500 text-white'
-                                            : 'bg-gray-200 text-gray-500'
-                                    }`}>
+                                    <div className={`flex items-center justify-center w-10 h-10 rounded-full ${currentStep >= step.id
+                                        ? 'bg-blue-500 text-white'
+                                        : 'bg-gray-200 text-gray-500'
+                                        }`}>
                                         {currentStep > step.id ? (
                                             <MdCheckCircle className="w-6 h-6" />
                                         ) : (
@@ -551,21 +622,19 @@ function AppointmentPage() {
                                         )}
                                     </div>
                                     <div className="ml-4">
-                                        <h3 className={`text-sm font-medium ${
-                                            currentStep >= step.id
-                                                ? 'text-blue-500'
-                                                : 'text-gray-500'
-                                        }`}>
+                                        <h3 className={`text-sm font-medium ${currentStep >= step.id
+                                            ? 'text-blue-500'
+                                            : 'text-gray-500'
+                                            }`}>
                                             {step.title}
                                         </h3>
                                         <p className="text-xs text-gray-500">{step.description}</p>
                                     </div>
                                     {index < steps.length - 1 && (
-                                        <div className={`w-full h-1 mx-4 ${
-                                            currentStep > step.id
-                                                ? 'bg-blue-500'
-                                                : 'bg-gray-200'
-                                        }`} />
+                                        <div className={`w-full h-1 mx-4 ${currentStep > step.id
+                                            ? 'bg-blue-500'
+                                            : 'bg-gray-200'
+                                            }`} />
                                     )}
                                 </div>
                             ))}

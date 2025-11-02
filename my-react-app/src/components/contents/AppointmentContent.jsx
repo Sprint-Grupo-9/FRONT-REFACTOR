@@ -1,8 +1,8 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { 
-    getAllServices, 
-    getEmployeesByServices,
+import {
+    getAllPetOfferings,
+    getAvailableEmployees,
     getAllPetsByOwnerId,
     getAvailableTimes,
     createAppointment
@@ -41,7 +41,7 @@ function AppointmentContent() {
         const fetchServices = async () => {
             try {
                 setIsLoading(true);
-                const response = await getAllServices();
+                const response = await getAllPetOfferings();
                 if (response?.data) {
                     setAllServices(response.data);
                 }
@@ -79,8 +79,8 @@ function AppointmentContent() {
             if (services.length === 0) return;
 
             try {
-                const serviceIds = services.map(s => s.id);
-                const response = await getEmployeesByServices(serviceIds);
+                const petOfferingIds = services.map(s => s.id);
+                const response = await getAvailableEmployees(petOfferingIds);
                 if (response?.data) {
                     setEmployees(response.data);
                 }
@@ -100,11 +100,11 @@ function AppointmentContent() {
 
             try {
                 setIsLoading(true);
-                const response = await getAvailableTimes(
-                    selectedDate.toISOString().split('T')[0],
-                    selectedPet.id,
-                    services.map(s => s.id)
-                );
+                const requestData = {
+                    date: selectedDate.toISOString().split('T')[0],
+                    petOfferingIds: services.map(s => Number(s.id))
+                };
+                const response = await getAvailableTimes(selectedPet.id, requestData);
                 if (response?.data) {
                     setAvailableTimes(response.data);
                 }
@@ -130,7 +130,7 @@ function AppointmentContent() {
             const appointmentData = {
                 petId: selectedPet.id,
                 employee_id: selectedEmployee.id,
-                servicesNames: services.map(s => s.name).join(', '),
+                petOfferingNames: services.map(s => s.name).join(', '),
                 totalPrice: services.reduce((total, service) => total + (service.price || 0), 0),
                 startDateTime: `${selectedDate.toISOString().split('T')[0]}T${selectedTime.value}`,
                 durationMinutes: services.reduce((total, service) => total + (service.duration || 0), 0)
@@ -174,7 +174,7 @@ function AppointmentContent() {
             {/* Conteúdo Principal */}
             <div className="max-w-7xl mx-auto px-4 py-8">
                 {errorMessage && <ErrorBox text={errorMessage} />}
-                
+
                 {showConfirmModal && (
                     <ConfirmationModalSystem
                         text="Deseja sair e perder os serviços selecionados?"
@@ -187,8 +187,8 @@ function AppointmentContent() {
                     {/* Coluna da Esquerda - Seleção de Serviços */}
                     <div className="bg-white rounded-lg shadow-lg p-6">
                         <h2 className="text-lg font-semibold mb-4">Selecione os Serviços</h2>
-                        <ServiceTabSystem 
-                            services={services} 
+                        <ServiceTabSystem
+                            services={services}
                             setServices={setServices}
                             allServices={allServices}
                             disabled={isLoading}

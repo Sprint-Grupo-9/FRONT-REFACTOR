@@ -9,6 +9,7 @@ import LoadingSystem from '../components/system/LoadingSystem';
 import HeaderSystem from "../components/system/HeaderSystem";
 import ErrorBox from "../components/system/ErrorBox";
 import AppointmentCardSystem from "../components/system/AppointmentCardSystem";
+import Pagination from '../components/system/Pagination';
 import { FaTrash } from "react-icons/fa";
 
 function SystemAppointments() {
@@ -18,19 +19,36 @@ function SystemAppointments() {
     const [showDeleteModal, setShowDeleteModal] = useState(false);
     const [appointmentToDelete, setAppointmentToDelete] = useState(null);
     const [errorMessage, setErrorMessage] = useState("");
+    const [currentPage, setCurrentPage] = useState(0);
+    const [totalPages, setTotalPages] = useState(0);
+    const [totalElements, setTotalElements] = useState(0);
+    const [isFirst, setIsFirst] = useState(true);
+    const [isLast, setIsLast] = useState(true);
+    const [pageSize, setPageSize] = useState(10);
     const ownerId = localStorage.getItem("id");
 
-    const fetchAppointments = useCallback(async () => {
+    const fetchAppointments = useCallback(async (page = 0, size = 10) => {
         try {
             setIsLoading(true);
-            const response = await getAppointmentsByOwner();
+            setErrorMessage(""); // Limpa mensagens de erro anteriores
+            const response = await getAppointmentsByOwner(page, size);
             console.log('Resposta da API:', response);
+
             if (response) {
-                setAppointments(response);
+                // Atualiza os dados da paginação
+                setAppointments(response.content || []);
+                setCurrentPage(response.pageNumber || 0);
+                setTotalPages(response.totalPages || 0);
+                setTotalElements(response.totalElements || 0);
+                setIsFirst(response.first !== undefined ? response.first : true);
+                setIsLast(response.last !== undefined ? response.last : true);
+                setPageSize(response.pageSize || size);
             }
         } catch (error) {
             console.error('Erro ao buscar agendamentos:', error);
-            setErrorMessage("Erro ao carregar os agendamentos");
+            console.error('Detalhes do erro:', error.response?.data || error.message);
+            setErrorMessage("Erro ao carregar os agendamentos. Por favor, tente novamente.");
+            setAppointments([]); // Limpa a lista em caso de erro
         } finally {
             setIsLoading(false);
         }
@@ -38,11 +56,14 @@ function SystemAppointments() {
 
     useEffect(() => {
         if (!ownerId || ownerId === "undefined" || ownerId === "null") {
-            setErrorMessage("ID do proprietário não encontrado");
+            console.error('ID do proprietário inválido:', ownerId);
+            setErrorMessage("ID do proprietário não encontrado. Por favor, faça login novamente.");
+            setIsLoading(false);
             return;
         }
-        fetchAppointments();
-    }, [ownerId, fetchAppointments]);
+        console.log('Buscando agendamentos para o ownerId:', ownerId, 'página:', currentPage, 'tamanho:', pageSize);
+        fetchAppointments(currentPage, pageSize);
+    }, [ownerId, currentPage, pageSize, fetchAppointments]);
 
     useEffect(() => {
         if (errorMessage) {
@@ -62,9 +83,9 @@ function SystemAppointments() {
         try {
             await deleteAppointment(appointmentToDelete.id);
             toast.success('Agendamento excluído com sucesso!');
-            setAppointments(prevAppointments => 
-                prevAppointments.filter(appointment => appointment.id !== appointmentToDelete.id)
-            );
+
+            // Recarrega a página atual após a exclusão
+            fetchAppointments(currentPage, pageSize);
         } catch (error) {
             console.error('Erro ao excluir agendamento:', error);
             toast.error('Erro ao excluir agendamento');
@@ -74,6 +95,16 @@ function SystemAppointments() {
         }
     };
 
+    const handlePageChange = (newPage) => {
+        setCurrentPage(newPage);
+    };
+
+    const handlePageSizeChange = (event) => {
+        const newSize = parseInt(event.target.value, 10);
+        setPageSize(newSize);
+        setCurrentPage(0); // Volta para a primeira página ao mudar o tamanho
+    };
+
     const handleDeleteCancel = () => {
         setShowDeleteModal(false);
         setAppointmentToDelete(null);
@@ -81,11 +112,11 @@ function SystemAppointments() {
 
     const formatDateTime = (dateTimeStr) => {
         if (!dateTimeStr) return 'Data não definida';
-        
+
         try {
             const date = new Date(dateTimeStr);
             if (isNaN(date.getTime())) return 'Data inválida';
-            
+
             return date.toLocaleString('pt-BR', {
                 day: '2-digit',
                 month: '2-digit',
@@ -101,12 +132,12 @@ function SystemAppointments() {
 
     const calculateDuration = (startDateTime, endDateTime) => {
         if (!startDateTime || !endDateTime) return 0;
-        
+
         try {
             const start = new Date(startDateTime);
             const end = new Date(endDateTime);
             if (isNaN(start.getTime()) || isNaN(end.getTime())) return 0;
-            
+
             const diffInMinutes = Math.round((end - start) / (1000 * 60));
             return diffInMinutes;
         } catch (error) {
@@ -122,37 +153,87 @@ function SystemAppointments() {
     return (
         <>
             <HeaderSystem text="Agendamentos" />
+            {errorMessage && (
+                <div className="fixed top-20 left-1/2 transform -translate-x-1/2 z-50">
+                    <ErrorBox text={errorMessage} />
+                </div>
+            )}
             <div className="w-full h-screen flex flex-row">
                 <SlidebarSystem />
-                <div className="flex-1 h-full bg-slate-100 flex justify-center items-center">
-                    {errorMessage && <ErrorBox text={errorMessage} />}
-                    
-                    <div className="flex justify-start w-11/12 h-4/5 mt-20 gap-6 flex-col relative">
+                <div className="flex-1 h-full bg-slate-100 overflow-y-auto">
+                    <div className="flex flex-col w-11/12 mx-auto pt-24 pb-8 min-h-full">
                         {appointments && appointments.length > 0 ? (
                             <>
-                                {appointments.map(appointment => (
-                                    <AppointmentCardSystem
-                                        key={appointment.id}
-                                        title={appointment.services}
-                                        subtitle={`Pet: ${appointment.pet.name}`}
-                                        price={`R$ ${appointment.totalPrice.toFixed(2)}`}
-                                        date={new Date(appointment.startDateTime).toLocaleDateString('pt-BR')}
-                                        time={new Date(appointment.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}
-                                        employee={appointment.employee.name}
-                                        variant="redTransp"
-                                        logo={<FaTrash className="text-red-500" />}
-                                        clickButton={() => handleDeleteClick(appointment)}
+                                <div className="flex justify-between items-center mb-6">
+                                    <div className="text-sm text-gray-600">
+                                        Mostrando {appointments.length} de {totalElements} agendamentos
+                                    </div>
+                                    <div className="flex items-center gap-2">
+                                        <label htmlFor="pageSize" className="text-sm text-gray-600">
+                                            Itens por página:
+                                        </label>
+                                        <select
+                                            id="pageSize"
+                                            value={pageSize}
+                                            onChange={handlePageSizeChange}
+                                            className="px-3 py-1 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                                        >
+                                            <option value={5}>5</option>
+                                            <option value={10}>10</option>
+                                            <option value={20}>20</option>
+                                            <option value={50}>50</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                <div className="flex flex-col gap-4 mb-6">
+                                    {appointments.map(appointment => {
+                                        // Validação de dados antes de renderizar
+                                        if (!appointment || !appointment.pet || !appointment.employee) {
+                                            console.warn('Agendamento com dados incompletos:', appointment);
+                                            return null;
+                                        }
+
+                                        return (
+                                            <AppointmentCardSystem
+                                                key={appointment.id}
+                                                title={appointment.petOfferingNames || 'Serviço não especificado'}
+                                                subtitle={`Pet: ${appointment.pet.name || 'Nome não disponível'}`}
+                                                price={`R$ ${(appointment.totalPrice || 0).toFixed(2)}`}
+                                                date={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleDateString('pt-BR') : 'Data não disponível'}
+                                                time={appointment.startDateTime ? new Date(appointment.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' }) : '--:--'}
+                                                employee={appointment.employee.name || 'Funcionário não especificado'}
+                                                taxiService={appointment.taxiService || false}
+                                                observations={appointment.observations || ''}
+                                                variant="redTransp"
+                                                logo={<FaTrash className="text-red-500" />}
+                                                clickButton={() => handleDeleteClick(appointment)}
+                                            />
+                                        );
+                                    })}
+                                </div>
+
+                                {/* Componente de Paginação */}
+                                <div className="mb-6">
+                                    <Pagination
+                                        currentPage={currentPage}
+                                        totalPages={totalPages}
+                                        onPageChange={handlePageChange}
+                                        isFirst={isFirst}
+                                        isLast={isLast}
                                     />
-                                ))}
-                                <ButtonSystem
-                                    variant="blue"
-                                    text="Novo Agendamento"
-                                    click={() => navigate('/system-appointments/new')}
-                                    logo={<MdAdd />}
-                                />
+                                </div>
+
+                                <div className="flex justify-center mt-4">
+                                    <ButtonSystem
+                                        variant="blue"
+                                        text="Novo Agendamento"
+                                        click={() => navigate('/system-appointments/new')}
+                                        logo={<MdAdd />}
+                                    />
+                                </div>
                             </>
                         ) : (
-                            <div className="flex flex-col items-center justify-center gap-6 text-center">
+                            <div className="flex flex-col items-center justify-center gap-6 text-center min-h-[60vh]">
                                 <h2 className="text-2xl font-semibold text-slate-800">
                                     Nenhum agendamento encontrado
                                 </h2>
@@ -172,7 +253,7 @@ function SystemAppointments() {
             </div>
 
             {/* Modal de Confirmação */}
-            {showDeleteModal && appointmentToDelete && (
+            {showDeleteModal && appointmentToDelete && appointmentToDelete.pet && appointmentToDelete.startDateTime && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg p-6 max-w-md w-full mx-4">
                         <div className="flex items-center gap-3 mb-4">
@@ -180,7 +261,7 @@ function SystemAppointments() {
                             <h3 className="text-xl font-semibold text-gray-800">Confirmar Exclusão</h3>
                         </div>
                         <p className="text-gray-600 mb-6">
-                            Tem certeza que deseja excluir o agendamento do pet {appointmentToDelete.pet.name} para o dia {new Date(appointmentToDelete.startDateTime).toLocaleDateString('pt-BR')} às {new Date(appointmentToDelete.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}?
+                            Tem certeza que deseja excluir o agendamento do pet {appointmentToDelete.pet.name || 'desconhecido'} para o dia {new Date(appointmentToDelete.startDateTime).toLocaleDateString('pt-BR')} às {new Date(appointmentToDelete.startDateTime).toLocaleTimeString('pt-BR', { hour: '2-digit', minute: '2-digit' })}?
                         </p>
                         <div className="flex justify-end gap-4">
                             <button

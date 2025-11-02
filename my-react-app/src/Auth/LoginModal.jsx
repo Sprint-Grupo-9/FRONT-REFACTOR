@@ -19,7 +19,7 @@ const LoginModal = ({ isOpen, onClose }) => {
         setShowAlert(false);
         try {
             const data = await loginOwner({ email, password });
-            login({ name: data.name, token: data.token });
+            login({ name: data.name, token: data.token, id: data.id, admin: data.admin || false });
             setEmail("");
             setPassword("");
             if (onClose) onClose();

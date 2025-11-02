@@ -3,12 +3,12 @@ import { useState, useEffect } from "react";
 import Calendar from 'react-calendar';
 import 'react-calendar/dist/Calendar.css';
 import '../contents/Calendar.css';
-import { 
-    createAppointment, 
-    getAvailableTimes, 
+import {
+    createAppointment,
+    getAvailableTimes,
     getAllPetsByOwnerId,
-    getAllServices,
-    getEmployeesByServices
+    getAllPetOfferings,
+    getAvailableEmployees
 } from "../../services/api";
 
 // Componentes do sistema
@@ -46,7 +46,7 @@ function CalendarContent() {
         const fetchServices = async () => {
             try {
                 setIsLoading(true);
-                const response = await getAllServices();
+                const response = await getAllPetOfferings();
                 if (response?.data) {
                     setAllServices(response.data);
                 }
@@ -84,8 +84,8 @@ function CalendarContent() {
             if (services.length === 0) return;
 
             try {
-                const serviceIds = services.map(s => s.id);
-                const response = await getEmployeesByServices(serviceIds);
+                const petOfferingIds = services.map(s => s.id);
+                const response = await getAvailableEmployees(petOfferingIds);
                 if (response?.data) {
                     setEmployees(response.data);
                 }
@@ -105,11 +105,11 @@ function CalendarContent() {
 
             try {
                 setIsLoading(true);
-                const response = await getAvailableTimes(
-                    selectedDate.toISOString().split('T')[0],
-                    selectedPet.id,
-                    services.map(s => s.id)
-                );
+                const requestData = {
+                    date: selectedDate.toISOString().split('T')[0],
+                    petOfferingIds: services.map(s => Number(s.id))
+                };
+                const response = await getAvailableTimes(selectedPet.id, requestData);
                 if (response?.data) {
                     setAvailableTimes(response.data);
                 }
@@ -141,7 +141,7 @@ function CalendarContent() {
             const appointmentData = {
                 petId: selectedPet.id,
                 employee_id: selectedEmployee.id,
-                servicesNames: services.map(s => s.name).join(', '),
+                petOfferingNames: services.map(s => s.name).join(', '),
                 totalPrice: services.reduce((total, service) => total + (service.price || 0), 0),
                 startDateTime: `${selectedDate.toISOString().split('T')[0]}T${selectedTime.value}`,
                 durationMinutes: services.reduce((total, service) => total + (service.duration || 0), 0)
@@ -227,7 +227,7 @@ function CalendarContent() {
                 <div className="flex-none relative z-10">
                     {showConfirmModal && <div className="absolute inset-0 bg-black/30 backdrop-blur-sm z-40"></div>}
                     {errorMessage && <ErrorBox text={errorMessage} />}
-                    
+
                     <div className="absolute top-4 left-4">
                         <ButtonSystem
                             variant="redTransp"
@@ -252,8 +252,8 @@ function CalendarContent() {
                     <div className="max-w-4xl mx-auto">
                         <div className="bg-white rounded-lg shadow-lg p-4">
                             <h2 className="text-lg font-semibold mb-4">Serviços Disponíveis</h2>
-                            <ServiceTabSystem 
-                                services={services} 
+                            <ServiceTabSystem
+                                services={services}
                                 setServices={setServices}
                                 allServices={allServices}
                                 disabled={isLoading}

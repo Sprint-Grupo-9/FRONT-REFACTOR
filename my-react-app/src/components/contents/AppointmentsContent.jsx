@@ -92,7 +92,7 @@ function AppointmentsContent() {
                     appointments.map((appointment) => (
                         <AppointmentCardSystem
                             key={appointment.id}
-                            title={appointment.servicesNames}
+                            title={appointment.petOfferingNames}
                             subtitle={appointment.pet?.name || "Pet não definido"}
                             variant="redTransp"
                             logo={<CgClose />}

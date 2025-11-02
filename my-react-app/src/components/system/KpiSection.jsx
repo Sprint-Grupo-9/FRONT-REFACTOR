@@ -21,7 +21,7 @@ export default function KpiSection() {
 
     useEffect(() => {
 
-        axios.get('http://localhost:8080/api/dashboards/procedures/amount-last-seven-days', {
+        axios.get('http://localhost:8080/api/dashboards/pet-offerings/amount-last-seven-days', {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -44,7 +44,7 @@ export default function KpiSection() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/procedures/most-performed-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/pet-offerings/most-performed-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -60,7 +60,7 @@ export default function KpiSection() {
     const [dataKPI2, setDataKPI2] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/procedures/least-performed-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/pet-offerings/least-performed-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -75,7 +75,7 @@ export default function KpiSection() {
     const [dataKPI3, setDataKPI3] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/procedures/most-procedures-timing-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/pet-offerings/most-timing-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -89,7 +89,7 @@ export default function KpiSection() {
     const [dataKPI4, setDataKPI4] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/procedures/least-procedures-timing-last-thirty-days", {
+        fetch("http://localhost:8080/api/dashboards/pet-offerings/least-timing-last-thirty-days", {
             headers: {
                 Authorization: `Bearer ${token}`
             }
@@ -151,7 +151,7 @@ export default function KpiSection() {
                             minute: '2-digit',
                         });
 
-                        return `Agendamento do dia: ${dataFormatada} - Horario: ${horaInicio} ${horaFim} Serviço: ${ag.servicesNames} – R$${ag.price}`;
+                        return `Agendamento do dia: ${dataFormatada} - Horario: ${horaInicio} ${horaFim} Serviço: ${ag.petOfferingNames} – R$${ag.price}`;
                     };
 
                     const ultimosDoDono = info.lastOwnerAppointments?.dtoList
@@ -178,7 +178,7 @@ export default function KpiSection() {
                         petPorte: capitalizeFirstLetter(info.pet.size),
                         petPelagem: capitalizeFirstLetter(info.pet.coat),
                         funcionario: capitalizeFirstLetter(info.employee.name),
-                        procedimento: capitalizeFirstLetter(info.services),
+                        procedimento: capitalizeFirstLetter(info.petOfferingNames),
                         valor: `${info.totalPrice}R$`,
                         horarioInicio: info.startDateTime.split('T')[1].slice(0, 5),
                         horarioFim: info.endDateTime.split('T')[1].slice(0, 5),
@@ -212,7 +212,7 @@ export default function KpiSection() {
                             date={<>
                                 ({formatDateToBR(data.start)}) - ({formatDateToBR(data.end)})
                             </>}
-                            description={`${data.serviceName} - ${data.count} vezes`}
+                            description={`${data.petOfferingName} - ${data.count} vezes`}
                         />
                     )}
                 </>
@@ -227,7 +227,7 @@ export default function KpiSection() {
                             date={<>
                                 ({formatDateToBR(dataKPI2.start)}) - ({formatDateToBR(dataKPI2.end)})
                             </>}
-                            description={`${dataKPI2.serviceName} - ${dataKPI2.count} vezes`}
+                            description={`${dataKPI2.petOfferingName} - ${dataKPI2.count} vezes`}
                         />
                     )}
                 </>
