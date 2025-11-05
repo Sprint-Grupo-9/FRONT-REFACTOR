@@ -258,9 +258,8 @@ function AppointmentPage() {
 
         try {
             setIsLoading(true);
-            const [year, month, day] = selectedDate.split('-');
-            const [hours, minutes] = selectedTime.split(':');
-            const appointmentDate = new Date(year, month - 1, day, hours, minutes);
+            // Formata a data e hora no formato local sem conversão para UTC
+            const startDateTime = `${selectedDate}T${selectedTime}`;
 
             // Formata os serviços para incluir os subserviços do banho
             const formattedServices = selectedServices.map(service => {
@@ -274,7 +273,7 @@ function AppointmentPage() {
                 petId: Number(selectedPet.value),
                 employee_id: Number(selectedEmployee.value),
                 petOfferingNames: formattedServices.join(', '),
-                startDateTime: appointmentDate.toISOString().slice(0, 16),
+                startDateTime: startDateTime,
                 totalPrice: Number(totalPrice),
                 durationMinutes: Number(totalDuration),
                 taxiService: taxiService,
