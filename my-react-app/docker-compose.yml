@@ -1,1 +1,51 @@
+services:
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: rabbitmq-petcolumbia
+    ports:
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      - RABBITMQ_DEFAULT_USER=admin
+      - RABBITMQ_DEFAULT_PASS=admin
+    restart: unless-stopped
+    healthcheck:
+      test: [ "CMD", "rabbitmq-diagnostics", "ping" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
 
+  frontend:
+    image: taysonmartins/pet-columbia-front:front-latest
+    container_name: frontend-petcolumbia
+    expose:
+      - "80"
+    restart: unless-stopped
+    depends_on:
+      - backend
+
+  backend:
+    image: taysonmartins/pet-columbia-front:backend-latest
+    container_name: backend-petcolumbia
+    env_file:
+      - .env
+    expose:
+      - "3000"
+    restart: unless-stopped
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      rabbitmq:
+        condition: service_healthy
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx-gateway
+    ports:
+      - "80:80"
+    volumes:
+      - ./Docker/Nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - frontend
+      - backend
+    restart: unless-stopped
