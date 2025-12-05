@@ -1,5 +1,5 @@
 :root {
-  --primary: #e52472;
+  --[#3B82F6]: #e52472;
   --secondary-gray: #BDBDBD;
 }
 
@@ -26,7 +26,7 @@
 }
 
 .react-calendar__tile--active {
-  background: var(--primary);
+  background: var(--[#3B82F6]);
   color: white;
 }
 
@@ -36,7 +36,7 @@
 }
 
 .react-calendar__navigation button {
-  color: var(--primary);
+  color: var(--[#3B82F6]);
   font-weight: bold;
 }
 

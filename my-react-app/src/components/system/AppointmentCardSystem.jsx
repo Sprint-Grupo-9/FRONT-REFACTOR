@@ -16,7 +16,7 @@ function AppointmentCardSystem(props) {
                 {props.hasChevron && props.active ? <FiChevronDown className={`size-10 text-secondary hover:bg-slate-200 hover:rounded-full transition-all duration-200 ${props.rotate ? '-rotate-180' : ''}`} onClick={props.clickChevron} /> : ""}
 
                 <div className="flex items-center gap-3">
-                    <BsCalendar2WeekFill className="bg-primary rounded-full py-2 size-10 text-white" />
+                    <BsCalendar2WeekFill className="bg-[#3B82F6] rounded-full py-2 size-10 text-white" />
                     {props.taxiService && (
                         <div className="relative" title="Serviço Taxi Dog incluído">
                             <FaTaxi className="text-yellow-500 text-xl" />
@@ -32,7 +32,7 @@ function AppointmentCardSystem(props) {
                 </div>
 
                 <div className="text-[0.8rem] font-bold whitespace-nowrap">
-                    <div className="text-[1rem] font-bold text-primary">
+                    <div className="text-[1rem] font-bold text-[#3B82F6]">
                         {props.price}
                     </div>
                     <div className="text-[0.8rem] font-thin">
@@ -43,7 +43,7 @@ function AppointmentCardSystem(props) {
                 <div className="h-10 w-[1px] bg-slate-300"></div>
 
                 <div className="text-[0.8rem] font-bold whitespace-nowrap">
-                    <div className="text-[1rem] font-bold text-primary">
+                    <div className="text-[1rem] font-bold text-[#3B82F6]">
                         {props.date}
                     </div>
                     <div className="text-[0.8rem] font-thin">
@@ -54,7 +54,7 @@ function AppointmentCardSystem(props) {
                 <div className="h-10 w-[1px] bg-slate-300"></div>
 
                 <div className="text-[0.8rem] font-bold whitespace-nowrap">
-                    <div className="text-[1rem] font-bold text-primary">
+                    <div className="text-[1rem] font-bold text-[#3B82F6]">
                         {props.time}
                     </div>
                     <div className="text-[0.8rem] font-thin">
@@ -65,7 +65,7 @@ function AppointmentCardSystem(props) {
                 <div className="h-10 w-[1px] bg-slate-300"></div>
 
                 <div className="text-[0.8rem] font-bold whitespace-nowrap">
-                    <div className="text-[1rem] font-bold text-primary">
+                    <div className="text-[1rem] font-bold text-[#3B82F6]">
                         {props.employee}
                     </div>
                     <div className="text-[0.8rem] font-thin">

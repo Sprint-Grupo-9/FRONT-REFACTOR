@@ -159,8 +159,8 @@ export function Cadastro() {
                     <div className="flex items-center gap-8 mb-10">
                         {steps.map((s, i) => (
                             <div key={i} className="flex flex-col items-center">
-                                <div className={`rounded-full w-12 h-12 flex items-center justify-center text-2xl border-4 ${step === i ? 'border-primary bg-white text-primary' : step > i ? 'border-secondary bg-secondary text-white' : 'border-gray-300 bg-gray-200 text-gray-400'}`}>{s.icon}</div>
-                                <span className={`mt-2 text-sm ${step === i ? 'text-primary' : 'text-gray-400'}`}>{s.label}</span>
+                                <div className={`rounded-full w-12 h-12 flex items-center justify-center text-2xl border-4 ${step === i ? 'border-[#3B82F6] bg-white text-[#3B82F6]' : step > i ? 'border-secondary bg-secondary text-white' : 'border-gray-300 bg-gray-200 text-gray-400'}`}>{s.icon}</div>
+                                <span className={`mt-2 text-sm ${step === i ? 'text-[#3B82F6]' : 'text-gray-400'}`}>{s.label}</span>
                                 {i < steps.length - 1 && <div className={`w-16 h-1 ${step > i ? 'bg-secondary' : 'bg-gray-300'} mt-6`}></div>}
                             </div>
                         ))}
@@ -208,7 +208,7 @@ export function Cadastro() {
                                     id="showPassword"
                                     checked={showPassword}
                                     onChange={() => setShowPassword((prev) => !prev)}
-                                    className="mr-2 accent-primary"
+                                    className="mr-2 accent-[#3B82F6]"
                                 />
                                 <label htmlFor="showPassword" className="text-sm text-gray-600 select-none cursor-pointer">Mostrar senha</label>
                             </div>
@@ -216,7 +216,7 @@ export function Cadastro() {
                     )}
                     {step === 3 && (
                         <div className="flex flex-col items-center justify-center w-[800px] mb-8">
-                            <div className="text-3xl text-primary font-bold mb-4 flex items-center gap-2"><MdCheckCircle className="text-secondary" /> Cadastro concluído!</div>
+                            <div className="text-3xl text-[#3B82F6] font-bold mb-4 flex items-center gap-2"><MdCheckCircle className="text-secondary" /> Cadastro concluído!</div>
                             <ButtonSystem variant="blue" text="Ir para Login" click={() => navigate('/')} />
                         </div>
                     )}

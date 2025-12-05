@@ -51,26 +51,26 @@ const LoginModal = ({ isOpen, onClose }) => {
                 <h2 className="text-2xl font-bold text-navy-blue mb-6 text-center font-figtree">Login</h2>
                 <form className="flex flex-col gap-4" onSubmit={handleSubmit}>
                     <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-primary text-xl">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#3B82F6] text-xl">
                             <MdEmail />
                         </span>
                         <input
                             type="email"
                             placeholder="E-mail"
-                            className="border border-gray-300 rounded pl-10 pr-4 py-2 focus:outline-none focus:border-primary font-figtree w-full"
+                            className="border border-gray-300 rounded pl-10 pr-4 py-2 focus:outline-none focus:border-[#3B82F6] font-figtree w-full"
                             required
                             value={email}
                             onChange={e => setEmail(e.target.value)}
                         />
                     </div>
                     <div className="relative">
-                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-primary text-xl">
+                        <span className="absolute left-3 top-1/2 -translate-y-1/2 text-[#3B82F6] text-xl">
                             <MdLock />
                         </span>
                         <input
                             type={showPassword ? "text" : "password"}
                             placeholder="Senha"
-                            className="border border-gray-300 rounded pl-10 pr-4 py-2 focus:outline-none focus:border-primary font-figtree w-full"
+                            className="border border-gray-300 rounded pl-10 pr-4 py-2 focus:outline-none focus:border-[#3B82F6] font-figtree w-full"
                             required
                             value={password}
                             onChange={e => setPassword(e.target.value)}
@@ -82,16 +82,16 @@ const LoginModal = ({ isOpen, onClose }) => {
                             id="showPasswordLogin"
                             checked={showPassword}
                             onChange={() => setShowPassword((prev) => !prev)}
-                            className="mr-2 accent-primary"
+                            className="mr-2 accent-[#3B82F6]"
                         />
                         <label htmlFor="showPasswordLogin" className="text-sm text-gray-600 select-none cursor-pointer">Mostrar senha</label>
                     </div>
                     <div className="w-full flex justify-center">
-                        <p>Esqueceu sua senha? <a href="#" className="text-primary font-bold">Clique aqui</a></p>
+                        <p>Esqueceu sua senha? <a href="#" className="text-[#3B82F6] font-bold">Clique aqui</a></p>
                     </div>
                     <button
                         type="submit"
-                        className="bg-secondary text-white font-bold py-2 rounded-lg mt-2 hover:bg-primary transition-colors font-figtree"
+                        className="bg-secondary text-white font-bold py-2 rounded-lg mt-2 hover:bg-[#3B82F6] transition-colors font-figtree"
                         disabled={loading}
                     >
                         {loading ? 'Entrando...' : 'Entrar'}

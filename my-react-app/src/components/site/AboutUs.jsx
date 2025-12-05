@@ -4,7 +4,7 @@ import MapsReact from "./MapsReact";
 export function AboutUs() {
   return (
     <div className="w-full h-[500px] bg-white ">
-      <div className="w-full h-[500px] bg-[#BB1055]  flex flex-start items-center justify-between p-24 rounded-br-[150px] rounded-tr-[150px]">
+      <div className="w-full h-[500px] bg-[#3B82F6]  flex flex-start items-center justify-between p-24 rounded-br-[150px] rounded-tr-[150px]">
         <div className="w-2/4 h-full  p-4">
           <div>
             <span className="w-full pl-28  flex">

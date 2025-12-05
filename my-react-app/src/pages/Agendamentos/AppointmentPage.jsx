@@ -587,14 +587,14 @@ function AppointmentPage() {
 
             <form onSubmit={(e) => e.preventDefault()}>
                 {/* Header */}
-                <div className="bg-primary shadow-md">
+                <div className="bg-[#3B82F6] shadow-md">
                     <div className="max-w-7xl mx-auto px-4 py-4 flex items-center justify-between">
                         <ButtonSystem
                             variant="white"
                             text="Voltar"
                             click={() => navigate('/system-appointments')}
                             logo={<IoChevronBackOutline />}
-                            className="text-primary"
+                            className="text-[#3B82F6]"
                         />
                         <div className="flex items-center gap-2">
                             <MdPets className="text-white text-2xl" />

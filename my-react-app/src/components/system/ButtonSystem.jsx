@@ -20,13 +20,13 @@ function ButtonSystem({ text, click, logo, variant = "blue", disabled = false, c
             case "red":
                 return "bg-red-600 text-white hover:bg-red-700";
             case "white":
-                return "bg-white text-primary hover:bg-gray-50";
+                return "bg-white text-[#3B82F6] hover:bg-gray-50";
             case "whiteTransp":
                 return "bg-white/10 text-white hover:bg-white/20";
             case "redTransp":
                 return "bg-red-100 text-red-600 hover:bg-red-200";
             default:
-                return "bg-primary text-white hover:bg-primary/90";
+                return "bg-[#3B82F6] text-white hover:bg-[#3B82F6]/90";
         }
     };
 

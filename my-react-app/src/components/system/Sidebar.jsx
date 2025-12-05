@@ -14,7 +14,7 @@ function Sidebar({ items }) {
     return (
         <div className="w-64 h-screen bg-white shadow-lg">
             <div className="p-4">
-                <h2 className="text-2xl font-bold text-primary mb-8">PetCare</h2>
+                <h2 className="text-2xl font-bold text-[#3B82F6] mb-8">PetCare</h2>
                 <nav>
                     <ul className="space-y-2">
                         {items.map((item, index) => (
@@ -23,7 +23,7 @@ function Sidebar({ items }) {
                                     onClick={() => handleClick(item.path)}
                                     className={`w-full flex items-center gap-3 px-4 py-3 rounded-lg transition-colors ${
                                         location.pathname === item.path
-                                            ? 'bg-primary text-white'
+                                            ? 'bg-[#3B82F6] text-white'
                                             : 'text-gray-600 hover:bg-gray-100'
                                     }`}
                                 >

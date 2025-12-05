@@ -31,7 +31,7 @@ function Cardsite() {
             Você precisa estar logado para agendar!
           </div>
         )}
-        <button onClick={handleAgendar} className='bg-[#23C3E3] text-white font-bold font-figtree py-2 px-6 rounded-lg transition-all duration-900 hover:bg-primary/90'>Agendar</button>
+        <button onClick={handleAgendar} className='bg-[#23C3E3] text-white font-bold font-figtree py-2 px-6 rounded-lg transition-all duration-900 hover:bg-[#3B82F6]/90'>Agendar</button>
       </div>
     </div>
   )

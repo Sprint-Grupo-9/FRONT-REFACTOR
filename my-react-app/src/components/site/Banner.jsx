@@ -31,9 +31,9 @@ function Banner() {
                     )}
                     <span className="flex flex-col">
                         <h3 className="font-figtree text-navy-blue text-[65px] font-normal ">Tudo para</h3>
-                        <h2 className="font-figtree text-primary text-[65px] font-extrabold ">Seu pet</h2>
+                        <h2 className="font-figtree text-[#3B82F6] text-[65px] font-extrabold ">Seu pet</h2>
                         <p className=" text-[20px] text-navy-blue">Proporcione um cuidado especial para seu melhor amigo.</p>
-                        <button onClick={handleAgendar} className="mt-16 bg-secondary text-white font-bold font-figtree py-2 px-4 rounded-lg transition-all duration-900 hover:bg-white hover:text-primary"> Agendar Serviços</button>
+                        <button onClick={handleAgendar} className="mt-16 bg-[#0F172A] text-white font-bold font-figtree py-2 px-4 rounded-lg transition-all duration-900 hover:bg-white hover:text-[#3B82F6]"> Agendar Serviços</button>
                     </span>
                 </div>
             </div>

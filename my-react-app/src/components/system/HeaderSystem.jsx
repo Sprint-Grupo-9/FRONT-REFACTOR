@@ -10,7 +10,7 @@ function HeaderSystem(props) {
   const goToSite = () => navigate("/");
 
   return (
-    <div className="fixed w-full h-20 top-0 left-0 bg-primary flex justify-center z-50">
+    <div className="fixed w-full h-20 top-0 left-0 bg-[#3B82F6] flex justify-center z-50">
       <div className="w-screen h-full flex justify-between px-12">
         <div className="flex items-center h-full gap-6">
           <ButtonSystem variant="transp" click={goToSite} text="Voltar ao Site" logo={<IoChevronBackOutline />} />

@@ -129,7 +129,7 @@ function PetsContent({ pets, setPets }) {
                     </>
                 ) : (
                     <div className="flex flex-col items-center justify-center gap-6 text-center">
-                        <MdPets className="text-primary text-6xl" />
+                        <MdPets className="text-[#3B82F6] text-6xl" />
                         <h2 className="text-2xl font-semibold text-slate-800">
                             Nenhum pet cadastrado
                         </h2>
@@ -149,7 +149,7 @@ function PetsContent({ pets, setPets }) {
             {showCreateModal && (
                 <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                     <div className="bg-white p-8 rounded-lg w-[500px] max-h-[90vh] overflow-y-auto">
-                        <h2 className="text-2xl font-bold text-primary mb-6">Novo Pet</h2>
+                        <h2 className="text-2xl font-bold text-[#3B82F6] mb-6">Novo Pet</h2>
 
                         <div className="space-y-4">
                             <TextBoxSystem

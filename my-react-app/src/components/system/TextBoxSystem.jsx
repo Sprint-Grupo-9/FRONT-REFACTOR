@@ -8,7 +8,7 @@ function TextBoxSystem(props) {
     return (
         <div className="flex flex-col gap-2">
             <div className="flex items-center gap-2">
-                {props.icon && <span className="text-primary">{props.icon}</span>}
+                {props.icon && <span className="text-[#3B82F6]">{props.icon}</span>}
                 <span className="text-slate-600 font-medium">{props.title}</span>
             </div>
             <div className="relative w-full">
@@ -17,7 +17,7 @@ function TextBoxSystem(props) {
                         mask={props.mask}
                         unmask={true}
                         onAccept={(value) => props.onChange({ target: { id: props.id, value } })}
-                        className={`bg-white px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:outline-none transition-colors ${widthClass} ${props.disabled ? 'bg-slate-100' : ''} ${inputTextClass}`}
+                        className={`bg-white px-4 py-2 rounded-lg border border-slate-200 focus:border-[#3B82F6] focus:outline-none transition-colors ${widthClass} ${props.disabled ? 'bg-slate-100' : ''} ${inputTextClass}`}
                         placeholder={props.hint}
                         disabled={props.disabled}
                         value={props.value}
@@ -26,7 +26,7 @@ function TextBoxSystem(props) {
                     <input
                         id={props.id}
                         type={props.type || "text"}
-                        className={`bg-white px-4 py-2 rounded-lg border border-slate-200 focus:border-primary focus:outline-none transition-colors ${widthClass} ${props.disabled ? 'bg-slate-100' : ''} ${inputTextClass}`}
+                        className={`bg-white px-4 py-2 rounded-lg border border-slate-200 focus:border-[#3B82F6] focus:outline-none transition-colors ${widthClass} ${props.disabled ? 'bg-slate-100' : ''} ${inputTextClass}`}
                         placeholder={props.hint}
                         onChange={props.onChange}
                         disabled={props.disabled}

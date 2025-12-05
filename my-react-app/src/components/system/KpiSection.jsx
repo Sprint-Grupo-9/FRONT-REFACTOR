@@ -366,7 +366,7 @@ export default function KpiSection() {
                             animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: 50 }}
                             transition={{ duration: 0.4, ease: 'easeOut' }}
-                            className="bg-white p-6 rounded-xl w-[500px] max-h-[90vh] overflow-y-auto shadow-lg border border-primary relative"
+                            className="bg-white p-6 rounded-xl w-[500px] max-h-[90vh] overflow-y-auto shadow-lg border border-[#3B82F6] relative"
                         >
                             <button
                                 className="absolute top-2 right-2 text-red-500 font-bold text-lg"
@@ -374,12 +374,12 @@ export default function KpiSection() {
                             >
                                 ×
                             </button>
-                            <h2 className="text-xl font-bold text-primary text-center mb-4">Ficha de Atendimento</h2>
+                            <h2 className="text-xl font-bold text-[#3B82F6] text-center mb-4">Ficha de Atendimento</h2>
                             <div className="text-left text-gray-800 space-y-4">
                                 {/* DONO */}
 
                                 <div>
-                                    <h3 className="font-semibold text-lg text-primary mb-1">Dono</h3>
+                                    <h3 className="font-semibold text-lg text-[#3B82F6] mb-1">Dono</h3>
                                     <p><strong>Nome:</strong> {detalhes.cliente}</p>
                                     <p><strong>CPF:</strong> {detalhes.cpf}</p>
                                     <p><strong>Telefone:</strong> ({detalhes.telefone.slice(0, 2)}) {detalhes.telefone.slice(2, 7)}-{detalhes.telefone.slice(7)}</p>
@@ -389,7 +389,7 @@ export default function KpiSection() {
 
                                 {/* PET */}
                                 <div>
-                                    <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Pet</h3>
+                                    <h3 className="font-semibold text-lg text-[#3B82F6] mt-4 mb-1">Pet</h3>
                                     <p><strong>Nome:</strong> {detalhes.petNome}</p>
                                     <p><strong>Espécie:</strong> {detalhes.petEspecie}</p>
                                     <p><strong>Raça:</strong> {detalhes.petRaca}</p>
@@ -400,7 +400,7 @@ export default function KpiSection() {
 
                                 {/* SERVIÇO */}
                                 <div>
-                                    <h3 className="font-semibold text-lg text-primary mt-4 mb-1">Serviço</h3>
+                                    <h3 className="font-semibold text-lg text-[#3B82F6] mt-4 mb-1">Serviço</h3>
                                     <p><strong>Nome:</strong> {detalhes.procedimento}</p>
                                     <p><strong>Preço:</strong> {detalhes.valor}</p>
                                 </div>
@@ -408,7 +408,7 @@ export default function KpiSection() {
                                 {/* ÚLTIMOS AGENDAMENTOS DO DONO */}
                                 {detalhes.ultimosAgendamentosDono && detalhes.ultimosAgendamentosDono.length > 0 && (
                                     <div >
-                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do dono</h4>
+                                        <h4 className="font-semibold text-lg text-[#3B82F6] mt-4 mb-1">Últimos agendamentos do dono</h4>
                                         <ul className='text-left text-gray-800 space-y-4 mb-2'>
                                             {detalhes.ultimosAgendamentosDono.map((item, index) => (
                                                 <li key={index}>{item}</li>
@@ -419,7 +419,7 @@ export default function KpiSection() {
 
                                 {detalhes.ultimosAgendamentosPet && detalhes.ultimosAgendamentosPet.length > 0 && (
                                     <div>
-                                        <h4 className="font-semibold text-lg text-primary mt-4 mb-1">Últimos agendamentos do pet {detalhes.petNome}</h4>
+                                        <h4 className="font-semibold text-lg text-[#3B82F6] mt-4 mb-1">Últimos agendamentos do pet {detalhes.petNome}</h4>
                                         <ul className='text-left text-gray-800 space-y-4 mb-2'>
                                             {detalhes.ultimosAgendamentosPet.map((item, index) => (
                                                 <li key={index}>{item}</li>

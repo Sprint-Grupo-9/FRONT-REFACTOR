@@ -13,12 +13,12 @@ function SlidebarSystem() {
             <div className="flex flex-col gap-2 p-4">
                 {/* Perfil do Usuário */}
                 <div className="flex items-center gap-3 p-4 mb-4 border-b border-gray-200">
-                    <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center">
-                        <MdPerson className="text-primary text-xl" />
+                    <div className="w-10 h-10 rounded-full bg-[#3B82F6]/10 flex items-center justify-center">
+                        <MdPerson className="text-[#3B82F6] text-xl" />
                     </div>
                     <div>
                         <p className="text-sm font-medium text-gray-600">Bem-vindo(a),</p>
-                        <p className="text-primary font-semibold">{userName}</p>
+                        <p className="text-[#3B82F6] font-semibold">{userName}</p>
                     </div>
                 </div>
 
@@ -28,21 +28,21 @@ function SlidebarSystem() {
                         text="Perfil"
                         click={() => navigate('/system-profile')}
                         logo={<MdPerson />}
-                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-profile' ? 'bg-primary/10' : ''}`}
+                        className={`text-[#3B82F6] w-full text-left justify-start ${location.pathname === '/system-profile' ? 'bg-[#3B82F6]/10' : ''}`}
                     />
                     <ButtonSystem
                         variant="white"
                         text="Pets"
                         click={() => navigate('/system-pets')}
                         logo={<MdPets />}
-                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-pets' ? 'bg-primary/10' : ''}`}
+                        className={`text-[#3B82F6] w-full text-left justify-start ${location.pathname === '/system-pets' ? 'bg-[#3B82F6]/10' : ''}`}
                     />
                     <ButtonSystem
                         variant="white"
                         text="Agendamentos"
                         click={() => navigate('/system-appointments')}
                         logo={<MdCalendarMonth />}
-                        className={`text-primary w-full text-left justify-start ${location.pathname === '/system-appointments' ? 'bg-primary/10' : ''}`}
+                        className={`text-[#3B82F6] w-full text-left justify-start ${location.pathname === '/system-appointments' ? 'bg-[#3B82F6]/10' : ''}`}
                     />
                     {isAdmin && (
                         <ButtonSystem
@@ -50,7 +50,7 @@ function SlidebarSystem() {
                             text="Dashboard"
                             click={() => navigate('/system-dashboard')}
                             logo={<MdDashboard />}
-                            className={`text-primary w-full text-left justify-start ${location.pathname === '/system-dashboard' ? 'bg-primary/10' : ''}`}
+                            className={`text-[#3B82F6] w-full text-left justify-start ${location.pathname === '/system-dashboard' ? 'bg-[#3B82F6]/10' : ''}`}
                         />
                     )}
                 </div>

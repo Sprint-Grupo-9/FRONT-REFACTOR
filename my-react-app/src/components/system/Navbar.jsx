@@ -13,17 +13,17 @@ function Navbar({ text, logo, variant = "blue", className = "" }) {
     const getVariantClasses = () => {
         switch (variant) {
             case "blue":
-                return "bg-primary text-white hover:bg-primary/90";
+                return "bg-[#3B82F6] text-white hover:bg-[#3B82F6]/90";
             case "red":
                 return "bg-red-600 text-white hover:bg-red-700";
             case "white":
-                return "bg-white text-primary hover:bg-gray-50";
+                return "bg-white text-[#3B82F6] hover:bg-gray-50";
             case "whiteTransp":
                 return "bg-white/10 text-white hover:bg-white/20";
             case "redTransp":
                 return "bg-red-600/10 text-red-600 hover:bg-red-600/20";
             default:
-                return "bg-primary text-white hover:bg-primary/90";
+                return "bg-[#3B82F6] text-white hover:bg-[#3B82F6]/90";
         }
     };
 
