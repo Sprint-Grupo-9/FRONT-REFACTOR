@@ -6,26 +6,17 @@ import { CardAppointment } from './CardAppointment';
 import Calendar from 'react-calendar';
 import './CalendarDash.css'
 import TextBoxSystem from "../system/TextBoxSystem";
-import axios from 'axios';
+import api from '../../services/api';
 import { capitalizeFirstLetter, formatDateToBR } from '../../utils/pass';
-
-
 
 export default function KpiSection() {
     // Estado para armazenar os detalhes do agendamento
     const [detalhes, setDetalhes] = useState(null);
 
-    const token = localStorage.getItem('token');
-
     const [weeklyData, setWeeklyData] = useState([]);
 
     useEffect(() => {
-
-        axios.get('http://localhost:8080/api/dashboards/pet-offerings/amount-last-seven-days', {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
+        api.get('/dashboards/pet-offerings/amount-last-seven-days')
             .then(response => {
                 const data = response.data;
 
@@ -44,13 +35,8 @@ export default function KpiSection() {
     const [data, setData] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/pet-offerings/most-performed-last-thirty-days", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-            .then((res) => res.json())
+        api.get('/dashboards/pet-offerings/most-performed-last-thirty-days')
+            .then((res) => res.data)
             .then((json) => setData(json))
             .catch((err) => console.error("Erro ao buscar dados:", err));
     }, []);
@@ -60,13 +46,8 @@ export default function KpiSection() {
     const [dataKPI2, setDataKPI2] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/pet-offerings/least-performed-last-thirty-days", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-            .then((res) => res.json())
+        api.get('/dashboards/pet-offerings/least-performed-last-thirty-days')
+            .then((res) => res.data)
             .then((json) => setDataKPI2(json))
             .catch((err) => console.error("Erro ao buscar dados:", err));
     }, []);
@@ -75,13 +56,8 @@ export default function KpiSection() {
     const [dataKPI3, setDataKPI3] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/pet-offerings/most-timing-last-thirty-days", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-            .then((res) => res.json())
+        api.get('/dashboards/pet-offerings/most-timing-last-thirty-days')
+            .then((res) => res.data)
             .then((json) => setDataKPI3(json))
             .catch((err) => console.error("Erro ao buscar dados:", err));
     }, []);
@@ -89,13 +65,8 @@ export default function KpiSection() {
     const [dataKPI4, setDataKPI4] = useState(null);
 
     useEffect(() => {
-        fetch("http://localhost:8080/api/dashboards/pet-offerings/least-timing-last-thirty-days", {
-            headers: {
-                Authorization: `Bearer ${token}`
-            }
-        })
-
-            .then((res) => res.json())
+        api.get('/dashboards/pet-offerings/least-timing-last-thirty-days')
+            .then((res) => res.data)
             .then((json) => setDataKPI4(json))
             .catch((err) => console.error("Erro ao buscar dados:", err));
     }, []);
@@ -116,13 +87,9 @@ export default function KpiSection() {
     useEffect(() => {
         const dataFormatada = dataSelecionada.toISOString().split('T')[0]; // YYYY-MM-DD
 
-        axios
-            .get(`http://localhost:8080/api/dashboards/appointments/date`, {
-                params: { date: dataFormatada },
-                headers: {
-                    Authorization: `Bearer ${token}`,
-                },
-            })
+        api.get('/dashboards/appointments/date', {
+            params: { date: dataFormatada }
+        })
             .then((res) => {
                 if (res.status === 204) {
                     setAgendamentosDoDia([]); // limpa os dados anteriores
